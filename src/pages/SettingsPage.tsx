@@ -34,23 +34,23 @@ export default function SettingsPage() {
         </div>
 
         <div className="bg-white rounded-lg shadow-sm">
-          {/* Onglets */}
+          {/* Onglets - Carrousel mobile-first renforcé */}
           <div className="border-b border-gray-200">
-            <nav className="flex space-x-8 px-6">
+            <nav className="flex overflow-x-auto flex-nowrap gap-x-2 px-2 py-2 scrollbar-hide no-scrollbar snap-x snap-mandatory">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 ${
-                      activeTab === tab.id
-                        ? 'border-purple-500 text-purple-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                    }`}
+                    className={`min-w-[120px] max-w-[160px] px-3 py-2 rounded-lg flex flex-col items-center justify-center space-y-1 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 snap-center
+                      ${activeTab === tab.id
+                        ? 'bg-purple-100 text-purple-700 border-b-2 border-purple-500 shadow'
+                        : 'bg-gray-50 text-gray-500 hover:bg-gray-100 border-b-2 border-transparent'}
+                    `}
                   >
-                    <Icon className="w-4 h-4" />
-                    <span>{tab.name}</span>
+                    <Icon className="w-5 h-5 mb-1" />
+                    <span className="truncate">{tab.name}</span>
                   </button>
                 );
               })}
@@ -362,4 +362,4 @@ export default function SettingsPage() {
       </div>
     </div>
   );
-} 
+}

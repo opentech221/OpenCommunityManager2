@@ -101,10 +101,10 @@ export default function MessagesPage() {
   };
 
   return (
-    <div className="h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row">
       {/* Liste des conversations */}
-      <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
-      {/* En-tête */}
+      <div className="w-full md:w-80 bg-white border-b md:border-r border-gray-200 flex-shrink-0">
+        {/* En-tête */}
         <div className="p-4 border-b border-gray-200">
           <h1 className="text-xl font-semibold text-gray-900 mb-4">Messagerie</h1>
           <div className="relative">
@@ -112,13 +112,12 @@ export default function MessagesPage() {
             <input
               type="text"
               placeholder="Rechercher une conversation..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
             />
           </div>
         </div>
-
         {/* Liste des conversations */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="max-h-64 md:max-h-none overflow-y-auto">
           {conversations.map((conversation) => (
             <div
               key={conversation.id}
@@ -129,7 +128,7 @@ export default function MessagesPage() {
             >
               <div className="flex items-center space-x-3">
                 <div className="relative">
-                  <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
+                  <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
                     {conversation.avatar}
                   </div>
                   {conversation.isOnline && (
@@ -145,19 +144,18 @@ export default function MessagesPage() {
                       {conversation.lastMessageTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600 truncate">{conversation.lastMessage}</p>
+                  <p className="text-xs text-gray-600 truncate">{conversation.lastMessage}</p>
                 </div>
                 {conversation.unreadCount > 0 && (
                   <div className="w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
                     <span className="text-xs text-white font-medium">{conversation.unreadCount}</span>
-            </div>
+                  </div>
                 )}
               </div>
             </div>
           ))}
         </div>
-        </div>
-
+      </div>
       {/* Zone de chat */}
       <div className="flex-1 flex flex-col">
         {selectedConversation ? (
@@ -171,7 +169,7 @@ export default function MessagesPage() {
                   </div>
                   <div>
                     <h2 className="text-lg font-semibold text-gray-900">{selectedConv?.name}</h2>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-xs text-gray-500">
                       {selectedConv?.isOnline ? 'En ligne' : 'Hors ligne'}
                     </p>
                   </div>
@@ -189,7 +187,6 @@ export default function MessagesPage() {
                 </div>
               </div>
             </div>
-
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.map((message) => (
@@ -198,7 +195,7 @@ export default function MessagesPage() {
                   className={`flex ${message.senderId === 'me' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                    className={`max-w-[80vw] md:max-w-md px-4 py-2 rounded-lg ${
                       message.senderId === 'me'
                         ? 'bg-purple-500 text-white'
                         : 'bg-gray-200 text-gray-900'
@@ -213,8 +210,7 @@ export default function MessagesPage() {
                   </div>
                 </div>
               ))}
-                </div>
-
+            </div>
             {/* Zone de saisie */}
             <div className="bg-white border-t border-gray-200 p-4">
               <div className="flex items-center space-x-2">
@@ -226,14 +222,14 @@ export default function MessagesPage() {
                     type="text"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                     placeholder="Tapez votre message..."
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                   />
                 </div>
                 <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
                   <Smile className="w-5 h-5" />
-                  </button>
+                </button>
                 <button
                   onClick={handleSendMessage}
                   className="p-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
@@ -241,7 +237,7 @@ export default function MessagesPage() {
                   <SendIcon className="w-5 h-5" />
                 </button>
               </div>
-                  </div>
+            </div>
           </>
         ) : (
           // État vide
@@ -255,7 +251,7 @@ export default function MessagesPage() {
             </div>
           </div>
         )}
-        </div>
+      </div>
     </div>
   );
 }

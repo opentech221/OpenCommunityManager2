@@ -65,28 +65,26 @@ const SecurityPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Sécurité</h1>
-          <p className="text-gray-600">Gérez la sécurité de votre compte et de votre association</p>
+    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
+      <div className="w-full max-w-full mx-auto px-2 py-2 sm:px-6 sm:py-8">
+        <div className="mb-6">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Sécurité</h1>
+          <p className="text-gray-600 text-sm">Gérez la sécurité de votre compte et de votre association</p>
         </div>
-
-        <div className="space-y-8">
+        <div className="space-y-6">
           {/* Changement de mot de passe */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center space-x-3 mb-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-6 w-full">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-3 mb-6">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <Key className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-gray-900">Mot de passe</h2>
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Mot de passe</h2>
                 <p className="text-gray-600">Changez votre mot de passe régulièrement pour plus de sécurité</p>
               </div>
             </div>
-
             <form onSubmit={handlePasswordChange} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Mot de passe actuel
@@ -96,7 +94,7 @@ const SecurityPage: React.FC = () => {
                       type={showCurrentPassword ? 'text' : 'password'}
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                       placeholder="Entrez votre mot de passe actuel"
                     />
                     <button
@@ -108,7 +106,6 @@ const SecurityPage: React.FC = () => {
                     </button>
                   </div>
                 </div>
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Nouveau mot de passe
@@ -118,7 +115,7 @@ const SecurityPage: React.FC = () => {
                       type={showNewPassword ? 'text' : 'password'}
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                       placeholder="Entrez un nouveau mot de passe"
                     />
                     <button
@@ -130,8 +127,7 @@ const SecurityPage: React.FC = () => {
                     </button>
                   </div>
                 </div>
-
-                <div className="md:col-span-2">
+                <div className="sm:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Confirmer le nouveau mot de passe
                   </label>
@@ -139,32 +135,30 @@ const SecurityPage: React.FC = () => {
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                     placeholder="Confirmez votre nouveau mot de passe"
                   />
                 </div>
               </div>
-
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="bg-purple-500 text-white px-6 py-2 rounded-lg hover:bg-purple-600 transition-colors"
+                  className="bg-purple-500 text-white px-6 py-2 rounded-lg hover:bg-purple-600 transition-colors text-sm"
                 >
                   Changer le mot de passe
                 </button>
               </div>
             </form>
           </div>
-
           {/* Authentification à deux facteurs */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-6 w-full">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 space-y-3 sm:space-y-0">
               <div className="flex items-center space-x-3">
                 <div className="p-2 bg-green-100 rounded-lg">
                   <Smartphone className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900">Authentification à deux facteurs</h2>
+                  <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Authentification à deux facteurs</h2>
                   <p className="text-gray-600">Ajoutez une couche de sécurité supplémentaire à votre compte</p>
                 </div>
               </div>
@@ -186,7 +180,6 @@ const SecurityPage: React.FC = () => {
                 </button>
               </div>
             </div>
-
             {twoFactorEnabled && (
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                 <div className="flex items-center space-x-2">
@@ -197,7 +190,6 @@ const SecurityPage: React.FC = () => {
                 </div>
               </div>
             )}
-
             {!twoFactorEnabled && (
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                 <div className="flex items-center space-x-2">
@@ -209,29 +201,27 @@ const SecurityPage: React.FC = () => {
               </div>
             )}
           </div>
-
           {/* Activité récente */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-200">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden w-full">
+            <div className="px-4 py-4 sm:px-6 sm:py-4 border-b border-gray-200">
               <div className="flex items-center space-x-3">
                 <div className="p-2 bg-purple-100 rounded-lg">
                   <Shield className="w-6 h-6 text-purple-600" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900">Activité récente</h2>
+                  <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Activité récente</h2>
                   <p className="text-gray-600">Surveillez les connexions et activités sur votre compte</p>
                 </div>
               </div>
             </div>
-
             <div className="divide-y divide-gray-200">
               {securityEvents.map((event) => (
-                <div key={event.id} className="p-6 hover:bg-gray-50 transition-colors">
-                  <div className="flex items-start space-x-4">
+                <div key={event.id} className="p-4 sm:p-6 hover:bg-gray-50 transition-colors">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                     {getEventIcon(event.status)}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-semibold text-gray-900">{event.event}</h3>
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
+                        <h3 className="text-base sm:text-lg font-semibold text-gray-900">{event.event}</h3>
                         <div className="flex items-center space-x-2 text-sm text-gray-500">
                           <Calendar className="w-4 h-4" />
                           <span>{formatDate(event.time)}</span>
@@ -246,9 +236,8 @@ const SecurityPage: React.FC = () => {
                 </div>
               ))}
             </div>
-
-            <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-              <button className="text-purple-600 hover:text-purple-700 font-medium">
+            <div className="px-4 py-4 sm:px-6 sm:py-4 bg-gray-50 border-t border-gray-200">
+              <button className="text-purple-600 hover:text-purple-700 font-medium text-sm">
                 Voir toute l'activité
               </button>
             </div>
