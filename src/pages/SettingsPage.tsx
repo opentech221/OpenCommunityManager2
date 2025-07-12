@@ -25,40 +25,36 @@ export default function SettingsPage() {
     { id: 'public', name: 'Profil public', icon: Globe },
   ];
 
+  // Mobile-first : carrousel horizontal pour onglets, layout vertical, boutons larges, accessibilité
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Paramètres</h1>
-          <p className="text-gray-600 mt-2">Gérez les paramètres de votre compte et de votre association</p>
-        </div>
-
+    <div className="min-h-screen bg-gray-50 pb-24">
+      <div className="max-w-md mx-auto px-4 py-6">
+        <h1 className="text-2xl font-bold font-montserrat text-purple-700 mb-2">Paramètres</h1>
+        <p className="text-gray-600 font-poppins mb-4">Gérez les paramètres de votre compte et de votre association.</p>
         <div className="bg-white rounded-lg shadow-sm">
           {/* Onglets - Carrousel mobile-first renforcé */}
-          <div className="border-b border-gray-200">
-            <nav className="flex overflow-x-auto flex-nowrap gap-x-2 px-2 py-2 scrollbar-hide no-scrollbar snap-x snap-mandatory">
-              {tabs.map((tab) => {
-                const Icon = tab.icon;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`min-w-[120px] max-w-[160px] px-3 py-2 rounded-lg flex flex-col items-center justify-center space-y-1 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 snap-center
-                      ${activeTab === tab.id
-                        ? 'bg-purple-100 text-purple-700 border-b-2 border-purple-500 shadow'
-                        : 'bg-gray-50 text-gray-500 hover:bg-gray-100 border-b-2 border-transparent'}
-                    `}
-                  >
-                    <Icon className="w-5 h-5 mb-1" />
-                    <span className="truncate">{tab.name}</span>
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
-
-          {/* Contenu des onglets */}
-          <div className="p-6">
+          <nav className="flex overflow-x-auto flex-nowrap gap-x-2 px-2 py-2 scrollbar-hide no-scrollbar snap-x snap-mandatory" aria-label="Onglets paramètres">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`min-w-[120px] max-w-[160px] px-3 py-2 rounded-lg flex flex-col items-center justify-center space-y-1 text-xs font-medium font-poppins transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 snap-center
+                    ${activeTab === tab.id
+                      ? 'bg-purple-100 text-purple-700 border-b-2 border-purple-500 shadow'
+                      : 'bg-gray-50 text-gray-500 hover:bg-gray-100 border-b-2 border-transparent'}
+                  `}
+                  aria-current={activeTab === tab.id ? 'page' : undefined}
+                >
+                  <Icon className="w-5 h-5 mb-1" aria-hidden="true" />
+                  <span className="truncate">{tab.name}</span>
+                </button>
+              );
+            })}
+          </nav>
+          {/* Contenu des onglets - layout vertical, padding mobile */}
+          <div className="p-4">
             {activeTab === 'profile' && (
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold text-gray-900">Profil utilisateur</h2>
