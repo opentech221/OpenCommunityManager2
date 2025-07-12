@@ -5,6 +5,15 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    // Mobile-first breakpoints optimisés pour smartphones 2025
+    screens: {
+      'xs': '375px',   // iPhone SE, petits smartphones
+      'sm': '414px',   // iPhone 12/13/14, smartphones standards
+      'md': '768px',   // Tablettes portrait
+      'lg': '1024px',  // Tablettes paysage, petits laptops
+      'xl': '1280px',  // Desktops
+      '2xl': '1536px', // Grands écrans
+    },
     extend: {
       colors: {
         primary: {
@@ -31,6 +40,61 @@ export default {
           800: '#9a3412',
           900: '#7c2d12',
         },
+      },
+      // Espacement optimisé pour le mobile
+      spacing: {
+        '18': '4.5rem',
+        '22': '5.5rem',
+        '26': '6.5rem',
+        '30': '7.5rem',
+        '34': '8.5rem',
+        '38': '9.5rem',
+        '42': '10.5rem',
+        '46': '11.5rem',
+        '50': '12.5rem',
+        '54': '13.5rem',
+        '58': '14.5rem',
+        '62': '15.5rem',
+        '66': '16.5rem',
+        '70': '17.5rem',
+        '74': '18.5rem',
+        '78': '19.5rem',
+        '82': '20.5rem',
+        '86': '21.5rem',
+        '90': '22.5rem',
+        '94': '23.5rem',
+        '98': '24.5rem',
+      },
+      // Tailles de police optimisées pour mobile
+      fontSize: {
+        'xs': ['0.75rem', { lineHeight: '1.5' }],
+        'sm': ['0.875rem', { lineHeight: '1.5' }],
+        'base': ['1rem', { lineHeight: '1.6' }],
+        'lg': ['1.125rem', { lineHeight: '1.6' }],
+        'xl': ['1.25rem', { lineHeight: '1.6' }],
+        '2xl': ['1.5rem', { lineHeight: '1.5' }],
+        '3xl': ['1.875rem', { lineHeight: '1.4' }],
+        '4xl': ['2.25rem', { lineHeight: '1.3' }],
+        '5xl': ['3rem', { lineHeight: '1.2' }],
+        '6xl': ['3.75rem', { lineHeight: '1.1' }],
+        '7xl': ['4.5rem', { lineHeight: '1.1' }],
+        '8xl': ['6rem', { lineHeight: '1' }],
+        '9xl': ['8rem', { lineHeight: '1' }],
+      },
+      // Hauteurs de zone tactile mobile-friendly
+      minHeight: {
+        '12': '3rem',   // 48px - minimum pour zone tactile
+        '14': '3.5rem', // 56px
+        '16': '4rem',   // 64px
+        '18': '4.5rem', // 72px
+        '20': '5rem',   // 80px
+      },
+      // Rayons de bordure harmonieux
+      borderRadius: {
+        'xl': '0.75rem',
+        '2xl': '1rem',
+        '3xl': '1.5rem',
+        '4xl': '2rem',
       },
       fontFamily: {
         montserrat: ['Montserrat', 'sans-serif'],

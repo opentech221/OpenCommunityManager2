@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Search, Calendar, MapPin, Users, Eye, Edit, Trash2 } from 'lucide-react';
+import { Plus, Search, Calendar, MapPin, Users, Eye, Edit, Trash2, Clock, Filter } from 'lucide-react';
 import type { EventType } from '../types';
 
 // Données de démonstration pour les événements
@@ -65,6 +65,36 @@ const mockEvents: EventType[] = [
     participants: [],
     createdAt: new Date(),
     updatedAt: new Date()
+  },
+  {
+    id: '4',
+    title: 'Réunion mensuelle du bureau',
+    description: 'Réunion mensuelle du bureau exécutif pour faire le point sur les activités.',
+    startDate: new Date('2025-02-20T18:00:00'),
+    location: 'Siège de l\'association',
+    type: 'MEETING',
+    status: 'PLANNED',
+    maxParticipants: 15,
+    associationId: 'assoc-1',
+    createdBy: 'user-1',
+    participants: [],
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: '5',
+    title: 'Journée porte ouverte',
+    description: 'Présentation des activités de l\'association aux nouveaux membres potentiels.',
+    startDate: new Date('2025-05-10T10:00:00'),
+    location: 'Espace public - Plateau',
+    type: 'SOCIAL',
+    status: 'PLANNED',
+    maxParticipants: 200,
+    associationId: 'assoc-1',
+    createdBy: 'user-1',
+    participants: [],
+    createdAt: new Date(),
+    updatedAt: new Date()
   }
 ];
 
@@ -72,7 +102,8 @@ export default function EventsPage() {
   const [events] = useState<EventType[]>(mockEvents);
   const [searchTerm, setSearchTerm] = useState('');
   const [dateFilter, setDateFilter] = useState<'upcoming' | 'past' | 'all'>('upcoming');
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [typeFilter, setTypeFilter] = useState<'all' | 'MEETING' | 'SOCIAL' | 'TRAINING'>('all');
+  const [showFilters, setShowFilters] = useState(false);
 
   const now = new Date();
   const filteredEvents = events.filter(event => {
@@ -88,7 +119,9 @@ export default function EventsPage() {
       matchesDate = event.startDate < now;
     }
     
-    return matchesSearch && matchesDate;
+    const matchesType = typeFilter === 'all' || event.type === typeFilter;
+    
+    return matchesSearch && matchesDate && matchesType;
   });
 
   const getEventStatus = (eventDate: Date) => {
@@ -102,193 +135,290 @@ export default function EventsPage() {
     }
   };
 
-  const formatEventDate = (date: Date) => {
-    return date.toLocaleDateString('fr-FR', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+  const getEventTypeLabel = (type: string) => {
+    switch (type) {
+      case 'MEETING': return 'Réunion';
+      case 'SOCIAL': return 'Social';
+      case 'TRAINING': return 'Formation';
+      default: return type;
+    }
   };
 
-  // Statistiques
-  const upcomingEvents = events.filter(e => e.startDate > now).length;
-  const totalParticipants = events.reduce((sum, e) => sum + e.participants.length, 0);
-  const averageParticipants = events.length > 0 ? Math.round(totalParticipants / events.length) : 0;
+  const getEventTypeColor = (type: string) => {
+    switch (type) {
+      case 'MEETING': return 'bg-purple-100 text-purple-800';
+      case 'SOCIAL': return 'bg-green-100 text-green-800';
+      case 'TRAINING': return 'bg-orange-100 text-orange-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getEventStats = () => {
+    const upcoming = events.filter(event => event.startDate > now).length;
+    const past = events.filter(event => event.startDate < now).length;
+    const thisMonth = events.filter(event => {
+      const eventDate = event.startDate;
+      return eventDate.getMonth() === now.getMonth() && eventDate.getFullYear() === now.getFullYear();
+    }).length;
+    
+    return { upcoming, past, thisMonth, total: events.length };
+  };
+
+  const stats = getEventStats();
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-montserrat font-bold text-gray-900 mb-2">
-          Gestion des événements
-        </h1>
-        <p className="text-gray-600">
-          Planifiez et organisez les activités de votre association
-        </p>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="card">
-          <h3 className="text-sm font-medium text-gray-500 mb-1">Événements à venir</h3>
-          <p className="text-3xl font-bold text-blue-600">{upcomingEvents}</p>
-        </div>
-        <div className="card">
-          <h3 className="text-sm font-medium text-gray-500 mb-1">Total événements</h3>
-          <p className="text-3xl font-bold text-gray-900">{events.length}</p>
-        </div>
-        <div className="card">
-          <h3 className="text-sm font-medium text-gray-500 mb-1">Participants inscrits</h3>
-          <p className="text-3xl font-bold text-green-600">{totalParticipants}</p>
-        </div>
-        <div className="card">
-          <h3 className="text-sm font-medium text-gray-500 mb-1">Moyenne par événement</h3>
-          <p className="text-3xl font-bold text-purple-600">{averageParticipants}</p>
-        </div>
-      </div>
-
-      {/* Filters and Actions */}
-      <div className="card mb-6">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <div className="flex flex-col sm:flex-row gap-4 flex-1">
-            {/* Search */}
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Rechercher un événement..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full"
-              />
-            </div>
-
-            {/* Date Filter */}
+    <div className="min-h-screen bg-gray-50">
+      {/* En-tête Mobile-First */}
+      <div className="bg-white border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col space-y-4">
+          <div className="flex items-center justify-between">
             <div>
-              <select
-                value={dateFilter}
-                onChange={(e) => setDateFilter(e.target.value as 'upcoming' | 'past' | 'all')}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                title="Filtrer par date"
-                aria-label="Filtrer par date"
-              >
-                <option value="upcoming">Événements à venir</option>
-                <option value="past">Événements passés</option>
-                <option value="all">Tous les événements</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="flex gap-2">
-            <button
-              onClick={() => setShowAddModal(true)}
-              className="btn-primary flex items-center"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Nouvel événement
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Events Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredEvents.map((event) => {
-          const eventStatus = getEventStatus(event.startDate);
-          
-          return (
-            <div key={event.id} className="card hover:shadow-lg transition-shadow">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <h3 className="text-lg font-montserrat font-bold text-gray-900 mb-2">
-                    {event.title}
-                  </h3>
-                  <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${eventStatus.className}`}>
-                    {eventStatus.label}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button 
-                    className="text-blue-600 hover:text-blue-900"
-                    title="Voir les détails"
-                    aria-label="Voir les détails"
-                  >
-                    <Eye className="h-4 w-4" />
-                  </button>
-                  <button 
-                    className="text-indigo-600 hover:text-indigo-900"
-                    title="Modifier"
-                    aria-label="Modifier"
-                  >
-                    <Edit className="h-4 w-4" />
-                  </button>
-                  <button 
-                    className="text-red-600 hover:text-red-900"
-                    title="Supprimer"
-                    aria-label="Supprimer"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-
-              <p className="text-gray-600 mb-4 line-clamp-3">
-                {event.description}
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">
+                Événements
+              </h1>
+              <p className="text-sm sm:text-base text-gray-600 mt-1">
+                Gérez les événements de votre association
               </p>
-
-              <div className="space-y-2 mb-4">
-                <div className="flex items-center text-sm text-gray-600">
-                  <Calendar className="h-4 w-4 mr-2" />
-                  {formatEventDate(event.startDate)}
-                </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <MapPin className="h-4 w-4 mr-2" />
-                  {event.location}
-                </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <Users className="h-4 w-4 mr-2" />
-                  {event.participants.length} / {event.maxParticipants} participants
-                </div>
-              </div>
-
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-purple-600 h-2 rounded-full"
-                  style={{ 
-                    width: `${(event.participants.length / event.maxParticipants) * 100}%` 
-                  }}
-                />
-              </div>
             </div>
-          );
-        })}
+            <button className="bg-purple-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2 text-sm sm:text-base">
+              <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">Nouvel événement</span>
+              <span className="sm:hidden">Nouveau</span>
+            </button>
+          </div>
+          
+          {/* Statistiques rapides */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <div className="bg-purple-50 p-3 rounded-lg">
+              <div className="text-lg sm:text-xl font-bold text-purple-600">{stats.total}</div>
+              <div className="text-xs sm:text-sm text-purple-600">Total</div>
+            </div>
+            <div className="bg-blue-50 p-3 rounded-lg">
+              <div className="text-lg sm:text-xl font-bold text-blue-600">{stats.upcoming}</div>
+              <div className="text-xs sm:text-sm text-blue-600">À venir</div>
+            </div>
+            <div className="bg-green-50 p-3 rounded-lg">
+              <div className="text-lg sm:text-xl font-bold text-green-600">{stats.thisMonth}</div>
+              <div className="text-xs sm:text-sm text-green-600">Ce mois</div>
+            </div>
+            <div className="bg-gray-50 p-3 rounded-lg">
+              <div className="text-lg sm:text-xl font-bold text-gray-600">{stats.past}</div>
+              <div className="text-xs sm:text-sm text-gray-600">Passés</div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {filteredEvents.length === 0 && (
-        <div className="text-center py-12">
-          <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500">Aucun événement trouvé</p>
-        </div>
-      )}
+      {/* Recherche et filtres mobiles */}
+      <div className="bg-white border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
+        <div className="space-y-4">
+          {/* Barre de recherche */}
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Search className="h-5 w-5 text-gray-400" />
+            </div>
+            <input
+              type="text"
+              placeholder="Rechercher un événement..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm sm:text-base"
+            />
+          </div>
 
-      {/* Add Event Modal - TODO: Implement */}
-      {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
-            <h3 className="text-lg font-semibold mb-4">Créer un événement</h3>
-            <p className="text-gray-600 mb-4">Fonctionnalité à implémenter...</p>
+          {/* Filtres rapides */}
+          <div className="flex items-center space-x-2 overflow-x-auto">
             <button
-              onClick={() => setShowAddModal(false)}
-              className="btn-primary"
+              onClick={() => setDateFilter('upcoming')}
+              className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                dateFilter === 'upcoming' 
+                  ? 'bg-purple-600 text-white' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
             >
-              Fermer
+              À venir
+            </button>
+            <button
+              onClick={() => setDateFilter('past')}
+              className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                dateFilter === 'past' 
+                  ? 'bg-purple-600 text-white' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Passés
+            </button>
+            <button
+              onClick={() => setDateFilter('all')}
+              className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                dateFilter === 'all' 
+                  ? 'bg-purple-600 text-white' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Tous
+            </button>
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex-shrink-0 flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+            >
+              <Filter className="w-4 h-4" />
+              <span>Filtres</span>
+            </button>
+          </div>
+
+          {/* Panneau de filtres */}
+          {showFilters && (
+            <div className="p-4 bg-gray-50 rounded-lg">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Type d'événement</label>
+                <select
+                  value={typeFilter}
+                  onChange={(e) => setTypeFilter(e.target.value as typeof typeFilter)}
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                >
+                  <option value="all">Tous les types</option>
+                  <option value="MEETING">Réunion</option>
+                  <option value="SOCIAL">Social</option>
+                  <option value="TRAINING">Formation</option>
+                </select>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Liste des événements - Mobile First */}
+      <div className="px-4 py-4 sm:px-6 lg:px-8">
+        {filteredEvents.length === 0 ? (
+          <div className="text-center py-8">
+            <Calendar className="mx-auto h-12 w-12 text-gray-400" />
+            <div className="text-gray-500 text-lg mt-2">Aucun événement trouvé</div>
+            <p className="text-gray-400 text-sm mt-1">Essayez de modifier vos critères de recherche</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {filteredEvents.map((event) => {
+              const eventStatus = getEventStatus(event.startDate);
+              const participantCount = event.participants?.length || 0;
+              
+              return (
+                <div key={event.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                  <div className="p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <h3 className="text-base sm:text-lg font-semibold text-gray-900 line-clamp-2">
+                          {event.title}
+                        </h3>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getEventTypeColor(event.type)}`}>
+                            {getEventTypeLabel(event.type)}
+                          </span>
+                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${eventStatus.className}`}>
+                            {eventStatus.label}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                      {event.description}
+                    </p>
+                    
+                    {/* Informations détaillées */}
+                    <div className="space-y-2">
+                      <div className="flex items-center space-x-2 text-sm text-gray-600">
+                        <Calendar className="w-4 h-4 flex-shrink-0" />
+                        <span>
+                          {event.startDate.toLocaleDateString('fr-FR', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2 text-sm text-gray-600">
+                        <Clock className="w-4 h-4 flex-shrink-0" />
+                        <span>
+                          {event.startDate.toLocaleTimeString('fr-FR', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2 text-sm text-gray-600">
+                        <MapPin className="w-4 h-4 flex-shrink-0" />
+                        <span className="truncate">{event.location}</span>
+                      </div>
+                      <div className="flex items-center space-x-2 text-sm text-gray-600">
+                        <Users className="w-4 h-4 flex-shrink-0" />
+                        <span>
+                          {participantCount} / {event.maxParticipants || '∞'} participants
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Barre de progression des participants */}
+                    {event.maxParticipants && (
+                      <div className="mt-3">
+                        <div className="flex justify-between text-xs text-gray-500 mb-1">
+                          <span>Participants</span>
+                          <span>{Math.round((participantCount / event.maxParticipants) * 100)}%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div 
+                            className="bg-purple-600 h-2 rounded-full transition-all duration-300"
+                            style={{ width: `${Math.min((participantCount / event.maxParticipants) * 100, 100)}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Actions */}
+                    <div className="mt-4 flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <button className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-purple-600 bg-purple-50 rounded-md hover:bg-purple-100 transition-colors">
+                          <Eye className="w-4 h-4 mr-1" />
+                          Voir
+                        </button>
+                        <button className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors">
+                          <Edit className="w-4 h-4 mr-1" />
+                          Modifier
+                        </button>
+                      </div>
+                      <button className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors">
+                        <Trash2 className="w-4 h-4 mr-1" />
+                        Supprimer
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Pagination mobile */}
+      <div className="bg-white border-t border-gray-200 px-4 py-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-gray-700">
+            <span className="font-medium">{filteredEvents.length}</span> sur <span className="font-medium">{events.length}</span> événements
+          </div>
+          <div className="flex items-center space-x-2">
+            <button className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50 border border-gray-300 rounded-md">
+              Précédent
+            </button>
+            <button className="px-3 py-1.5 text-sm bg-purple-600 text-white rounded-md">
+              1
+            </button>
+            <button className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50 border border-gray-300 rounded-md">
+              Suivant
             </button>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
