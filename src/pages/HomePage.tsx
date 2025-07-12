@@ -5,9 +5,10 @@ import {
   Calendar, 
   TrendingUp, 
   FileText, 
-  MessageSquare,
+ 
   ArrowRight,
-  Check
+  Check,
+  MessageSquare
 } from 'lucide-react';
 import { ROUTES } from '../constants';
 

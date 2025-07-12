@@ -1,18 +1,20 @@
 import React from 'react';
 import { FileText, Scale, Shield } from 'lucide-react';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 export const LegalPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Mentions légales</h1>
-          <p className="text-xl text-gray-600">
-            Informations légales concernant Open Community Manager
-          </p>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 space-y-8">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        {/* Section Hero */}
+        <section className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4 font-montserrat">Mentions légales</h1>
+          <p className="text-xl text-gray-600 font-poppins">Informations légales et RGPD</p>
+        </section>
+        {/* Fil d'Ariane */}
+        <Breadcrumb current="Mentions légales" />
+        {/* Contenu principal */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mt-8">
           <section>
             <div className="flex items-center space-x-3 mb-4">
               <div className="p-2 bg-blue-100 rounded-lg">

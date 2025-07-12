@@ -18,6 +18,7 @@ import {
   Heart,
 } from 'lucide-react';
 import { ROUTES } from '../constants';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 export const LandingPage: React.FC = () => {
 
@@ -146,6 +147,7 @@ export const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white">
+
       {/* Hero Section moderne */}
       <section className="relative bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
@@ -198,6 +200,8 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
       </section>
+      {/* Fil d'Ariane */}
+      <Breadcrumb current="Accueil" />
 
       {/* Section Avantages */}
       <section className="py-20 bg-gray-50">

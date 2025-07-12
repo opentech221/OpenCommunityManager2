@@ -1,5 +1,5 @@
 import React from 'react';
-import { PublicHeader, PublicBreadcrumb } from './PublicHeader';
+import { PublicHeader } from './PublicHeader';
 import { Footer } from './Footer';
 
 interface PublicLayoutProps {
@@ -18,13 +18,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <PublicHeader />
-      {showBreadcrumb && (
-        <PublicBreadcrumb 
-          currentPage={currentPage} 
-          showBackButton={showBreadcrumb}
-          backTo={backTo}
-        />
-      )}
+      {/* Breadcrumb supprimé */}
       <main className="flex-1">
         {children}
       </main>

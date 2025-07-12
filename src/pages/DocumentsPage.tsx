@@ -144,42 +144,42 @@ const DocumentsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-24">
-      <div className="max-w-md mx-auto px-4 py-6">
-        {/* En-tête mobile-first */}
+      <div className="max-w-4xl mx-auto px-4 py-6">
+        {/* En-tête responsive */}
         <div className="mb-6">
-          <h1 className="text-2xl font-bold font-montserrat text-purple-700 mb-2">Documents</h1>
+          <h1 className="text-2xl md:text-3xl font-bold font-montserrat text-purple-700 mb-2">Documents</h1>
           <p className="text-gray-600 font-poppins">Gestion des documents de l'association</p>
         </div>
         <button 
           onClick={() => setShowUploadModal(true)}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-orange-500 text-white rounded-lg font-bold shadow-lg mb-4 focus:outline-none focus:ring-2 focus:ring-orange-400"
+          className="w-full md:w-auto flex items-center justify-center gap-2 px-4 py-3 bg-orange-500 text-white rounded-lg font-bold shadow-lg mb-4 focus:outline-none focus:ring-2 focus:ring-orange-400"
         >
           <Upload className="w-5 h-5" /> Télécharger un document
         </button>
-        {/* Statistiques - cards verticales */}
-        <div className="flex flex-col gap-4 mb-4">
-          <div className="bg-white p-4 rounded-lg shadow flex items-center justify-between">
+        {/* Statistiques - colonne mobile, ligne desktop */}
+        <div className="flex flex-col md:flex-row gap-4 mb-4">
+          <div className="bg-white p-4 rounded-lg shadow flex items-center justify-between flex-1">
             <div>
               <p className="text-xs font-poppins text-gray-600">Total documents</p>
               <p className="text-xl font-bold font-montserrat text-gray-900">{documents.length}</p>
             </div>
             <File className="w-6 h-6 text-blue-600" />
           </div>
-          <div className="bg-white p-4 rounded-lg shadow flex items-center justify-between">
+          <div className="bg-white p-4 rounded-lg shadow flex items-center justify-between flex-1">
             <div>
               <p className="text-xs font-poppins text-gray-600">Procès-verbaux</p>
               <p className="text-xl font-bold text-blue-600">{documents.filter(d => d.type === DocumentTypeEnum.PV).length}</p>
             </div>
             <FileText className="w-6 h-6 text-blue-600" />
           </div>
-          <div className="bg-white p-4 rounded-lg shadow flex items-center justify-between">
+          <div className="bg-white p-4 rounded-lg shadow flex items-center justify-between flex-1">
             <div>
               <p className="text-xs font-poppins text-gray-600">Rapports financiers</p>
               <p className="text-xl font-bold text-green-600">{documents.filter(d => d.type === DocumentTypeEnum.FINANCIAL_REPORT).length}</p>
             </div>
             <FileSpreadsheet className="w-6 h-6 text-green-600" />
           </div>
-          <div className="bg-white p-4 rounded-lg shadow flex items-center justify-between">
+          <div className="bg-white p-4 rounded-lg shadow flex items-center justify-between flex-1">
             <div>
               <p className="text-xs font-poppins text-gray-600">Taille totale</p>
               <p className="text-xl font-bold text-purple-600">{formatFileSize(documents.reduce((sum, d) => sum + d.size, 0))}</p>
@@ -187,9 +187,9 @@ const DocumentsPage: React.FC = () => {
             <Upload className="w-6 h-6 text-purple-600" />
           </div>
         </div>
-        {/* Barre de recherche et filtres - mobile-first */}
-        <div className="bg-white p-4 rounded-lg shadow mb-4 flex flex-col gap-3">
-          <div className="relative">
+        {/* Barre de recherche et filtres - empilés mobile, ligne desktop */}
+        <div className="bg-white p-4 rounded-lg shadow mb-4 flex flex-col md:flex-row gap-3 md:items-center">
+          <div className="relative flex-1">
             <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
             <input
               type="text"
@@ -215,8 +215,8 @@ const DocumentsPage: React.FC = () => {
             </select>
           </div>
         </div>
-        {/* Liste des documents - cards verticales mobile-first */}
-        <div className="flex flex-col gap-3">
+        {/* Liste des documents - cards mobile, table desktop */}
+        <div className="block md:hidden flex flex-col gap-3">
           {filteredDocuments.length === 0 && (
             <div className="text-center py-12">
               <File className="mx-auto h-12 w-12 text-gray-400" />
@@ -239,30 +239,70 @@ const DocumentsPage: React.FC = () => {
                 <span className="ml-auto text-xs text-gray-700">{formatFileSize(document.size)}</span>
               </div>
               <div className="flex items-center gap-3 pt-2">
-                <button 
-                  className="text-violet-600 hover:text-violet-800 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500 rounded"
-                  title="Voir le document"
-                  aria-label="Voir le document"
-                >
-                  <Eye className="w-5 h-5" />
-                </button>
-                <button 
-                  className="text-blue-600 hover:text-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
-                  title="Télécharger"
-                  aria-label="Télécharger le document"
-                >
-                  <Download className="w-5 h-5" />
-                </button>
-                <button 
-                  className="text-red-600 hover:text-red-800 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 rounded"
-                  title="Supprimer"
-                  aria-label="Supprimer le document"
-                >
-                  <Trash2 className="w-5 h-5" />
-                </button>
+                <button className="text-violet-600 hover:text-violet-800 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500 rounded" title="Voir le document" aria-label="Voir le document"><Eye className="w-5 h-5" /></button>
+                <button className="text-blue-600 hover:text-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded" title="Télécharger" aria-label="Télécharger le document"><Download className="w-5 h-5" /></button>
+                <button className="text-red-600 hover:text-red-800 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 rounded" title="Supprimer" aria-label="Supprimer le document"><Trash2 className="w-5 h-5" /></button>
               </div>
             </div>
           ))}
+        </div>
+        <div className="hidden md:block bg-white rounded-xl shadow-sm border overflow-hidden">
+          <div className="p-6 border-b">
+            <h3 className="text-lg font-semibold text-gray-900">Documents ({filteredDocuments.length})</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Document</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Taille</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Téléchargé par</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {filteredDocuments.map((document) => (
+                  <tr key={document.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center">
+                        {getFileIcon(document.name)}
+                        <div className="ml-3">
+                          <div className="text-sm font-medium text-gray-900">{document.name}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTypeBadgeColor(document.type)}`}>{getTypeLabel(document.type)}</span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{formatFileSize(document.size)}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <User className="w-4 h-4 text-gray-400 mr-2" />
+                        <span className="text-sm text-gray-900">{document.uploadedBy}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <Calendar className="w-4 h-4 text-gray-400 mr-2" />
+                        <span className="text-sm text-gray-900">{formatDate(document.uploadDate)}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <button className="text-violet-600 hover:text-violet-800 transition-colors" title="Voir le document"><Eye className="w-4 h-4" /></button>
+                        <button className="text-blue-600 hover:text-blue-800 transition-colors" title="Télécharger"><Download className="w-4 h-4" /></button>
+                        <button className="text-red-600 hover:text-red-800 transition-colors" title="Supprimer"><Trash2 className="w-4 h-4" /></button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
         {/* Modal de téléchargement - inchangé, déjà mobile-first */}
         {showUploadModal && (

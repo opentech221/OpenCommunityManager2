@@ -28,37 +28,36 @@ export default function SettingsPage() {
   // Mobile-first : carrousel horizontal pour onglets, layout vertical, boutons larges, accessibilité
   return (
     <div className="min-h-screen bg-gray-50 pb-24">
-      <div className="max-w-md mx-auto px-4 py-6">
-        <h1 className="text-2xl font-bold font-montserrat text-purple-700 mb-2">Paramètres</h1>
+      <div className="max-w-5xl mx-auto px-4 py-6">
+        <h1 className="text-2xl md:text-3xl font-bold font-montserrat text-purple-700 mb-2">Paramètres</h1>
         <p className="text-gray-600 font-poppins mb-4">Gérez les paramètres de votre compte et de votre association.</p>
-        <div className="bg-white rounded-lg shadow-sm">
-          {/* Onglets - Carrousel mobile-first renforcé */}
-          <nav className="flex overflow-x-auto flex-nowrap gap-x-2 px-2 py-2 scrollbar-hide no-scrollbar snap-x snap-mandatory" aria-label="Onglets paramètres">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`min-w-[120px] max-w-[160px] px-3 py-2 rounded-lg flex flex-col items-center justify-center space-y-1 text-xs font-medium font-poppins transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 snap-center
-                    ${activeTab === tab.id
-                      ? 'bg-purple-100 text-purple-700 border-b-2 border-purple-500 shadow'
-                      : 'bg-gray-50 text-gray-500 hover:bg-gray-100 border-b-2 border-transparent'}
-                  `}
-                  aria-current={activeTab === tab.id ? 'page' : undefined}
-                >
-                  <Icon className="w-5 h-5 mb-1" aria-hidden="true" />
-                  <span className="truncate">{tab.name}</span>
-                </button>
-              );
-            })}
+        <div className="bg-white rounded-lg shadow-sm md:grid md:grid-cols-5 md:gap-0">
+          {/* Onglets - carrousel mobile, menu vertical desktop */}
+          <nav
+            className="flex flex-row flex-nowrap w-full gap-x-2 px-0 py-2 md:flex-col md:gap-y-2 md:col-span-1 md:py-8 md:px-4 md:border-r md:border-gray-100 md:bg-gray-50"
+            aria-label="Onglets paramètres"
+          >
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex-1 min-w-0 px-1 py-1 rounded-lg flex flex-col items-center justify-center space-y-0 text-[11px] font-medium font-poppins transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 md:min-w-0 md:max-w-none md:flex-row md:space-y-0 md:space-x-2 md:rounded-lg md:border-l-4 md:py-3 md:px-2 md:justify-start md:items-center
+                  ${activeTab === tab.id
+                    ? 'bg-purple-100 text-purple-700 border-l-4 border-purple-500 shadow md:bg-purple-50 md:shadow-none'
+                    : 'bg-gray-50 text-gray-500 hover:bg-gray-100 border-l-4 border-transparent md:bg-transparent md:hover:bg-gray-100'}
+              `}
+              aria-current={activeTab === tab.id ? 'page' : undefined}
+            >
+              <tab.icon className="w-3 h-3 mb-0 md:mb-0 md:mr-2" aria-hidden="true" />
+              <span className="truncate md:text-base">{tab.name}</span>
+            </button>
+            ))}
           </nav>
-          {/* Contenu des onglets - layout vertical, padding mobile */}
-          <div className="p-4">
+          {/* Contenu des onglets - layout vertical mobile, carte à droite desktop */}
+          <div className="p-4 md:p-8 md:col-span-4">
             {activeTab === 'profile' && (
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold text-gray-900">Profil utilisateur</h2>
-                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -102,11 +101,11 @@ export default function SettingsPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end space-x-3">
-                  <button className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                <div className="flex flex-col md:flex-row items-center justify-end gap-3">
+                  <button className="w-full md:w-auto px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
                     Annuler
                   </button>
-                  <button className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center space-x-2">
+                  <button className="w-full md:w-auto px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center space-x-2">
                     <Save className="w-4 h-4" />
                     <span>Sauvegarder</span>
                   </button>
@@ -116,66 +115,67 @@ export default function SettingsPage() {
 
             {activeTab === 'association' && (
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-gray-900">Informations de l'association</h2>
-                
-                <div className="space-y-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Nom de l'association
-                    </label>
-                    <input
-                      type="text"
-                      defaultValue="Association Communautaire de Conakry"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Sigle (optionnel)
-                    </label>
-                    <input
-                      type="text"
-                      defaultValue="ACC"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
+                <div className="md:max-w-2xl w-full mx-auto">
+                  <h2 className="text-xl font-semibold text-gray-900">Informations de l'association</h2>
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Nom de l'association
+                      </label>
+                      <input
+                        type="text"
+                        defaultValue="Association Communautaire de Conakry"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Sigle (optionnel)
+                      </label>
+                      <input
+                        type="text"
+                        defaultValue="ACC"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      />
+                    </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Description
-                    </label>
-                    <textarea
-                      rows={4}
-                      defaultValue="Nous œuvrons pour le développement communautaire et l'autonomisation des jeunes dans la région de Conakry."
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
-                  </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Description
+                      </label>
+                      <textarea
+                        rows={4}
+                        defaultValue="Nous œuvrons pour le développement communautaire et l'autonomisation des jeunes dans la région de Conakry."
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      />
+                    </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Logo de l'association
-                    </label>
-                    <div className="flex items-center space-x-4">
-                      <div className="w-20 h-20 bg-purple-500 rounded-lg flex items-center justify-center">
-                        <span className="text-white font-bold text-lg">ACC</span>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Logo de l'association
+                      </label>
+                      <div className="flex items-center space-x-4">
+                        <div className="w-20 h-20 bg-purple-500 rounded-lg flex items-center justify-center">
+                          <span className="text-white font-bold text-lg">ACC</span>
+                        </div>
+                        <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center space-x-2">
+                          <Upload className="w-4 h-4" />
+                          <span>Changer le logo</span>
+                        </button>
                       </div>
-                      <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center space-x-2">
-                        <Upload className="w-4 h-4" />
-                        <span>Changer le logo</span>
-                      </button>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex items-center justify-end space-x-3">
-                  <button className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
-                    Annuler
-                  </button>
-                  <button className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center space-x-2">
-                    <Save className="w-4 h-4" />
-                    <span>Sauvegarder</span>
-                  </button>
+                  <div className="flex flex-col md:flex-row items-center justify-end gap-3">
+                    <button className="w-full md:w-auto px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                      Annuler
+                    </button>
+                    <button className="w-full md:w-auto px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center space-x-2">
+                      <Save className="w-4 h-4" />
+                      <span>Sauvegarder</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
@@ -224,11 +224,11 @@ export default function SettingsPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end space-x-3">
-                  <button className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                <div className="flex flex-col md:flex-row items-center justify-end gap-3">
+                  <button className="w-full md:w-auto px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
                     Annuler
                   </button>
-                  <button className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center space-x-2">
+                  <button className="w-full md:w-auto px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center space-x-2">
                     <Save className="w-4 h-4" />
                     <span>Changer le mot de passe</span>
                   </button>

@@ -103,34 +103,35 @@ const FinancesPage: React.FC = () => {
   // Mobile-first : layout vertical, padding, boutons larges, responsive, accessibilité
   return (
     <div className="min-h-screen bg-gray-50 pb-24">
-      <div className="max-w-md mx-auto px-4 py-6">
-        <h1 className="text-2xl font-bold font-montserrat text-purple-700 mb-2">Finances</h1>
+      <div className="max-w-4xl mx-auto px-4 py-6">
+        <h1 className="text-2xl md:text-3xl font-bold font-montserrat text-purple-700 mb-2">Finances</h1>
         <p className="text-gray-600 font-poppins mb-4">Suivi des entrées/sorties et bilans financiers de l'association.</p>
-        <div className="flex flex-col gap-4 mb-4">
+        {/* Filtres - carrousel mobile, ligne desktop */}
+        <div className="flex flex-col md:flex-row gap-3 mb-4 md:items-center">
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide snap-x snap-mandatory md:overflow-x-visible md:flex-row">
+            <button
+              className={`min-w-[100px] px-3 py-2 rounded-lg font-poppins text-xs font-medium snap-center focus:outline-none focus:ring-2 focus:ring-purple-500 md:min-w-0 md:mr-2 ${filterType === 'all' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-500'}`}
+              onClick={() => setFilterType('all')}
+            >Toutes</button>
+            <button
+              className={`min-w-[100px] px-3 py-2 rounded-lg font-poppins text-xs font-medium snap-center focus:outline-none focus:ring-2 focus:ring-purple-500 md:min-w-0 md:mr-2 ${filterType === TransactionTypeEnum.INCOME ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-500'}`}
+              onClick={() => setFilterType(TransactionTypeEnum.INCOME)}
+            >Entrées</button>
+            <button
+              className={`min-w-[100px] px-3 py-2 rounded-lg font-poppins text-xs font-medium snap-center focus:outline-none focus:ring-2 focus:ring-purple-500 md:min-w-0 md:mr-2 ${filterType === TransactionTypeEnum.EXPENSE ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-500'}`}
+              onClick={() => setFilterType(TransactionTypeEnum.EXPENSE)}
+            >Sorties</button>
+          </div>
           <button
-            className="w-full bg-orange-500 text-white font-bold py-3 rounded-lg shadow-lg flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full md:w-auto bg-orange-500 text-white font-bold py-3 rounded-lg shadow-lg flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
             onClick={() => setShowAddModal(true)}
             aria-label="Ajouter une transaction"
           >
             <Plus className="w-5 h-5" /> Ajouter une transaction
           </button>
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
-            <button
-              className={`min-w-[100px] px-3 py-2 rounded-lg font-poppins text-xs font-medium snap-center focus:outline-none focus:ring-2 focus:ring-purple-500 ${filterType === 'all' ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-500'}`}
-              onClick={() => setFilterType('all')}
-            >Toutes</button>
-            <button
-              className={`min-w-[100px] px-3 py-2 rounded-lg font-poppins text-xs font-medium snap-center focus:outline-none focus:ring-2 focus:ring-purple-500 ${filterType === TransactionTypeEnum.INCOME ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-500'}`}
-              onClick={() => setFilterType(TransactionTypeEnum.INCOME)}
-            >Entrées</button>
-            <button
-              className={`min-w-[100px] px-3 py-2 rounded-lg font-poppins text-xs font-medium snap-center focus:outline-none focus:ring-2 focus:ring-purple-500 ${filterType === TransactionTypeEnum.EXPENSE ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-500'}`}
-              onClick={() => setFilterType(TransactionTypeEnum.EXPENSE)}
-            >Sorties</button>
-          </div>
         </div>
-        {/* Liste des transactions - layout vertical, cards mobiles */}
-        <div className="flex flex-col gap-3">
+        {/* Liste des transactions - cards mobile, table desktop */}
+        <div className="flex flex-col gap-3 md:hidden">
           {transactions.filter(t => filterType === 'all' || t.type === filterType).map((tx) => (
             <div key={tx.id} className="bg-white rounded-lg shadow p-4 flex flex-col gap-2 border-l-4 border-purple-500">
               <div className="flex items-center justify-between">
@@ -146,6 +147,37 @@ const FinancesPage: React.FC = () => {
               )}
             </div>
           ))}
+        </div>
+        <div className="hidden md:block bg-white rounded-xl shadow-sm border overflow-hidden">
+          <div className="p-6 border-b">
+            <h3 className="text-lg font-semibold text-gray-900">Transactions</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Montant</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Catégorie</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reçu</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {transactions.filter(t => filterType === 'all' || t.type === filterType).map((tx) => (
+                  <tr key={tx.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4">{tx.description}</td>
+                    <td className="px-6 py-4">{tx.type === TransactionTypeEnum.INCOME ? 'Entrée' : 'Sortie'}</td>
+                    <td className={`px-6 py-4 font-bold ${tx.type === TransactionTypeEnum.INCOME ? 'text-green-600' : 'text-red-500'}`}>{tx.type === TransactionTypeEnum.INCOME ? '+' : '-'}{tx.amount} €</td>
+                    <td className="px-6 py-4">{tx.category}</td>
+                    <td className="px-6 py-4">{tx.date.toLocaleDateString()}</td>
+                    <td className="px-6 py-4">{tx.receipt ? (<a href={tx.receipt} className="text-blue-500 underline text-xs" target="_blank" rel="noopener noreferrer">Reçu</a>) : '-'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
         {/* Modal d'ajout mobile-first à ajouter ici si besoin */}
       </div>

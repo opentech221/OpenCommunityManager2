@@ -1,21 +1,20 @@
 import React from 'react';
 import { Shield, Lock, Eye, Database, UserCheck, Globe } from 'lucide-react';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 export const PrivacyPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Politique de confidentialité</h1>
-          <p className="text-xl text-gray-600">
-            Comment nous protégeons et utilisons vos données personnelles
-          </p>
-          <p className="text-sm text-gray-500 mt-2">
-            Dernière mise à jour : 11 juillet 2025
-          </p>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 space-y-8">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        {/* Section Hero */}
+        <section className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4 font-montserrat">Politique de confidentialité</h1>
+          <p className="text-xl text-gray-600 font-poppins">Comment vos données sont protégées</p>
+        </section>
+        {/* Fil d'Ariane */}
+        <Breadcrumb current="Confidentialité" />
+        {/* Contenu principal */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mt-8">
           <section>
             <div className="flex items-center space-x-3 mb-4">
               <div className="p-2 bg-blue-100 rounded-lg">

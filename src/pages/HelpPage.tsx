@@ -13,6 +13,7 @@ import {
   ChevronRight,
   Search
 } from 'lucide-react';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 export const HelpPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -69,14 +70,15 @@ export const HelpPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Header + Hero */}
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Centre d'aide</h1>
-          <p className="text-xl text-gray-600">
-            Trouvez rapidement les réponses à vos questions
-          </p>
-        </div>
-
+        {/* Section Hero améliorée */}
+        <section className="mb-8 rounded-xl bg-gradient-to-br from-purple-700 via-purple-600 to-orange-400 p-8 text-white shadow-lg">
+          <h1 className="text-4xl font-bold mb-4 font-montserrat drop-shadow">Centre d'aide</h1>
+          <p className="text-xl font-poppins opacity-90">Trouvez rapidement les réponses à vos questions</p>
+        </section>
+        {/* Fil d'Ariane */}
+        <Breadcrumb current="Support" />
         {/* Barre de recherche */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
           <div className="relative">
@@ -90,7 +92,6 @@ export const HelpPage: React.FC = () => {
             />
           </div>
         </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar des catégories */}
           <div className="lg:col-span-1">

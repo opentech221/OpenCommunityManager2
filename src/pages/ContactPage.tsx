@@ -15,6 +15,7 @@ import {
   CheckCircle
 } from 'lucide-react';
 import { ROUTES } from '../constants';
+import { Breadcrumb } from '../components/Breadcrumb';
 
 export const ContactPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -96,13 +97,6 @@ export const ContactPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <h1 className="text-2xl font-bold text-gray-900">Nous contacter</h1>
-          <p className="text-gray-600">Besoin d'aide ? Notre équipe est là pour vous</p>
-        </div>
-      </div>
 
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white py-16">
@@ -119,6 +113,7 @@ export const ContactPage: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <Breadcrumb current="Contact" />
         {/* Contact Methods */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {contactMethods.map((method, index) => (
