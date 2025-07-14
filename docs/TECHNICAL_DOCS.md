@@ -29,6 +29,7 @@ OpenCommunityManager2/
 ### Technologies utilisées
 
 #### Frontend
+
 - **React 18** : Framework principal
 - **TypeScript** : Typage statique
 - **Vite** : Build tool et dev server
@@ -37,6 +38,7 @@ OpenCommunityManager2/
 - **Lucide React** : Icônes
 
 #### Backend
+
 - **Flask** : Framework web Python
 - **SQLAlchemy** : ORM
 - **Flask-Migrate** : Gestion des migrations
@@ -54,23 +56,27 @@ OpenCommunityManager2/
 ### Installation
 
 1. **Cloner le dépôt**
+
    ```bash
    git clone https://github.com/yourusername/OpenCommunityManager2.git
    cd OpenCommunityManager2
    ```
 
 2. **Configuration du frontend**
+
    ```bash
    npm install
    ```
 
 3. **Configuration du backend**
+
    ```bash
    cd backend
    pip install -r requirements.txt
    ```
 
 4. **Base de données**
+
    ```bash
    # Depuis le dossier backend
    flask db init
@@ -81,17 +87,20 @@ OpenCommunityManager2/
 ### Lancement en développement
 
 1. **Backend (Port 5000)**
+
    ```bash
    cd backend
    python run.py
    ```
 
 2. **Frontend (Port 5173)**
+
    ```bash
    npm run dev
    ```
 
 3. **Système complet**
+
    ```bash
    # Windows
    ./launch-full-system.bat
@@ -105,10 +114,12 @@ OpenCommunityManager2/
 ### Composants principaux
 
 #### Layouts
+
 - `PublicLayout` : Layout pour les pages publiques
 - `AppLayout` : Layout pour les pages authentifiées
 
 #### Composants réutilisables
+
 - `Header` : Barre de navigation authentifiée
 - `PublicHeader` : Barre de navigation publique
 - `Sidebar` : Menu latéral
@@ -116,6 +127,7 @@ OpenCommunityManager2/
 - `MemberForm` : Formulaire de gestion des membres
 
 #### Pages
+
 - **Publiques** : Landing, Login, Register, Legal, etc.
 - **Authentifiées** : Dashboard, Members, Events, etc.
 
@@ -176,6 +188,7 @@ const App = () => (
 ### Modèles de données
 
 #### Association
+
 ```python
 class Association(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -196,6 +209,7 @@ class Association(db.Model):
 ```
 
 #### Member
+
 ```python
 class Member(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -218,6 +232,7 @@ class Member(db.Model):
 ### Routes API
 
 #### Authentification
+
 ```python
 @auth_bp.route('/login', methods=['POST'])
 def login():
@@ -233,6 +248,7 @@ def register():
 ```
 
 #### Gestion des membres
+
 ```python
 @members_bp.route('/', methods=['GET'])
 def get_members():
@@ -336,6 +352,7 @@ module.exports = {
 ### Composants UI
 
 #### Boutons
+
 ```typescript
 // Types de boutons standardisés
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
@@ -350,6 +367,7 @@ const buttonClasses = {
 ```
 
 #### Formulaires
+
 ```typescript
 // Classes standardisées pour les formulaires
 const inputClasses = `

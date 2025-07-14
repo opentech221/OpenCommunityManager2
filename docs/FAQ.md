@@ -62,6 +62,7 @@ R: Oui, Open Community Manager respecte les principes du RGPD. Vous disposez d'o
 
 **Q: Où puis-je obtenir de l'aide ?**
 R: Plusieurs options sont disponibles :
+
 - Documentation en ligne
 - Forum communautaire
 - Support par email
@@ -165,6 +166,7 @@ R: Non, vous pouvez utiliser Open Community Manager pour tout type d'association
 **Questions non trouvées ?**
 
 Si vous ne trouvez pas la réponse à votre question, n'hésitez pas à :
+
 - Consulter la documentation complète
 - Poser votre question sur le forum communautaire
 - Contacter le support technique
