@@ -294,7 +294,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMenuOpen }) => {
   };
 
   return (
-    <header className="bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-200 px-4 py-3 sticky top-0 z-40">
+    <header className="bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-200 px-4 py-3 sticky top-0 z-30">
       <div className="flex items-center justify-between">
         {/* Section gauche */}
         <div className="flex items-center space-x-4">
@@ -534,7 +534,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMenuOpen }) => {
 
             {/* Menu profil */}
             {isProfileOpen && (
-              <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
+              <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-60">
                 <div className="px-4 py-3 border-b border-gray-100">
                   <div className="flex items-center space-x-3">
                     <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center">

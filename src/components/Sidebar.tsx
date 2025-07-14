@@ -10,7 +10,8 @@ import {
   MessageSquare, 
   Globe, 
   Settings,
-  Building2
+  Building2,
+  Bell
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -33,8 +34,9 @@ const menuItems: MenuItem[] = [
   { name: 'Finances', path: '/finances', icon: DollarSign },
   { name: 'Documents', path: '/documents', icon: FolderOpen },
   { name: 'Messagerie', path: '/messages', icon: MessageSquare, badge: 5 },
-  { name: 'Profil public', path: '/public-profile', icon: Globe },
+  { name: 'Notifications', path: '/notifications', icon: Bell },
   { name: 'Paramètres', path: '/settings', icon: Settings },
+  { name: 'Profil public', path: '/public-profile', icon: Globe },
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
@@ -109,7 +111,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
         </nav>
 
         {/* Footer du sidebar */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
+        <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-200 mt-0 lg:static lg:mt-4">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
               <span className="text-sm font-medium text-gray-600">A</span>
