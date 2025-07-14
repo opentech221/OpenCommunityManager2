@@ -38,23 +38,58 @@ Une application web moderne de gestion d'associations qui permet aux organisatio
 ## 🚀 Installation et développement
 
 ### Prérequis
-- Node.js (version 18 ou supérieure)
-- npm ou yarn
 
-### Installation
+- Node.js (v18+) et npm ou yarn (pour le frontend)
+- Python 3.10+ et pip (pour le backend)
+- SQLite (par défaut) ou PostgreSQL (optionnel)
+
+### Variables d'environnement
+
+- Créez un fichier `.env` à la racine du frontend (`src/` ou projet) et du backend (`backend/`).
+- Exemple frontend :
+  ```env
+  VITE_BACKEND_URL=http://localhost:5000/api
+  ```
+- Exemple backend :
+  ```env
+  FLASK_ENV=development
+  DATABASE_URL=sqlite:///instance/app.db
+  SECRET_KEY=change-me
+  ```
+
+### Installation du frontend
+
 ```bash
-# Installer les dépendances
+# À la racine du projet
 npm install
-
-# Lancer le serveur de développement
 npm run dev
 ```
 
+### Installation du backend
+
+```bash
+# Dans le dossier backend/
+pip install -r requirements.txt
+python run.py
+```
+
 ### Scripts disponibles
-- `npm run dev` - Lance le serveur de développement
-- `npm run build` - Build de production
-- `npm run lint` - Vérification du code avec ESLint
-- `npm run preview` - Prévisualisation du build de production
+
+- `npm run dev` : Lance le serveur de développement React/Vite (http://localhost:5173)
+- `npm run build` : Build de production frontend
+- `npm run lint` : Vérification du code avec ESLint
+- `npm run preview` : Prévisualisation du build
+- `python run.py` : Lance le backend Flask (http://localhost:5000)
+- `flask db upgrade` : Applique les migrations DB
+
+### Accès à l'application
+
+- Frontend : http://localhost:5173
+- Backend API : http://localhost:5000/api
+
+---
+
+Pour le déploiement, suivez les instructions dans `docs/DEPLOYMENT.md` (Netlify pour le frontend, Render/Railway/Heroku pour le backend).
 
 ## 📱 Responsive Design
 
