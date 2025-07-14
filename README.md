@@ -15,10 +15,14 @@ Une application web moderne de gestion d'associations qui permet aux organisatio
 ## 🛠️ Technologies utilisées
 
 - **Frontend** : React 18 + TypeScript + Vite
-- **Styling** : Tailwind CSS avec palette personnalisée
+- **Styling** : Tailwind CSS (palette personnalisée)
 - **Routing** : React Router DOM
 - **Icons** : Lucide React
 - **Typographie** : Montserrat (titres) + Poppins (corps)
+- **Backend** : Flask (Python) + SQLite/PostgreSQL
+- **API REST** : Flask RESTful
+- **CI/CD** : Netlify (frontend) + GitHub Actions (build, tests, déploiement)
+- **Documentation** : Markdown (docs/)
 
 ## 🎨 Design System
 
@@ -62,14 +66,30 @@ L'application est conçue avec une approche **mobile-first** :
 ## 🏗️ Architecture du projet
 
 ```
-src/
-├── components/         # Composants réutilisables
-├── pages/             # Pages principales
-├── types/             # Définitions TypeScript
-├── constants/         # Constantes de l'application
-├── hooks/             # Hooks personnalisés
-├── utils/             # Fonctions utilitaires
-└── styles/            # Styles globaux
+OpenCommunityManager2/
+├── backend/           # Backend Flask (API, modèles, migrations)
+│   ├── app/           # Code principal Flask
+│   ├── migrations/    # Migrations DB
+│   ├── instance/      # Base SQLite
+│   └── requirements.txt
+├── src/               # Frontend React
+│   ├── components/    # Composants réutilisables
+│   ├── pages/         # Pages principales
+│   ├── types/         # Types TypeScript
+│   ├── constants/     # Constantes
+│   ├── hooks/         # Hooks personnalisés
+│   ├── utils/         # Fonctions utilitaires
+│   └── styles/        # Styles globaux
+├── public/            # Assets publics
+├── uploads/           # Fichiers uploadés
+├── docs/              # Documentation projet
+│   ├── USER_GUIDE.md
+│   ├── TECHNICAL_DOCS.md
+│   ├── DEPLOYMENT.md
+│   └── screenshots/
+├── .github/workflows/ # CI/CD GitHub Actions
+├── .env               # Variables d'environnement
+└── README.md
 ```
 
 ## 🎯 Objectifs UX
@@ -83,22 +103,28 @@ src/
 
 ### Phase 1 - MVP (En cours)
 - [x] Structure du projet et design system
+- [x] Mobile-first et responsive sur toutes les pages principales
+- [x] Intégration CI/CD Netlify + GitHub
+- [x] Documentation complète
 - [x] Page d'accueil et authentification
 - [x] Dashboard principal
-- [ ] Gestion des membres
-- [ ] Système de cotisations
+- [x] Sidebar, header, footer, navigation
+- [ ] Gestion des membres (CRUD, rôles)
+- [ ] Système de cotisations (suivi, rapports)
 
 ### Phase 2 - Fonctionnalités avancées
-- [ ] Gestion des événements
-- [ ] Module financier
-- [ ] Système documentaire
+- [ ] Gestion des événements (planning, inscriptions)
+- [ ] Module financier (entrées/sorties, bilans)
+- [ ] Système documentaire (upload, archivage)
 - [ ] Messagerie interne
+- [ ] Profil public association
 
-### Phase 3 - Optimisations
-- [ ] Profils publics
-- [ ] API REST backend
-- [ ] Tests automatisés
-- [ ] Déploiement production
+### Phase 3 - Optimisations & Production
+- [ ] API REST backend (Flask, déploiement cloud)
+- [ ] Tests automatisés (unitaires, e2e)
+- [ ] Accessibilité (WCAG, navigation clavier)
+- [ ] Optimisation performance (lazy loading, audits)
+- [ ] Déploiement production (frontend + backend)
 
 ## 👥 Cibles
 
