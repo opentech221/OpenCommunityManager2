@@ -4,6 +4,7 @@ from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_migrate import Migrate
+import os
 
 # Initialisation des extensions
 db = SQLAlchemy()
@@ -17,7 +18,11 @@ def create_app():
     
     # Configuration
     app.config.from_object('config.Config')
-    
+
+    # Gestion dynamique du dossier uploads (local ou Railway)
+    uploads_path = '/app/uploads' if os.path.exists('/app/uploads') else 'uploads'
+    app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER', uploads_path)
+
     # Initialisation des extensions
     db.init_app(app)
     jwt.init_app(app)
@@ -26,7 +31,6 @@ def create_app():
     migrate.init_app(app, db)
     
     # Création du dossier uploads
-    import os
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     
     # Importation des modèles
