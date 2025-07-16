@@ -161,6 +161,35 @@ OpenCommunityManager2/
 - [ ] Optimisation performance (lazy loading, audits)
 - [ ] Déploiement production (frontend + backend)
 
+### Intégration fonctionnelle, partenariats et accompagnement
+
+#### 1. Intégration de services tiers
+
+- **Connecteurs API** : Intégration de services publics (BEL, 3FPT, ONFP...) pour l’accès automatisé aux offres de formation, financement, ou labellisation.
+- **Interopérabilité** : Prévoir des endpoints REST pour synchroniser les données avec d’autres plateformes associatives ou institutionnelles.
+- **Webhooks & automatisation** : Déclencheurs pour notifier ou synchroniser des actions (ex : inscription à une formation, validation d’un financement).
+
+#### 2. Accompagnement technique et fonctionnel
+
+- **Onboarding** : Parcours guidé pour la prise en main de l’outil (tutoriels, documentation interactive).
+- **Support & formation** : Modules de formation intégrés, FAQ, et support technique pour les administrateurs d’associations.
+- **Formalisation** : Génération automatisée de documents types (statuts, PV, demandes de subvention) et accompagnement à la conformité réglementaire.
+- **Financement** : Mise en relation avec des partenaires financiers via des modules de candidature ou d’appel à projets intégrés.
+
+#### 3. Partenariats et écosystème
+
+- **Partenaires publics** : Modules d’intégration pour la diffusion d’offres, la collecte de données d’impact, et le reporting réglementaire.
+- **Partenaires techniques** : API ouvertes pour permettre à des entreprises ou startups d’enrichir l’écosystème (plugins, extensions, services complémentaires).
+- **Partenaires financiers** : Suivi des financements, reporting d’utilisation des fonds, et interface de gestion des subventions.
+
+#### 4. Gouvernance et adaptation
+
+- **Prise en compte des parties prenantes** :
+  - **Utilisateurs finaux** : Analyse des besoins, ergonomie adaptée, modules personnalisables.
+  - **État & collectivités** : Respect des cadres légaux, adaptation aux politiques publiques, conformité RGPD.
+  - **Investisseurs & bailleurs** : Transparence, traçabilité des flux, indicateurs d’impact.
+  - **Partenaires techniques** : Documentation API, guides d’intégration, support développeur.
+
 ## 👥 Cibles
 
 - Associations communautaires et socioculturelles

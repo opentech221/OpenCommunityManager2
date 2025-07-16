@@ -16,4 +16,4 @@ class Config:
     JWT_ALGORITHM = 'HS256'
     
     # Configuration CORS
-    CORS_ORIGINS = ['http://localhost:5173', 'http://localhost:3000']
+    CORS_ORIGINS = ['http://localhost:5173', 'http://localhost:5000']
