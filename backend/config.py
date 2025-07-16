@@ -15,5 +15,14 @@ class Config:
     JWT_ACCESS_TOKEN_EXPIRES = False  # Pour le développement
     JWT_ALGORITHM = 'HS256'
     
-    # Configuration CORS
-    CORS_ORIGINS = ['http://localhost:5173', 'http://localhost:5000']
+    # Configuration CORS intelligente :
+    # - En développement : autorise localhost
+    # - En production : autorise le front Netlify
+    # - Peut être surchargé par la variable d'environnement CORS_ORIGINS
+    ENV = os.environ.get('FLASK_ENV', 'production')
+    if os.environ.get('CORS_ORIGINS'):
+        CORS_ORIGINS = os.environ['CORS_ORIGINS'].split(',')
+    elif ENV == 'development':
+        CORS_ORIGINS = ['http://localhost:5173']
+    else:
+        CORS_ORIGINS = ['https://opencommunitymanager2.netlify.app']
