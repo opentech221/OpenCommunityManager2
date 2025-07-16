@@ -1,4 +1,5 @@
-from flask import Flask
+from datetime import datetime
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
@@ -49,10 +50,83 @@ def create_app():
     app.register_blueprint(cotisations_bp, url_prefix='/api/cotisations')
     app.register_blueprint(main_bp, url_prefix='/api')
     
-    # Route de test
+    # Route racine : message d'accueil API contextualisé
     @app.route('/')
     def hello():
-        return {'message': 'API Open Community Manager - Backend Flask + PostgreSQL'}
+        return jsonify({
+            'message': 'API Open Community Manager - Backend Flask + PostgreSQL',
+            'author': 'OpenTech221',
+            'description': "API de gestion d'associations communautaires (membres, cotisations, événements, finances, documents, messagerie)",
+            'version': '1.0.0',
+            'timestamp': datetime.now().isoformat(),
+            'docs': 'https://github.com/opentech221/OpenCommunityManager2',
+            'features': [
+                'Authentification JWT',
+                'Gestion des membres (CRUD, rôles)',
+                'Suivi des cotisations',
+                'Gestion des événements',
+                'Module financier',
+                'Archivage de documents',
+                'Messagerie interne',
+                'Profil public association',
+                'Endpoints RESTful',
+                'Support multi-environnements',
+                'Sécurité et CORS dynamique'
+            ]
+        })
+
+    # Contrôles de routes publics additionnels
+    @app.route('/api/ping')
+    def ping():
+        return jsonify({'ping': 'pong', 'status': 'ok', 'timestamp': datetime.now().isoformat()})
+
+    @app.route('/api/health')
+    def health():
+        return jsonify({'status': 'healthy', 'db': True, 'timestamp': datetime.now().isoformat()})
+
+    @app.route('/api/version')
+    def version():
+        return jsonify({'version': '1.0.0', 'backend': 'Flask', 'database': 'PostgreSQL', 'timestamp': datetime.now().isoformat()})
+
+    @app.route('/api/features')
+    def features():
+        return jsonify({
+            'features': [
+                'Gestion membres',
+                'Cotisations',
+                'Événements',
+                'Finances',
+                'Documents',
+                'Messagerie',
+                'Profil public',
+                'API RESTful',
+                'Sécurité JWT',
+                'CORS dynamique',
+                'Support multi-environnements'
+            ]
+        })
+
+    @app.route('/api/docs')
+    def docs():
+        return jsonify({'docs': 'https://github.com/opentech221/OpenCommunityManager2', 'user_guide': 'https://github.com/opentech221/OpenCommunityManager2/blob/master/docs/USER_GUIDE.md'})
+
+    @app.route('/api/time')
+    def time():
+        return jsonify({'server_time': datetime.now().isoformat()})
+
+    @app.route('/api/roadmap')
+    def roadmap():
+        return jsonify({
+            'roadmap': [
+                'MVP : Auth, membres, cotisations, dashboard',
+                'Phase 2 : événements, finances, documents, messagerie',
+                'Phase 3 : optimisation, accessibilité, production, intégrations'
+            ]
+        })
+
+    @app.route('/api/author')
+    def author():
+        return jsonify({'author': 'OpenTech221', 'contact': 'https://github.com/opentech221'})
     
     # Gestion des erreurs
     @app.errorhandler(404)
@@ -62,5 +136,6 @@ def create_app():
     @app.errorhandler(500)
     def internal_error(error):
         return {'error': 'Erreur interne du serveur'}, 500
+    
     
     return app
