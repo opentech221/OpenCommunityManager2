@@ -88,6 +88,33 @@ python run.py
 - Backend API : http://localhost:5000/api
 
 ---
+## 📡 Endpoints publics de l’API backend
+
+L’API Flask expose plusieurs routes publiques pour l’intégration, la supervision et la documentation :
+
+| Endpoint             | Description                                      |
+|----------------------|-------------------------------------------------|
+| `/`                  | Message d’accueil API contextualisé             |
+| `/api/ping`          | Test de vie (pong)                              |
+| `/api/health`        | Statut de santé de l’API                        |
+| `/api/version`       | Version, backend, base de données               |
+| `/api/features`      | Liste des fonctionnalités principales           |
+| `/api/docs`          | Liens vers la documentation et le guide         |
+| `/api/time`          | Heure serveur                                   |
+| `/api/roadmap`       | Roadmap synthétique du projet                   |
+| `/api/author`        | Auteur et contact                               |
+| `/api/status`        | Statut, environnement, debug, DB                |
+| `/api/config`        | Infos config API (uploads, CORS, JWT…)          |
+| `/api/endpoints`     | Liste des endpoints publics                     |
+| `/api/uptime`        | Uptime (statique)                               |
+| `/api/contact`       | Email, GitHub, site OpenTech221                 |
+| `/api/license`       | Licence du projet                               |
+| `/api/stack`         | Stack technique (backend, frontend, cloud)      |
+| `/api/sample`        | Exemples de données membre/association          |
+| `/api/links`         | Liens utiles (frontend, backend, docs, GitHub)  |
+
+Ces routes facilitent l’intégration, le monitoring, la démo et la documentation de l’API.
+
 
 Pour le déploiement, suivez les instructions dans `docs/DEPLOYMENT.md` (Netlify pour le frontend, Render/Railway/Heroku pour le backend).
 

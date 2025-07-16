@@ -54,7 +54,7 @@ def create_app():
     @app.route('/')
     def hello():
         return jsonify({
-            'message': 'API Open Community Manager - Backend Flask + PostgreSQL',
+            'message': 'API Open Community Manager by opentech221 - Backend Flask + PostgreSQL',
             'author': 'OpenTech221',
             'description': "API de gestion d'associations communautaires (membres, cotisations, événements, finances, documents, messagerie)",
             'version': '1.0.0',
@@ -136,6 +136,79 @@ def create_app():
     @app.errorhandler(500)
     def internal_error(error):
         return {'error': 'Erreur interne du serveur'}, 500
+    # Autres routes publiques pertinentes
+    @app.route('/api/status')
+    def status():
+        return jsonify({
+            'status': 'running',
+            'env': os.environ.get('FLASK_ENV', 'production'),
+            'debug': app.debug,
+            'database_url': app.config.get('SQLALCHEMY_DATABASE_URI', ''),
+            'timestamp': datetime.now().isoformat()
+        })
+
+    @app.route('/api/config')
+    def config_info():
+        return jsonify({
+            'UPLOAD_FOLDER': app.config.get('UPLOAD_FOLDER'),
+            'MAX_CONTENT_LENGTH': app.config.get('MAX_CONTENT_LENGTH'),
+            'CORS_ORIGINS': app.config.get('CORS_ORIGINS'),
+            'JWT_ALGORITHM': app.config.get('JWT_ALGORITHM'),
+            'timestamp': datetime.now().isoformat()
+        })
+
+    @app.route('/api/endpoints')
+    def endpoints():
+        return jsonify({
+            'public_endpoints': [
+                '/', '/api/ping', '/api/health', '/api/version', '/api/features', '/api/docs', '/api/time', '/api/roadmap', '/api/author',
+                '/api/status', '/api/config', '/api/endpoints', '/api/uptime', '/api/contact', '/api/license', '/api/stack', '/api/sample', '/api/links'
+            ]
+        })
+
+    @app.route('/api/uptime')
+    def uptime():
+        # Pour un vrai uptime, il faudrait stocker le démarrage du serveur
+        return jsonify({'uptime': 'N/A (statique)', 'timestamp': datetime.now().isoformat()})
+
+    @app.route('/api/contact')
+    def contact():
+        return jsonify({'email': 'contact@opentech221.com', 'github': 'https://github.com/opentech221', 'site': 'https://opentech221.com'})
+
+    @app.route('/api/license')
+    def license():
+        return jsonify({'license': 'MIT', 'url': 'https://github.com/opentech221/OpenCommunityManager2/blob/master/LICENSE'})
+
+    @app.route('/api/stack')
+    def stack():
+        return jsonify({'backend': 'Flask', 'database': 'PostgreSQL', 'frontend': 'React + Vite + Tailwind', 'cloud': 'Railway/Netlify'})
+
+    @app.route('/api/sample')
+    def sample():
+        return jsonify({
+            'sample_member': {
+                'first_name': 'Awa',
+                'last_name': 'Diop',
+                'email': 'awa.diop@email.com',
+                'role': 'TRESORIER',
+                'status': 'ACTIVE'
+            },
+            'sample_association': {
+                'name': 'Association Demo',
+                'sigle': 'AD',
+                'email': 'demo@asso.com',
+                'description': 'Démo gestion associative'
+            }
+        })
+
+    @app.route('/api/links')
+    def links():
+        return jsonify({
+            'frontend': 'https://opencommunitymanager2.netlify.app',
+            'backend': 'https://opencommunitymanager2-backend.railway.app',
+            'github': 'https://github.com/opentech221/OpenCommunityManager2',
+            'docs': 'https://github.com/opentech221/OpenCommunityManager2/blob/master/docs/USER_GUIDE.md'
+        })
     
     
     return app
