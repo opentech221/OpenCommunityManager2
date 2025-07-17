@@ -1,3 +1,11 @@
+// Génère l'URL complète de l'API selon l'environnement
+export function apiUrl(path: string) {
+  const base = import.meta.env.VITE_BACKEND_URL || '';
+  // Si path commence déjà par http, ne rien faire
+  if (/^https?:\/\//.test(path)) return path;
+  // Ajoute le slash si besoin
+  return base.replace(/\/$/, '') + (path.startsWith('/') ? path : '/' + path);
+}
 /**
  * Formate une date en français
  */

@@ -1,4 +1,5 @@
 import { useState, useEffect, createContext, useContext } from 'react';
+import { apiUrl } from '../utils';
 import type { AssociationType } from '../types';
 
 interface AuthContextType {
@@ -55,7 +56,7 @@ export const useAuthState = () => {
     setIsLoading(true);
     try {
       // Simulation d'appel API
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(apiUrl('/api/auth/login'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -92,7 +93,7 @@ export const useAuthState = () => {
         password: data.password
       };
 
-      const response = await fetch('/api/auth/register', {
+      const response = await fetch(apiUrl('/api/auth/register'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { apiUrl } from '../utils';
 import type { EventType } from '../types';
 import { EventTypeEnum, EventStatus } from '../types';
 
@@ -24,7 +25,7 @@ export const useEvents = (): UseEventsReturn => {
   const fetchEvents = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/events');
+      const response = await fetch(apiUrl('/api/events'));
       if (response.ok) {
         const data = await response.json();
         setEvents(data);
@@ -39,7 +40,7 @@ export const useEvents = (): UseEventsReturn => {
 
   const addEvent = async (eventData: Omit<EventType, 'id'>) => {
     try {
-      const response = await fetch('/api/events', {
+      const response = await fetch(apiUrl('/api/events'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,7 +65,7 @@ export const useEvents = (): UseEventsReturn => {
 
   const updateEvent = async (id: string, updates: Partial<EventType>) => {
     try {
-      const response = await fetch(`/api/events/${id}`, {
+      const response = await fetch(apiUrl(`/api/events/${id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +88,7 @@ export const useEvents = (): UseEventsReturn => {
 
   const deleteEvent = async (id: string) => {
     try {
-      const response = await fetch(`/api/events/${id}`, {
+      const response = await fetch(apiUrl(`/api/events/${id}`), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,

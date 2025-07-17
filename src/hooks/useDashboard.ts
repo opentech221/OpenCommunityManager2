@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { apiUrl } from '../utils';
 
 export interface DashboardStats {
   membersActive: number;
@@ -58,8 +59,8 @@ export const useDashboard = (): UseDashboardReturn => {
     try {
       // Simulation d'appel API - à remplacer par votre vraie API
       const [statsResponse, activitiesResponse] = await Promise.all([
-        fetch('/api/dashboard/stats'),
-        fetch('/api/dashboard/activities')
+        fetch(apiUrl('/api/dashboard/stats')),
+        fetch(apiUrl('/api/dashboard/activities'))
       ]);
 
       if (statsResponse.ok && activitiesResponse.ok) {

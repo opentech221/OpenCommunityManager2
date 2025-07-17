@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
+import { apiUrl } from '../utils';
 import type { MemberType } from '../types';
 
 interface UseMembersReturn {
@@ -31,7 +32,7 @@ export const useMembers = (): UseMembersReturn => {
     setIsLoading(true);
     try {
       // Simulation d'appel API - à remplacer par votre vraie API
-      const response = await fetch('/api/members');
+      const response = await fetch(apiUrl('/api/members'));
       if (response.ok) {
         const data = await response.json();
         setMembers(data);
@@ -47,7 +48,7 @@ export const useMembers = (): UseMembersReturn => {
 
   const addMember = async (memberData: Omit<MemberType, 'id'>) => {
     try {
-      const response = await fetch('/api/members', {
+      const response = await fetch(apiUrl('/api/members'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +74,7 @@ export const useMembers = (): UseMembersReturn => {
 
   const updateMember = async (id: string, updates: Partial<MemberType>) => {
     try {
-      const response = await fetch(`/api/members/${id}`, {
+      const response = await fetch(apiUrl(`/api/members/${id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -96,7 +97,7 @@ export const useMembers = (): UseMembersReturn => {
 
   const deleteMember = async (id: string) => {
     try {
-      const response = await fetch(`/api/members/${id}`, {
+      const response = await fetch(apiUrl(`/api/members/${id}`), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
