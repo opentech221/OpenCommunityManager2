@@ -19,6 +19,9 @@ def create_app():
     
     # Configuration
     app.config.from_object('config.Config')
+    # Vérification explicite de la présence de DATABASE_URL
+    if not app.config.get('SQLALCHEMY_DATABASE_URI'):
+        raise RuntimeError("DATABASE_URL manquant : vérifie ta configuration ou tes variables d’environnement.")
 
     # Gestion dynamique du dossier uploads (local ou Railway)
     uploads_path = '/app/uploads' if os.path.exists('/app/uploads') else 'uploads'
