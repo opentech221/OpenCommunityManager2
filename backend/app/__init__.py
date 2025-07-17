@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, jsonify
+from flask import Flask, jsonify, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
@@ -82,10 +82,11 @@ def create_app():
     @app.route('/api/ping')
     def ping():
         return jsonify({'ping': 'pong', 'status': 'ok', 'timestamp': datetime.now().isoformat()})
+    
 
-    @app.route('/api/health')
-    def health():
-        return jsonify({'status': 'healthy', 'db': True, 'timestamp': datetime.now().isoformat()})
+    # Importation et enregistrement du blueprint health
+    from .routes.health import health_bp
+    app.register_blueprint(health_bp)
 
     @app.route('/api/version')
     def version():
