@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect, createContext, useContext } from 'react';
 import { apiUrl } from '../utils';
 import type { AssociationType } from '../types';
@@ -101,12 +102,24 @@ export const useAuthState = () => {
         body: JSON.stringify(requestData),
       });
 
+      let result;
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Erreur lors de l\'inscription');
+        // Tente de parser en JSON, sinon récupère le texte brut
+        try {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Erreur lors de l\'inscription');
+        } catch (e) {
+          const errorText = await response.text();
+          throw new Error(errorText || 'Erreur lors de l\'inscription');
+        }
       }
-
-      const result = await response.json();
+      try {
+        result = await response.json();
+      } catch (e) {
+        // Si la réponse n'est pas du JSON, affiche le texte brut
+        const errorText = await response.text();
+        throw new Error(errorText || 'Erreur lors de l\'inscription');
+      }
       
       localStorage.setItem('auth_token', result.token);
       localStorage.setItem('association_data', JSON.stringify(result.association));
