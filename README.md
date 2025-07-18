@@ -73,48 +73,34 @@ pip install -r requirements.txt
 python run.py
 ```
 
-### Scripts disponibles
-
-- `npm run dev` : Lance le serveur de développement React/Vite (http://localhost:5173)
-- `npm run build` : Build de production frontend
 - `npm run lint` : Vérification du code avec ESLint
 - `npm run preview` : Prévisualisation du build
 - `python run.py` : Lance le backend Flask (http://localhost:5000)
-- `flask db upgrade` : Applique les migrations DB
 
 ### Accès à l'application
 
 - Frontend : http://localhost:5173
 - Backend API : http://localhost:5000/api
-
 ---
 ## 📡 Endpoints publics de l’API backend
-
 L’API Flask expose plusieurs routes publiques pour l’intégration, la supervision et la documentation :
 
 | Endpoint             | Description                                      |
-|----------------------|-------------------------------------------------|
 | `/`                  | Message d’accueil API contextualisé             |
 | `/api/ping`          | Test de vie (pong)                              |
 | `/api/health`        | Statut de santé de l’API                        |
-| `/api/version`       | Version, backend, base de données               |
 | `/api/features`      | Liste des fonctionnalités principales           |
 | `/api/docs`          | Liens vers la documentation et le guide         |
 | `/api/time`          | Heure serveur                                   |
-| `/api/roadmap`       | Roadmap synthétique du projet                   |
 | `/api/author`        | Auteur et contact                               |
 | `/api/status`        | Statut, environnement, debug, DB                |
 | `/api/config`        | Infos config API (uploads, CORS, JWT…)          |
 | `/api/endpoints`     | Liste des endpoints publics                     |
 | `/api/uptime`        | Uptime (statique)                               |
-| `/api/contact`       | Email, GitHub, site OpenTech221                 |
 | `/api/license`       | Licence du projet                               |
 | `/api/stack`         | Stack technique (backend, frontend, cloud)      |
-| `/api/sample`        | Exemples de données membre/association          |
 | `/api/links`         | Liens utiles (frontend, backend, docs, GitHub)  |
-
 Ces routes facilitent l’intégration, le monitoring, la démo et la documentation de l’API.
-
 
 Pour le déploiement, suivez les instructions dans `docs/DEPLOYMENT.md` (Netlify pour le frontend, Render/Railway/Heroku pour le backend).
 
@@ -127,7 +113,6 @@ L'application est conçue avec une approche **mobile-first** :
 
 ## 🏗️ Architecture du projet
 
-```
 OpenCommunityManager2/
 ├── backend/           # Backend Flask (API, modèles, migrations)
 │   ├── app/           # Code principal Flask
@@ -148,7 +133,6 @@ OpenCommunityManager2/
 │   ├── USER_GUIDE.md
 │   ├── TECHNICAL_DOCS.md
 │   ├── DEPLOYMENT.md
-│   └── screenshots/
 ├── .github/workflows/ # CI/CD GitHub Actions
 ├── .env               # Variables d'environnement
 └── README.md
@@ -164,15 +148,10 @@ OpenCommunityManager2/
 ## 📋 Roadmap
 
 
-### Phase 1 - MVP (En cours)
 - [x] Structure du projet et design system
-- [x] Mobile-first et responsive sur toutes les pages principales
 - [x] Intégration CI/CD Netlify + GitHub
-- [x] Documentation complète
 - [x] Page d'accueil et authentification
-- [x] Dashboard principal
 - [x] Sidebar, header, footer, navigation
-- [ ] Gestion des membres (CRUD, rôles)
   - Backend : Modèles, routes API (GET, POST, PUT, DELETE), gestion des rôles
   - Frontend : Page liste, formulaire ajout/édition, suppression, attribution de rôles
   - Tests : Création, modification, suppression, filtrage par rôle
@@ -185,7 +164,6 @@ OpenCommunityManager2/
 - [ ] Gestion des événements (planning, inscriptions)
   - Backend : Modèle Event, routes API (création, inscription, liste)
   - Frontend : Calendrier, formulaire événement, gestion des inscriptions
-  - Tests : Création, inscription, annulation
 - [ ] Module financier (entrées/sorties, bilans)
   - Backend : Modèle Transaction, routes API (entrées, sorties, bilans)
   - Frontend : Page finances, formulaire transaction, affichage bilans
@@ -206,7 +184,6 @@ OpenCommunityManager2/
 ### Phase 3 - Optimisations & Production
 - [ ] API REST backend (Flask, déploiement cloud)
   - Dockerisation, CI/CD, monitoring, documentation Swagger/OpenAPI
-- [ ] Tests automatisés (unitaires, e2e)
   - Unitaires (backend, frontend), end-to-end (Cypress, Playwright)
 - [ ] Accessibilité (WCAG, navigation clavier)
   - Audit WCAG, navigation clavier, contrastes, ARIA
@@ -243,6 +220,49 @@ OpenCommunityManager2/
   - **État & collectivités** : Respect des cadres légaux, adaptation aux politiques publiques, conformité RGPD.
   - **Investisseurs & bailleurs** : Transparence, traçabilité des flux, indicateurs d’impact.
   - **Partenaires techniques** : Documentation API, guides d’intégration, support développeur.
+
+
+## 📈 Stratégie d'évolution et segmentation ciblée
+
+Afin de viser une clientèle à **fort pouvoir d'achat** et de structurer une montée en gamme progressive de nos offres, nous adoptons la stratégie suivante :
+
+### 🔹 Phase de Lancement – Créer une communauté restreinte de forte valeur
+
+* Identifier et engager des profils **modèles de succès, de valeur, de crédibilité et d’influence** au sein de notre cible.
+* Établir avec eux un **partenariat gagnant-gagnant** dès le départ : ils bénéficient de nos services et nous tirons parti de leur **réseau, notoriété et capital confiance**.
+* Objectif : amorcer un **effet de levier** et de **transfert de potentiel** pour attirer de nouveaux utilisateurs en confiance.
+
+---
+
+### 🔹 Phase 1 – Prestations de service sur mesure
+
+> Construire notre expertise terrain
+
+* Fournir des services personnalisés à haute valeur ajoutée pour affiner nos compétences, comprendre les attentes du marché premium et maîtriser les problématiques réelles du terrain.
+
+### 🔹 Phase 2 – Coaching ciblé
+
+> Valoriser l’expertise acquise
+
+* Proposer un **accompagnement individuel ou en petits groupes** basé sur notre retour d’expérience.
+* Viser les débutants et profils en reconversion cherchant à accéder à un haut niveau de compétence.
+
+### 🔹 Phase 3 – Formations structurées
+
+> Industrialiser le savoir-faire
+
+* Créer des **parcours de formation complets** (autonomes ou accompagnés), capitalisant à la fois sur notre **expérience pratique** (prestations) et sur notre **maturité pédagogique** (coaching).
+
+---
+
+## 🧩 Fonctionnalités futures à intégrer dans la plateforme
+
+* **📰 Page Blog**
+  Proposer des articles réguliers sur les thématiques clés de notre secteur d’intervention afin de renforcer notre position d’expert, booster notre SEO et entretenir l’engagement de la communauté.
+
+* **📊 Page Open Data**
+  Rendre accessibles certaines données issues des associations (anonymisées) pour un usage **académique, institutionnel ou sectoriel** : ONG, cabinets d’étude, chercheurs, étudiants, etc.
+  *Avantages : marketing d’influence, crédibilité scientifique, visibilité institutionnelle.*
 
 ## 👥 Cibles
 
