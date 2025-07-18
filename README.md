@@ -163,6 +163,7 @@ OpenCommunityManager2/
 
 ## 📋 Roadmap
 
+
 ### Phase 1 - MVP (En cours)
 - [x] Structure du projet et design system
 - [x] Mobile-first et responsive sur toutes les pages principales
@@ -172,21 +173,47 @@ OpenCommunityManager2/
 - [x] Dashboard principal
 - [x] Sidebar, header, footer, navigation
 - [ ] Gestion des membres (CRUD, rôles)
+  - Backend : Modèles, routes API (GET, POST, PUT, DELETE), gestion des rôles
+  - Frontend : Page liste, formulaire ajout/édition, suppression, attribution de rôles
+  - Tests : Création, modification, suppression, filtrage par rôle
 - [ ] Système de cotisations (suivi, rapports)
+  - Backend : Modèle Cotisation, routes API (paiement, historique, rapport)
+  - Frontend : Page cotisations, formulaire paiement, affichage historique, génération rapport PDF/Excel
+  - Tests : Paiement, génération rapport, export
 
 ### Phase 2 - Fonctionnalités avancées
 - [ ] Gestion des événements (planning, inscriptions)
+  - Backend : Modèle Event, routes API (création, inscription, liste)
+  - Frontend : Calendrier, formulaire événement, gestion des inscriptions
+  - Tests : Création, inscription, annulation
 - [ ] Module financier (entrées/sorties, bilans)
+  - Backend : Modèle Transaction, routes API (entrées, sorties, bilans)
+  - Frontend : Page finances, formulaire transaction, affichage bilans
+  - Tests : Ajout, édition, calcul bilans
 - [ ] Système documentaire (upload, archivage)
+  - Backend : Upload sécurisé, routes API (upload, liste, suppression)
+  - Frontend : Page documents, upload, visualisation, suppression
+  - Tests : Upload, accès, suppression
 - [ ] Messagerie interne
+  - Backend : Modèle Message, routes API (envoi, réception, historique)
+  - Frontend : Page messagerie, interface chat
+  - Tests : Envoi, réception, notifications
 - [ ] Profil public association
+  - Backend : Route API profil public
+  - Frontend : Page vitrine publique, affichage infos association
+  - Tests : Affichage, mise à jour
 
 ### Phase 3 - Optimisations & Production
 - [ ] API REST backend (Flask, déploiement cloud)
+  - Dockerisation, CI/CD, monitoring, documentation Swagger/OpenAPI
 - [ ] Tests automatisés (unitaires, e2e)
+  - Unitaires (backend, frontend), end-to-end (Cypress, Playwright)
 - [ ] Accessibilité (WCAG, navigation clavier)
+  - Audit WCAG, navigation clavier, contrastes, ARIA
 - [ ] Optimisation performance (lazy loading, audits)
+  - Lazy loading, audits Lighthouse, cache, bundle splitting
 - [ ] Déploiement production (frontend + backend)
+  - Netlify (frontend), Railway/Render/Heroku (backend), backups, monitoring
 
 ### Intégration fonctionnelle, partenariats et accompagnement
 
