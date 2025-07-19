@@ -1,82 +1,21 @@
 import { useState } from 'react';
-import { Plus, Search, Filter, Edit, Trash2, Eye, Phone, Mail, Calendar } from 'lucide-react';
+import { Plus, Search, Filter, Edit, Trash2, Phone, Mail, Calendar } from 'lucide-react';
 import type { MemberType, MemberRole as MemberRoleType, MemberStatus as MemberStatusType } from '../types';
 import { MemberRole, MemberStatus } from '../types';
+import { MEMBER_ROLES } from '../constants';
+import { useMembers } from '../hooks/useMembers';
+import { MemberForm } from '../components/MemberForm';
 
-export default function MembersPageMobile() {
+export default function MembersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRole, setSelectedRole] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const [showFilters, setShowFilters] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [editMember, setEditMember] = useState<MemberType | undefined>(undefined);
+  const { members, isLoading, addMember, updateMember, deleteMember, filterMembers } = useMembers();
 
-  // Données fictives des membres
-  const members: MemberType[] = [
-    {
-      id: '1',
-      firstName: 'Mamadou',
-      lastName: 'Diallo',
-      email: 'mamadou.diallo@email.com',
-      phone: '+224 123 456 789',
-      role: MemberRole.PRESIDENT,
-      status: MemberStatus.ACTIVE,
-      joinDate: new Date('2023-01-15'),
-      associationId: '1'
-    },
-    {
-      id: '2',
-      firstName: 'Fatou',
-      lastName: 'Camara',
-      email: 'fatou.camara@email.com',
-      phone: '+224 987 654 321',
-      role: MemberRole.SECRETARY,
-      status: MemberStatus.ACTIVE,
-      joinDate: new Date('2023-02-20'),
-      associationId: '1'
-    },
-    {
-      id: '3',
-      firstName: 'Ibrahima',
-      lastName: 'Bah',
-      email: 'ibrahima.bah@email.com',
-      phone: '+224 555 123 456',
-      role: MemberRole.TREASURER,
-      status: MemberStatus.ACTIVE,
-      joinDate: new Date('2023-03-10'),
-      associationId: '1'
-    },
-    {
-      id: '4',
-      firstName: 'Aissatou',
-      lastName: 'Sow',
-      email: 'aissatou.sow@email.com',
-      phone: '+224 777 888 999',
-      role: MemberRole.MEMBER,
-      status: MemberStatus.SUSPENDED,
-      joinDate: new Date('2023-04-05'),
-      associationId: '1'
-    },
-    {
-      id: '5',
-      firstName: 'Oumar',
-      lastName: 'Keita',
-      email: 'oumar.keita@email.com',
-      phone: '+224 666 777 888',
-      role: MemberRole.MEMBER,
-      status: MemberStatus.ACTIVE,
-      joinDate: new Date('2023-05-12'),
-      associationId: '1'
-    }
-  ];
-
-  const filteredMembers = members.filter(member => {
-    const matchesSearch = member.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         member.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         member.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = selectedRole === 'all' || member.role === selectedRole;
-    const matchesStatus = selectedStatus === 'all' || member.status === selectedStatus;
-    
-    return matchesSearch && matchesRole && matchesStatus;
-  });
+  const filteredMembers = filterMembers({ role: selectedRole, status: selectedStatus, search: searchTerm });
 
   const getRoleLabel = (role: MemberRoleType) => {
     switch (role) {
@@ -118,7 +57,26 @@ export default function MembersPageMobile() {
     }
   };
 
+  // Actions CRUD
+  const handleAddMember = async (member: Omit<MemberType, 'id'>) => {
+    await addMember(member);
+  };
+
+  const handleEditMember = async (member: Omit<MemberType, 'id'>) => {
+    if (editMember) {
+      await updateMember(editMember.id, member);
+      setEditMember(undefined);
+    }
+    setShowForm(false);
+  };
+
+  const handleDeleteMember = async (id: string) => {
+    if (window.confirm('Voulez-vous vraiment supprimer ce membre ?')) {
+      await deleteMember(id);
+    }
+  };
   return (
+  // Responsive layout
     <div className="min-h-screen bg-gray-50">
       {/* En-tête Mobile-First */}
       <div className="bg-white border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
@@ -132,12 +90,14 @@ export default function MembersPageMobile() {
                 Gérez les membres de votre association
               </p>
             </div>
-            <button className="bg-purple-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2 text-sm sm:text-base">
+            <button
+              className="bg-purple-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2 text-sm sm:text-base"
+              onClick={() => { setShowForm(true); setEditMember(undefined); }}
+            >
               <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="hidden sm:inline">Nouveau membre</span>
               <span className="sm:hidden">Nouveau</span>
             </button>
-          </div>
           
           {/* Statistiques rapides */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
@@ -305,16 +265,18 @@ export default function MembersPageMobile() {
                   {/* Actions */}
                   <div className="mt-4 flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <button className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-purple-600 bg-purple-50 rounded-md hover:bg-purple-100 transition-colors">
-                        <Eye className="w-4 h-4 mr-1" />
-                        Voir
-                      </button>
-                      <button className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors">
+                      <button
+                        className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors"
+                        onClick={() => { setEditMember(member); setShowForm(true); }}
+                      >
                         <Edit className="w-4 h-4 mr-1" />
                         Modifier
                       </button>
                     </div>
-                    <button className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors">
+                    <button
+                      className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
+                      onClick={() => handleDeleteMember(member.id)}
+                    >
                       <Trash2 className="w-4 h-4 mr-1" />
                       Supprimer
                     </button>
@@ -345,6 +307,13 @@ export default function MembersPageMobile() {
           </div>
         </div>
       </div>
+      {/* Modale ajout/édition membre */}
+      <MemberForm
+        isOpen={showForm}
+        member={editMember}
+        onClose={() => { setShowForm(false); setEditMember(undefined); }}
+        onSave={editMember ? handleEditMember : handleAddMember}
+      />
     </div>
   );
 }
