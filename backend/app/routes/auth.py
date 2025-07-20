@@ -56,7 +56,7 @@ def register():
         db.session.commit()
         
         # Création du token JWT
-        access_token = create_access_token(identity=association.id)
+        access_token = create_access_token(identity=str(association.id))
         
         return jsonify({
             'token': access_token,
@@ -82,7 +82,7 @@ def login():
             return jsonify({'error': 'Identifiants invalides'}), 401
         
         # Création du token JWT
-        access_token = create_access_token(identity=association.id)
+        access_token = create_access_token(identity=str(association.id))
         
         return jsonify({
             'token': access_token,
