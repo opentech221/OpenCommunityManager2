@@ -31,8 +31,13 @@ export const useMembers = (): UseMembersReturn => {
   const fetchMembers = async () => {
     setIsLoading(true);
     try {
-      // Simulation d'appel API - à remplacer par votre vraie API
-      const response = await fetch(apiUrl('/api/members'));
+      const token = localStorage.getItem('auth_token');
+      const response = await fetch(apiUrl('/api/members'), {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+        },
+      });
       if (response.ok) {
         const data = await response.json();
         setMembers(data);
@@ -46,11 +51,12 @@ export const useMembers = (): UseMembersReturn => {
 
   const addMember = async (memberData: Omit<MemberType, 'id'>) => {
     try {
+      const token = localStorage.getItem('auth_token');
       const response = await fetch(apiUrl('/api/members'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         },
         body: JSON.stringify(memberData),
       });
@@ -77,11 +83,12 @@ export const useMembers = (): UseMembersReturn => {
 
   const updateMember = async (id: string, updates: Partial<MemberType>) => {
     try {
+      const token = localStorage.getItem('auth_token');
       const response = await fetch(apiUrl(`/api/members/${id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         },
         body: JSON.stringify(updates),
       });
@@ -100,10 +107,11 @@ export const useMembers = (): UseMembersReturn => {
 
   const deleteMember = async (id: string) => {
     try {
+      const token = localStorage.getItem('auth_token');
       const response = await fetch(apiUrl(`/api/members/${id}`), {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         },
       });
 
