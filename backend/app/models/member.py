@@ -36,21 +36,3 @@ class Member(db.Model):
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }
-
-    def to_dict(self):
-        """Convertir l'objet en dictionnaire pour la sérialisation JSON"""
-        return {
-            'id': self.id,
-            'first_name': self.first_name,
-            'last_name': self.last_name,
-            'email': self.email,
-            'phone': self.phone,
-            'address': self.address,
-            'birth_date': self.birth_date.isoformat() if self.birth_date else None,
-            'role': self.role,
-            'status': self.status,
-            'join_date': self.join_date.isoformat() if self.join_date else None,
-            'association_id': self.association_id,
-            'created_at': self.created_at.isoformat() if self.created_at else None,
-            'updated_at': self.updated_at.isoformat() if self.updated_at else None
-        }
