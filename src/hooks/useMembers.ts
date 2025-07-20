@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// ...existing code...
 import { useState, useEffect } from 'react';
-// @ts-ignore
-import { apiUrl } from '../utils/apiUrl.node';
+import { apiUrl } from '../utils';
 import type { MemberType } from '../types';
 
 interface UseMembersReturn {
@@ -41,8 +39,6 @@ export const useMembers = (): UseMembersReturn => {
       }
     } catch (error) {
       console.error('Erreur lors du chargement des membres:', error);
-      // Données fictives en cas d'erreur
-      setMembers(getMockMembers());
     } finally {
       setIsLoading(false);
     }
@@ -160,39 +156,3 @@ export const useMembers = (): UseMembersReturn => {
   };
 };
 
-// Données fictives pour le développement
-const getMockMembers = (): MemberType[] => [
-  {
-    id: '1',
-    firstName: 'Mamadou',
-    lastName: 'Diallo',
-    email: 'mamadou.diallo@email.com',
-    phone: '+224 123 456 789',
-    role: 'PRESIDENT' as unknown,
-    status: 'ACTIVE' as any,
-    joinDate: new Date('2023-01-15'),
-    associationId: '1'
-  },
-  {
-    id: '2',
-    firstName: 'Fatou',
-    lastName: 'Camara',
-    email: 'fatou.camara@email.com',
-    phone: '+224 987 654 321',
-    role: 'SECRETARY' as any,
-    status: 'ACTIVE' as any,
-    joinDate: new Date('2023-02-20'),
-    associationId: '1'
-  },
-  {
-    id: '3',
-    firstName: 'Ibrahima',
-    lastName: 'Bah',
-    email: 'ibrahima.bah@email.com',
-    phone: '+224 555 123 456',
-    role: 'TREASURER' as any,
-    status: 'ACTIVE' as any,
-    joinDate: new Date('2023-03-10'),
-    associationId: '1'
-  }
-];
