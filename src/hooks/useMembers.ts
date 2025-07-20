@@ -32,7 +32,7 @@ export const useMembers = (): UseMembersReturn => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(apiUrl('/api/members'), {
+      const response = await fetch(apiUrl('/api/members/'), {
         headers: {
           'Content-Type': 'application/json',
           ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
@@ -52,7 +52,7 @@ export const useMembers = (): UseMembersReturn => {
   const addMember = async (memberData: Omit<MemberType, 'id'>) => {
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(apiUrl('/api/members'), {
+      const response = await fetch(apiUrl('/api/members/'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ export const useMembers = (): UseMembersReturn => {
   const updateMember = async (id: string, updates: Partial<MemberType>) => {
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(apiUrl(`/api/members/${id}`), {
+      const response = await fetch(apiUrl(`/api/members/${id}/`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ export const useMembers = (): UseMembersReturn => {
   const deleteMember = async (id: string) => {
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(apiUrl(`/api/members/${id}`), {
+      const response = await fetch(apiUrl(`/api/members/${id}/`), {
         method: 'DELETE',
         headers: {
           ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
