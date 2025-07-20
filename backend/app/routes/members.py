@@ -3,6 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import db
 from app.models.member import Member
 from app.models.association import Association
+import traceback
 
 members_bp = Blueprint('members', __name__)
 
@@ -38,7 +39,8 @@ def get_members():
         return jsonify([member.to_dict() for member in members]), 200
         
     except Exception as e:
-        return jsonify({'error': 'Erreur lors de la récupération des membres: ' + str(e)}), 500
+        import traceback
+        return jsonify({'error': 'Erreur lors de la récupération des membres', 'details': str(e), 'trace': traceback.format_exc()}), 500
 
 @members_bp.route('/', methods=['POST'])
 @jwt_required()
