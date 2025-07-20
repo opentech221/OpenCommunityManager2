@@ -1,7 +1,7 @@
 // ...existing code...
 import { useState, useEffect } from 'react';
-import { apiUrl } from '../utils';
 import type { MemberType } from '../types';
+import { apiUrl } from '../utils';
 
 interface UseMembersReturn {
   members: MemberType[];
