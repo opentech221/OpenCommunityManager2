@@ -14,7 +14,7 @@ import {
 
 export default function SettingsPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [activeTab, setActiveTab] = useState('profile');
+  const [activeTab, setActiveTab] = useState<string>('profile');
 
   const tabs = [
     { id: 'profile', name: 'Profil', icon: User },
@@ -183,7 +183,6 @@ export default function SettingsPage() {
             {activeTab === 'security' && (
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold text-gray-900">Sécurité</h2>
-                
                 <form className="space-y-6" autoComplete="off">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -195,6 +194,7 @@ export default function SettingsPage() {
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent pr-10"
                       />
                       <button
+                        type="button"
                         onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                       >
@@ -202,7 +202,6 @@ export default function SettingsPage() {
                       </button>
                     </div>
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Nouveau mot de passe
@@ -214,7 +213,6 @@ export default function SettingsPage() {
                       autoComplete="new-password"
                     />
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Confirmer le nouveau mot de passe
@@ -226,24 +224,21 @@ export default function SettingsPage() {
                       autoComplete="new-password"
                     />
                   </div>
-                </div>
-
-                <div className="flex flex-col md:flex-row items-center justify-end gap-3">
-                  <button type="reset" className="w-full md:w-auto px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
-                    Annuler
-                  </button>
-                  <button type="submit" className="w-full md:w-auto px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center space-x-2">
-                    <Save className="w-4 h-4" />
-                    <span>Changer le mot de passe</span>
-                  </button>
-                </div>
+                  <div className="flex flex-col md:flex-row items-center justify-end gap-3">
+                    <button type="reset" className="w-full md:w-auto px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                      Annuler
+                    </button>
+                    <button type="submit" className="w-full md:w-auto px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center space-x-2">
+                      <Save className="w-4 h-4" />
+                      <span>Changer le mot de passe</span>
+                    </button>
+                  </div>
+                </form>
               </div>
             )}
-
             {activeTab === 'notifications' && (
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold text-gray-900">Notifications</h2>
-                
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
@@ -255,7 +250,6 @@ export default function SettingsPage() {
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
                     </label>
                   </div>
-
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="text-sm font-medium text-gray-900">Notifications push</h3>
@@ -266,7 +260,6 @@ export default function SettingsPage() {
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
                     </label>
                   </div>
-
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="text-sm font-medium text-gray-900">Nouvelles cotisations</h3>
@@ -277,14 +270,12 @@ export default function SettingsPage() {
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
                     </label>
                   </div>
-                </form>
+                </div>
               </div>
             )}
-
             {activeTab === 'appearance' && (
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold text-gray-900">Apparence</h2>
-                
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -296,7 +287,6 @@ export default function SettingsPage() {
                       <option>Système</option>
                     </select>
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Couleur principale
@@ -312,11 +302,9 @@ export default function SettingsPage() {
                 </div>
               </div>
             )}
-
             {activeTab === 'public' && (
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold text-gray-900">Profil public</h2>
-                
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
@@ -328,7 +316,6 @@ export default function SettingsPage() {
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
                     </label>
                   </div>
-
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="text-sm font-medium text-gray-900">Autoriser les demandes d'adhésion</h3>
@@ -340,7 +327,6 @@ export default function SettingsPage() {
                     </label>
                   </div>
                 </div>
-
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <h3 className="text-sm font-medium text-blue-900 mb-2">Lien du profil public</h3>
                   <div className="flex items-center space-x-2">
