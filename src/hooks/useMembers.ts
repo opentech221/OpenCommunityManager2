@@ -58,15 +58,20 @@ export const useMembers = (): UseMembersReturn => {
       if (response.ok) {
         const newMember = await response.json();
         setMembers(prev => [...prev, newMember]);
+      } else {
+        let errorMsg = 'Erreur lors de l\'ajout du membre.';
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.error || errorMsg;
+        } catch (e) {
+          const errorText = await response.text();
+          if (errorText) errorMsg = errorText;
+        }
+        throw new Error(errorMsg);
       }
     } catch (error) {
       console.error('Erreur lors de l\'ajout du membre:', error);
-      // Simulation pour développement
-      const newMember: MemberType = {
-        ...memberData,
-        id: Date.now().toString(),
-      };
-      setMembers(prev => [...prev, newMember]);
+      alert(error instanceof Error ? error.message : String(error));
     }
   };
 
