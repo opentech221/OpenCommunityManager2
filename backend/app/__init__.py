@@ -15,13 +15,18 @@ cors = CORS()
 migrate = Migrate()
 
 def create_app():
+    app = Flask(__name__)
+    # Force HTTPS en production
+    if not app.debug and not app.testing:
+        from flask_talisman import Talisman
+        Talisman(app, content_security_policy=None)
+
+    # Redirige toute requête HTTP vers HTTPS
     @app.before_request
     def before_request():
-        # Redirige toute requête HTTP vers HTTPS
         if request.headers.get('X-Forwarded-Proto') != 'https':
             url = request.url.replace('http://', 'https://', 1)
             return redirect(url, code=301)
-    app = Flask(__name__)
     # Force HTTPS en production
     if not app.debug and not app.testing:
         from flask_talisman import Talisman
