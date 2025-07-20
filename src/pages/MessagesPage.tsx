@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   Send, 
   Search,
@@ -32,6 +32,33 @@ interface Conversation {
 export default function MessagesPage() {
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState('');
+  const [messages, setMessages] = useState<Message[]>([ // dynamique
+    {
+      id: '1',
+      senderId: '1',
+      senderName: 'Mamadou Diallo',
+      content: 'Bonjour, avez-vous reçu le rapport financier ?',
+      timestamp: new Date(Date.now() - 1000 * 60 * 30),
+      isRead: true
+    },
+    {
+      id: '2',
+      senderId: 'me',
+      senderName: 'Moi',
+      content: 'Oui, je l\'ai reçu hier. Je vais l\'examiner ce soir.',
+      timestamp: new Date(Date.now() - 1000 * 60 * 25),
+      isRead: true
+    },
+    {
+      id: '3',
+      senderId: '1',
+      senderName: 'Mamadou Diallo',
+      content: 'Parfait, merci !',
+      timestamp: new Date(Date.now() - 1000 * 60 * 20),
+      isRead: false
+    }
+  ]);
+  const [feedback, setFeedback] = useState<string>('');
 
   // Données fictives
   const conversations: Conversation[] = [
@@ -64,44 +91,41 @@ export default function MessagesPage() {
     }
   ];
 
-  const messages: Message[] = [
-    {
-      id: '1',
-      senderId: '1',
-      senderName: 'Mamadou Diallo',
-      content: 'Bonjour, avez-vous reçu le rapport financier ?',
-      timestamp: new Date(Date.now() - 1000 * 60 * 30),
-      isRead: true
-    },
-    {
-      id: '2',
-      senderId: 'me',
-      senderName: 'Moi',
-      content: 'Oui, je l\'ai reçu hier. Je vais l\'examiner ce soir.',
-      timestamp: new Date(Date.now() - 1000 * 60 * 25),
-      isRead: true
-    },
-    {
-      id: '3',
-      senderId: '1',
-      senderName: 'Mamadou Diallo',
-      content: 'Parfait, merci !',
-      timestamp: new Date(Date.now() - 1000 * 60 * 20),
-      isRead: false
-    }
-  ];
+  // messages est maintenant dynamique
 
   const selectedConv = conversations.find(c => c.id === selectedConversation);
 
   const handleSendMessage = () => {
     if (newMessage.trim()) {
-      // Ici on ajouterait la logique pour envoyer le message
+      const msg: Message = {
+        id: Date.now().toString(),
+        senderId: 'me',
+        senderName: 'Moi',
+        content: newMessage,
+        timestamp: new Date(),
+        isRead: true
+      };
+      setMessages(prev => [...prev, msg]);
       setNewMessage('');
+      setFeedback('Message envoyé !');
+      setTimeout(() => setFeedback(''), 2000);
     }
+  };
+
+  const handleDeleteMessage = (id: string) => {
+    setMessages(prev => prev.filter(m => m.id !== id));
+    setFeedback('Message supprimé.');
+    setTimeout(() => setFeedback(''), 2000);
   };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row">
+      {/* Feedback */}
+      {feedback && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50">
+          {feedback}
+        </div>
+      )}
       {/* Liste des conversations */}
       <div className="w-full md:w-80 bg-white border-b md:border-r border-gray-200 flex-shrink-0">
         {/* En-tête */}
@@ -195,7 +219,7 @@ export default function MessagesPage() {
                   className={`flex ${message.senderId === 'me' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[80vw] md:max-w-md px-4 py-2 rounded-lg ${
+                    className={`relative max-w-[80vw] md:max-w-md px-4 py-2 rounded-lg ${
                       message.senderId === 'me'
                         ? 'bg-purple-500 text-white'
                         : 'bg-gray-200 text-gray-900'
@@ -207,6 +231,18 @@ export default function MessagesPage() {
                     }`}>
                       {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
+                    {message.senderId === 'me' && (
+                      <button
+                        className="absolute top-2 right-2 text-red-300 hover:text-red-500"
+                        title="Supprimer le message"
+                        aria-label="Supprimer le message"
+                        onClick={() => handleDeleteMessage(message.id)}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -233,6 +269,7 @@ export default function MessagesPage() {
                 <button
                   onClick={handleSendMessage}
                   className="p-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+                  aria-label="Envoyer le message"
                 >
                   <SendIcon className="w-5 h-5" />
                 </button>

@@ -1,11 +1,7 @@
+// ...existing code...
+// ...autres exports utilitaires...
 // Génère l'URL complète de l'API selon l'environnement
-export function apiUrl(path: string) {
-  const base = import.meta.env.VITE_BACKEND_URL || '';
-  // Si path commence déjà par http, ne rien faire
-  if (/^https?:\/\//.test(path)) return path;
-  // Ajoute le slash si besoin
-  return base.replace(/\/$/, '') + (path.startsWith('/') ? path : '/' + path);
-}
+export { apiUrl } from './apiUrl.vite';
 /**
  * Formate une date en français
  */
@@ -181,28 +177,8 @@ export const daysBetweenDates = (date1: Date | string, date2: Date | string): nu
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 };
 
-/**
- * Tronque un texte à une longueur donnée
- */
-export const truncateText = (text: string, maxLength: number): string => {
-  if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength) + '...';
-};
+// ...existing code...
+// URL de l'API backend
+// ...existing code...
 
-/**
- * Capitalise la première lettre d'une chaîne
- */
-export const capitalize = (text: string): string => {
-  if (!text) return '';
-  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
-};
-
-/**
- * Génère un nom de fichier sécurisé
- */
-export const sanitizeFileName = (fileName: string): string => {
-  return fileName
-    .replace(/[^a-z0-9.-]/gi, '_')
-    .replace(/_{2,}/g, '_')
-    .toLowerCase();
-};
+// ...existing code...

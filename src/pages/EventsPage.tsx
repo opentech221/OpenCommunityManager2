@@ -1,4 +1,6 @@
+import React from 'react';
 import { useState } from 'react';
+import EventForm from '../components/EventForm';
 import { Plus, Search, Calendar, MapPin, Users, Eye, Edit, Trash2, Clock, Filter } from 'lucide-react';
 import type { EventType } from '../types';
 
@@ -99,11 +101,14 @@ const mockEvents: EventType[] = [
 ];
 
 export default function EventsPage() {
-  const [events] = useState<EventType[]>(mockEvents);
+  const [events, setEvents] = useState<EventType[]>(mockEvents);
   const [searchTerm, setSearchTerm] = useState('');
   const [dateFilter, setDateFilter] = useState<'upcoming' | 'past' | 'all'>('upcoming');
   const [typeFilter, setTypeFilter] = useState<'all' | 'MEETING' | 'SOCIAL' | 'TRAINING'>('all');
   const [showFilters, setShowFilters] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalEvent, setModalEvent] = useState<EventType | null>(null);
+  const [feedback, setFeedback] = useState<string>('');
 
   const now = new Date();
   const filteredEvents = events.filter(event => {
@@ -111,19 +116,50 @@ export default function EventsPage() {
       event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.location.toLowerCase().includes(searchTerm.toLowerCase());
-    
     let matchesDate = true;
     if (dateFilter === 'upcoming') {
       matchesDate = event.startDate > now;
     } else if (dateFilter === 'past') {
       matchesDate = event.startDate < now;
     }
-    
     const matchesType = typeFilter === 'all' || event.type === typeFilter;
-    
     return matchesSearch && matchesDate && matchesType;
   });
 
+  // Handlers CRUD
+  const handleAddEvent = (newEvent: EventType) => {
+    setEvents(prev => [...prev, { ...newEvent, id: Date.now().toString() }]);
+    setFeedback('événement ajouté avec succès');
+    setShowModal(false);
+  };
+
+  const handleEditEvent = (updatedEvent: EventType) => {
+    setEvents(prev => prev.map(ev => ev.id === updatedEvent.id ? updatedEvent : ev));
+    setFeedback('événement modifié avec succès');
+    setShowModal(false);
+  };
+
+  const handleDeleteEvent = (id: string) => {
+    setEvents(prev => prev.filter(ev => ev.id !== id));
+    setFeedback('événement supprimé avec succès');
+  };
+
+  // Modal form (simplifié)
+  const openAddModal = () => {
+    setModalEvent(null);
+    setShowModal(true);
+  };
+  const openEditModal = (event: EventType) => {
+    setModalEvent(event);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setModalEvent(null);
+  };
+
+  // Helpers
   const getEventStatus = (eventDate: Date) => {
     const today = new Date();
     if (eventDate > today) {
@@ -160,7 +196,6 @@ export default function EventsPage() {
       const eventDate = event.startDate;
       return eventDate.getMonth() === now.getMonth() && eventDate.getFullYear() === now.getFullYear();
     }).length;
-    
     return { upcoming, past, thisMonth, total: events.length };
   };
 
@@ -168,6 +203,13 @@ export default function EventsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Feedback */}
+      {feedback && (
+        <div className="bg-green-100 border border-green-300 text-green-800 px-4 py-2 rounded-lg mx-4 mt-4 mb-2 text-center font-medium">
+          {feedback}
+          <button className="ml-2 text-xs text-green-700 underline" onClick={() => setFeedback('')}>Fermer</button>
+        </div>
+      )}
       {/* En-tête Mobile-First */}
       <div className="bg-white border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex flex-col space-y-4">
@@ -180,7 +222,11 @@ export default function EventsPage() {
                 Gérez les événements de votre association
               </p>
             </div>
-            <button className="bg-purple-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2 text-sm sm:text-base">
+            <button
+              className="bg-purple-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2 text-sm sm:text-base"
+              onClick={openAddModal}
+              aria-label="ouvrir modal ajout événement"
+            >
               <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="hidden sm:inline">Nouvel événement</span>
               <span className="sm:hidden">Nouveau</span>
@@ -301,7 +347,6 @@ export default function EventsPage() {
             {filteredEvents.map((event) => {
               const eventStatus = getEventStatus(event.startDate);
               const participantCount = event.participants?.length || 0;
-              
               return (
                 <div key={event.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
                   <div className="p-4">
@@ -320,11 +365,9 @@ export default function EventsPage() {
                         </div>
                       </div>
                     </div>
-                    
                     <p className="text-sm text-gray-600 mb-3 line-clamp-2">
                       {event.description}
                     </p>
-                    
                     {/* Informations détaillées */}
                     <div className="space-y-2">
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
@@ -358,7 +401,6 @@ export default function EventsPage() {
                         </span>
                       </div>
                     </div>
-                    
                     {/* Barre de progression des participants */}
                     {event.maxParticipants && (
                       <div className="mt-3">
@@ -374,7 +416,6 @@ export default function EventsPage() {
                         </div>
                       </div>
                     )}
-                    
                     {/* Actions */}
                     <div className="mt-4 flex items-center justify-between">
                       <div className="flex items-center space-x-2">
@@ -382,12 +423,20 @@ export default function EventsPage() {
                           <Eye className="w-4 h-4 mr-1" />
                           Voir
                         </button>
-                        <button className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors">
+                        <button
+                          className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors"
+                          onClick={() => openEditModal(event)}
+                          aria-label="modifier l'événement"
+                        >
                           <Edit className="w-4 h-4 mr-1" />
                           Modifier
                         </button>
                       </div>
-                      <button className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors">
+                      <button
+                        className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
+                        onClick={() => handleDeleteEvent(event.id)}
+                        aria-label="supprimer l'événement"
+                      >
                         <Trash2 className="w-4 h-4 mr-1" />
                         Supprimer
                       </button>
@@ -399,6 +448,20 @@ export default function EventsPage() {
           </div>
         )}
       </div>
+
+      {/* Modal ajout/modification événement */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mx-auto">
+            <h2 className="text-lg font-bold mb-4">{modalEvent ? 'Modifier' : 'Ajouter'} un événement</h2>
+            <EventForm
+              event={modalEvent}
+              onSave={modalEvent ? handleEditEvent : handleAddEvent}
+              onCancel={closeModal}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Pagination mobile */}
       <div className="bg-white border-t border-gray-200 px-4 py-3 sm:px-6 lg:px-8">

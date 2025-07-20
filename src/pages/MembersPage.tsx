@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Plus, Search, Filter, Edit, Trash2, Phone, Mail, Calendar } from 'lucide-react';
 import type { MemberType, MemberRole as MemberRoleType, MemberStatus as MemberStatusType } from '../types';
 import { MemberRole, MemberStatus } from '../types';
@@ -14,6 +14,7 @@ export default function MembersPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editMember, setEditMember] = useState<MemberType | undefined>(undefined);
+  const [feedbackMessage, setFeedbackMessage] = useState<string>('');
   const { members, isLoading, addMember, updateMember, deleteMember, filterMembers } = useMembers();
 
   const filteredMembers = filterMembers({ role: selectedRole, status: selectedStatus, search: searchTerm });
@@ -61,6 +62,8 @@ export default function MembersPage() {
   // Actions CRUD
   const handleAddMember = async (member: Omit<MemberType, 'id'>) => {
     await addMember(member);
+    setFeedbackMessage('Membre ajouté avec succès');
+    setTimeout(() => setFeedbackMessage(''), 2000);
   };
 
   const handleEditMember = async (member: Omit<MemberType, 'id'>) => {
@@ -74,11 +77,17 @@ export default function MembersPage() {
   const handleDeleteMember = async (id: string) => {
     if (window.confirm('Voulez-vous vraiment supprimer ce membre ?')) {
       await deleteMember(id);
+      setFeedbackMessage('Membre supprimé avec succès');
+      setTimeout(() => setFeedbackMessage(''), 2000);
     }
   };
   return (
-  // Responsive layout
     <div className="min-h-screen bg-gray-50">
+      {feedbackMessage && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50">
+          {feedbackMessage}
+        </div>
+      )}
       {/* En-tête Mobile-First */}
       <div className="bg-white border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex flex-col space-y-4">

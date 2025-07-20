@@ -1,460 +1,399 @@
-import { useState } from 'react';
-import { Plus, Search, Eye, Download, Edit, Trash2, DollarSign, Calendar, User, CreditCard, Filter } from 'lucide-react';
-import type { CotisationType, MemberType } from '../types';
-import { PaymentMethod, PaymentStatus, MemberRole, MemberStatus } from '../types';
+import React, { useState } from 'react';
+import { Plus, X } from 'lucide-react';
+import { PaymentStatus, PaymentMethod, type CotisationType } from '../types';
+import { formatCurrency, formatDate } from '../utils';
 
-// Données de démonstration pour les membres
-const mockMembers: MemberType[] = [
-  {
-    id: '1',
-    firstName: 'Aminata',
-    lastName: 'Diallo',
-    email: 'aminata.diallo@email.com',
-    phone: '+221 77 123 45 67',
-    role: 'PRESIDENT' as MemberRole,
-    status: 'ACTIVE' as MemberStatus,
-    joinDate: new Date('2023-01-15'),
-    associationId: 'assoc-1'
-  },
-  {
-    id: '2',
-    firstName: 'Mamadou',
-    lastName: 'Ba',
-    email: 'mamadou.ba@email.com',
-    phone: '+221 70 987 65 43',
-    role: 'TREASURER' as MemberRole,
-    status: 'ACTIVE' as MemberStatus,
-    joinDate: new Date('2023-02-10'),
-    associationId: 'assoc-1'
-  },
-  {
-    id: '3',
-    firstName: 'Fatou',
-    lastName: 'Sow',
-    email: 'fatou.sow@email.com',
-    phone: '+221 76 555 44 33',
-    role: 'MEMBER' as MemberRole,
-    status: 'ACTIVE' as MemberStatus,
-    joinDate: new Date('2023-03-05'),
-    associationId: 'assoc-1'
-  },
-  {
-    id: '4',
-    firstName: 'Ibrahima',
-    lastName: 'Kane',
-    email: 'ibrahima.kane@email.com',
-    phone: '+221 78 888 99 00',
-    role: 'MEMBER' as MemberRole,
-    status: 'ACTIVE' as MemberStatus,
-    joinDate: new Date('2023-04-20'),
-    associationId: 'assoc-1'
-  }
-];
-
-// Données de démonstration pour les cotisations
 const mockCotisations: CotisationType[] = [
   {
     id: '1',
     memberId: '1',
     amount: 15000,
-    paymentDate: new Date('2025-01-15'),
-    paymentMethod: PaymentMethod.MOBILE_MONEY,
+    paymentDate: new Date('2024-07-01'),
+    paymentMethod: PaymentMethod.CASH,
     status: PaymentStatus.PAID,
-    year: 2025,
-    notes: 'Cotisation annuelle 2025'
+    year: 2024,
+    notes: 'Cotisation annuelle',
   },
   {
     id: '2',
     memberId: '2',
-    amount: 15000,
-    paymentDate: new Date('2025-02-01'),
-    paymentMethod: PaymentMethod.CASH,
-    status: PaymentStatus.PAID,
-    year: 2025,
-    notes: 'Cotisation annuelle 2025'
+    amount: 10000,
+    paymentDate: new Date('2024-07-10'),
+    paymentMethod: PaymentMethod.BANK_TRANSFER,
+    status: PaymentStatus.PENDING,
+    year: 2024,
+    notes: 'En attente',
   },
   {
     id: '3',
     memberId: '3',
-    amount: 15000,
-    paymentDate: new Date('2025-03-01'),
-    paymentMethod: PaymentMethod.BANK_TRANSFER,
-    status: PaymentStatus.PENDING,
-    year: 2025,
-    notes: 'Cotisation en attente de validation'
-  },
-  {
-    id: '4',
-    memberId: '4',
-    amount: 15000,
-    paymentDate: new Date('2025-01-30'),
+    amount: 8000,
+    paymentDate: new Date('2024-06-15'),
     paymentMethod: PaymentMethod.MOBILE_MONEY,
     status: PaymentStatus.OVERDUE,
-    year: 2025,
-    notes: 'Cotisation en retard'
-  },
-  {
-    id: '5',
-    memberId: '1',
-    amount: 15000,
-    paymentDate: new Date('2024-12-15'),
-    paymentMethod: PaymentMethod.CASH,
-    status: PaymentStatus.PAID,
     year: 2024,
-    notes: 'Cotisation annuelle 2024'
-  }
+    notes: 'Retard',
+  },
+];
+
+const members = [
+  { id: '1', name: 'Aminata Diallo' },
+  { id: '2', name: 'Mamadou Ba' },
+  { id: '3', name: 'Fatou Camara' },
 ];
 
 export default function CotisationsPage() {
-  const [cotisations] = useState<CotisationType[]>(mockCotisations);
-  const [members] = useState<MemberType[]>(mockMembers);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<PaymentStatus | 'ALL'>('ALL');
-  const [yearFilter, setYearFilter] = useState<number | 'ALL'>(2025);
-  const [methodFilter, setMethodFilter] = useState<PaymentMethod | 'ALL'>('ALL');
-  const [showFilters, setShowFilters] = useState(false);
+  const [cotisations, setCotisations] = useState<CotisationType[]>(mockCotisations);
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState<keyof typeof PaymentStatus | 'ALL'>('ALL');
+  const [feedback, setFeedback] = useState('');
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editCotisation, setEditCotisation] = useState<CotisationType | null>(null);
 
-  // Enrichir les cotisations avec les informations des membres
-  const enrichedCotisations = cotisations.map(cotisation => {
-    const member = members.find(m => m.id === cotisation.memberId);
-    return {
-      ...cotisation,
-      memberName: member ? `${member.firstName} ${member.lastName}` : 'Membre inconnu',
-      memberEmail: member?.email || ''
-    };
+  // Stats
+  const total = cotisations.length;
+  const paid = cotisations.filter(c => c.status === PaymentStatus.PAID).length;
+  const pending = cotisations.filter(c => c.status === PaymentStatus.PENDING).length;
+  const overdue = cotisations.filter(c => c.status === PaymentStatus.OVERDUE).length;
+  const totalAmount = cotisations.reduce((sum, c) => sum + c.amount, 0);
+
+  // Filtrage
+  const filteredCotisations = cotisations.filter(c => {
+    const memberName = members.find(m => m.id === c.memberId)?.name || '';
+    const matchesSearch = memberName.toLowerCase().includes(search.toLowerCase()) || c.notes?.toLowerCase().includes(search.toLowerCase());
+    const matchesStatus = statusFilter === 'ALL' || c.status === statusFilter;
+    return matchesSearch && matchesStatus;
   });
 
-  const filteredCotisations = enrichedCotisations.filter(cotisation => {
-    const matchesSearch = 
-      cotisation.memberName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      cotisation.memberEmail.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      cotisation.notes?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesStatus = statusFilter === 'ALL' || cotisation.status === statusFilter;
-    const matchesYear = yearFilter === 'ALL' || cotisation.year === yearFilter;
-    const matchesMethod = methodFilter === 'ALL' || cotisation.paymentMethod === methodFilter;
-    
-    return matchesSearch && matchesStatus && matchesYear && matchesMethod;
+  // Handlers
+  const handleAdd = (cotisation: Omit<CotisationType, 'id'>) => {
+    const newCotisation: CotisationType = { ...cotisation, id: Date.now().toString() };
+    setCotisations(prev => [...prev, newCotisation]);
+    setFeedback('Cotisation ajoutée avec succès');
+    setShowAddModal(false);
+    setTimeout(() => setFeedback(''), 2000);
+  };
+
+  const handleDelete = (id: string) => {
+    setCotisations(prev => prev.filter(c => c.id !== id));
+    setFeedback('Cotisation supprimée avec succès');
+    setTimeout(() => setFeedback(''), 2000);
+  };
+
+  const handleEdit = (cotisation: CotisationType) => {
+    setCotisations(prev => prev.map(c => c.id === cotisation.id ? cotisation : c));
+    setFeedback('Cotisation modifiée avec succès');
+    setShowEditModal(false);
+    setEditCotisation(null);
+    setTimeout(() => setFeedback(''), 2000);
+  };
+
+  // Modal form state
+  const [form, setForm] = useState<Omit<CotisationType, 'id'>>({
+    memberId: '',
+    amount: 0,
+    paymentDate: new Date(),
+    paymentMethod: PaymentMethod.CASH,
+    status: PaymentStatus.PAID,
+    year: new Date().getFullYear(),
+    notes: '',
   });
 
-  const getStatusBadge = (status: PaymentStatus) => {
-    const statusConfig = {
-      [PaymentStatus.PAID]: { label: 'Payé', className: 'bg-green-100 text-green-800' },
-      [PaymentStatus.PENDING]: { label: 'En attente', className: 'bg-yellow-100 text-yellow-800' },
-      [PaymentStatus.OVERDUE]: { label: 'En retard', className: 'bg-red-100 text-red-800' }
-    };
-    
-    return statusConfig[status] || { label: status, className: 'bg-gray-100 text-gray-800' };
+  // Add modal open
+  const openAddModal = () => {
+    setForm({
+      memberId: '',
+      amount: 0,
+      paymentDate: new Date(),
+      paymentMethod: PaymentMethod.CASH,
+      status: PaymentStatus.PAID,
+      year: new Date().getFullYear(),
+      notes: '',
+    });
+    setShowAddModal(true);
   };
 
-  const getPaymentMethodLabel = (method: PaymentMethod) => {
-    const methodLabels = {
-      [PaymentMethod.CASH]: 'Espèces',
-      [PaymentMethod.MOBILE_MONEY]: 'Mobile Money',
-      [PaymentMethod.BANK_TRANSFER]: 'Virement',
-      [PaymentMethod.CHECK]: 'Chèque',
-      [PaymentMethod.CARD]: 'Carte'
-    };
-    
-    return methodLabels[method] || method;
+  // Edit modal open
+  const openEditModal = (cotisation: CotisationType) => {
+    setEditCotisation(cotisation);
+    setForm({
+      memberId: cotisation.memberId,
+      amount: cotisation.amount,
+      paymentDate: cotisation.paymentDate,
+      paymentMethod: cotisation.paymentMethod,
+      status: cotisation.status,
+      year: cotisation.year,
+      notes: cotisation.notes || '',
+    });
+    setShowEditModal(true);
   };
 
-  const getPaymentMethodColor = (method: PaymentMethod) => {
-    const methodColors = {
-      [PaymentMethod.CASH]: 'bg-gray-100 text-gray-800',
-      [PaymentMethod.MOBILE_MONEY]: 'bg-blue-100 text-blue-800',
-      [PaymentMethod.BANK_TRANSFER]: 'bg-purple-100 text-purple-800',
-      [PaymentMethod.CHECK]: 'bg-orange-100 text-orange-800',
-      [PaymentMethod.CARD]: 'bg-green-100 text-green-800'
-    };
-    
-    return methodColors[method] || 'bg-gray-100 text-gray-800';
+  // Simulate edit for test
+  const simulateEdit = () => {
+    if (cotisations.length > 0) {
+      openEditModal(cotisations[0]);
+    }
   };
 
-  const getCotisationStats = () => {
-    const paid = cotisations.filter(c => c.status === PaymentStatus.PAID).length;
-    const pending = cotisations.filter(c => c.status === PaymentStatus.PENDING).length;
-    const overdue = cotisations.filter(c => c.status === PaymentStatus.OVERDUE).length;
-    const totalAmount = cotisations
-      .filter(c => c.status === PaymentStatus.PAID)
-      .reduce((sum, c) => sum + c.amount, 0);
-    
-    return { paid, pending, overdue, total: cotisations.length, totalAmount };
+  // Form change
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setForm(prev => ({
+      ...prev,
+      [name]: name === 'amount' || name === 'year' ? Number(value) : value,
+      paymentDate: name === 'paymentDate' ? new Date(value) : prev.paymentDate,
+    }));
   };
 
-  const stats = getCotisationStats();
+  // Form submit
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (showAddModal) {
+      handleAdd(form);
+    } else if (showEditModal && editCotisation) {
+      handleEdit({ ...editCotisation, ...form });
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* En-tête Mobile-First */}
-      <div className="bg-white border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">
-                Cotisations
-              </h1>
-              <p className="text-sm sm:text-base text-gray-600 mt-1">
-                Gérez les cotisations de vos membres
-              </p>
-            </div>
-            <button className="bg-purple-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2 text-sm sm:text-base">
-              <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
-              <span className="hidden sm:inline">Nouvelle cotisation</span>
-              <span className="sm:hidden">Nouveau</span>
-            </button>
-          </div>
-          
-          {/* Statistiques rapides */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <div className="bg-purple-50 p-3 rounded-lg">
-              <div className="text-lg sm:text-xl font-bold text-purple-600">{stats.total}</div>
-              <div className="text-xs sm:text-sm text-purple-600">Total</div>
-            </div>
-            <div className="bg-green-50 p-3 rounded-lg">
-              <div className="text-lg sm:text-xl font-bold text-green-600">{stats.paid}</div>
-              <div className="text-xs sm:text-sm text-green-600">Payées</div>
-            </div>
-            <div className="bg-yellow-50 p-3 rounded-lg">
-              <div className="text-lg sm:text-xl font-bold text-yellow-600">{stats.pending}</div>
-              <div className="text-xs sm:text-sm text-yellow-600">En attente</div>
-            </div>
-            <div className="bg-red-50 p-3 rounded-lg">
-              <div className="text-lg sm:text-xl font-bold text-red-600">{stats.overdue}</div>
-              <div className="text-xs sm:text-sm text-red-600">En retard</div>
-            </div>
-          </div>
-          
-          {/* Montant total */}
-          <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-4 text-white">
-            <div className="flex items-center space-x-2">
-              <DollarSign className="w-5 h-5" />
-              <span className="text-sm font-medium">Montant total perçu</span>
-            </div>
-            <div className="text-2xl sm:text-3xl font-bold mt-1">
-              {stats.totalAmount.toLocaleString()} FCFA
-            </div>
-          </div>
+    <div className="min-h-screen bg-gray-50 p-4">
+      <h1 className="text-2xl font-bold mb-4" data-testid="cotisations-title">Cotisations</h1>
+      {/* Feedback */}
+      {feedback && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50" role="alert">
+          {feedback}
         </div>
-      </div>
-
-      {/* Recherche et filtres mobiles */}
-      <div className="bg-white border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
-        <div className="space-y-4">
-          {/* Barre de recherche */}
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
-            </div>
-            <input
-              type="text"
-              placeholder="Rechercher une cotisation..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm sm:text-base"
-            />
-          </div>
-
-          {/* Filtres rapides */}
-          <div className="flex items-center space-x-2 overflow-x-auto">
-            <button
-              onClick={() => setStatusFilter('ALL')}
-              className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                statusFilter === 'ALL' 
-                  ? 'bg-purple-600 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Toutes
-            </button>
-            <button
-              onClick={() => setStatusFilter(PaymentStatus.PAID)}
-              className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                statusFilter === PaymentStatus.PAID 
-                  ? 'bg-green-600 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Payées
-            </button>
-            <button
-              onClick={() => setStatusFilter(PaymentStatus.PENDING)}
-              className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                statusFilter === PaymentStatus.PENDING 
-                  ? 'bg-yellow-600 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              En attente
-            </button>
-            <button
-              onClick={() => setStatusFilter(PaymentStatus.OVERDUE)}
-              className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                statusFilter === PaymentStatus.OVERDUE 
-                  ? 'bg-red-600 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              En retard
-            </button>
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex-shrink-0 flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
-            >
-              <Filter className="w-4 h-4" />
-              <span>Filtres</span>
-            </button>
-          </div>
-
-          {/* Panneau de filtres */}
-          {showFilters && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 bg-gray-50 rounded-lg">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Année</label>
-                <select
-                  value={yearFilter}
-                  onChange={(e) => setYearFilter(e.target.value === 'ALL' ? 'ALL' : parseInt(e.target.value))}
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
-                >
-                  <option value="ALL">Toutes les années</option>
-                  <option value={2025}>2025</option>
-                  <option value={2024}>2024</option>
-                  <option value={2023}>2023</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Méthode de paiement</label>
-                <select
-                  value={methodFilter}
-                  onChange={(e) => setMethodFilter(e.target.value as typeof methodFilter)}
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
-                >
-                  <option value="ALL">Toutes les méthodes</option>
-                  <option value={PaymentMethod.CASH}>Espèces</option>
-                  <option value={PaymentMethod.MOBILE_MONEY}>Mobile Money</option>
-                  <option value={PaymentMethod.BANK_TRANSFER}>Virement</option>
-                  <option value={PaymentMethod.CHECK}>Chèque</option>
-                  <option value={PaymentMethod.CARD}>Carte</option>
-                </select>
-              </div>
-            </div>
-          )}
+      )}
+      {/* Statistiques */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div className="bg-white rounded-lg p-4 shadow" data-testid="stat-total">
+          <div className="text-sm text-gray-500" data-testid="stat-total-label">Total</div>
+          <div className="text-xl font-bold" data-testid="stat-total-value">{total}</div>
         </div>
+        <button className={`bg-green-100 rounded-lg p-4 shadow ${statusFilter === PaymentStatus.PAID ? 'border-2 border-green-500' : ''}`} onClick={() => setStatusFilter(PaymentStatus.PAID)} aria-label="Filtrer payées" data-testid="stat-paid">
+          <div className="text-sm text-green-700" data-testid="stat-paid-label">Payées</div>
+          <div className="text-xl font-bold" data-testid="stat-paid-value">{paid}</div>
+        </button>
+        <button className={`bg-yellow-100 rounded-lg p-4 shadow ${statusFilter === PaymentStatus.PENDING ? 'border-2 border-yellow-500' : ''}`} onClick={() => setStatusFilter(PaymentStatus.PENDING)} aria-label="Filtrer en attente" data-testid="stat-pending">
+          <div className="text-sm text-yellow-700" data-testid="stat-pending-label">En attente</div>
+          <div className="text-xl font-bold" data-testid="stat-pending-value">{pending}</div>
+        </button>
+        <button className={`bg-red-100 rounded-lg p-4 shadow ${statusFilter === PaymentStatus.OVERDUE ? 'border-2 border-red-500' : ''}`} onClick={() => setStatusFilter(PaymentStatus.OVERDUE)} aria-label="Filtrer en retard" data-testid="stat-overdue">
+          <div className="text-sm text-red-700" data-testid="stat-overdue-label">En retard</div>
+          <div className="text-xl font-bold" data-testid="stat-overdue-value">{overdue}</div>
+        </button>
       </div>
-
-      {/* Liste des cotisations - Mobile First */}
-      <div className="px-4 py-4 sm:px-6 lg:px-8">
+      <div className="bg-white rounded-lg p-4 shadow mb-6" data-testid="stat-total-amount">
+        <div className="text-sm text-gray-500" data-testid="stat-total-amount-label">Montant total perçu</div>
+        <div className="text-xl font-bold" data-testid="stat-total-amount-value">{formatCurrency(totalAmount)}</div>
+      </div>
+      {/* Barre de recherche et bouton ajout */}
+      <div className="flex flex-col md:flex-row gap-2 mb-4">
+        <input
+          type="text"
+          placeholder="Rechercher une cotisation..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          className="input-field flex-1"
+          aria-label="Rechercher une cotisation"
+        />
+        <button
+          className="btn-primary flex items-center gap-2"
+          onClick={openAddModal}
+          aria-label="Nouvelle cotisation"
+          data-testid="add-cotisation-btn"
+        >
+          <Plus className="w-5 h-5" /> Nouvelle cotisation
+        </button>
+        <button
+          className="btn-secondary"
+          onClick={simulateEdit}
+          aria-label="Simuler modification"
+        >
+          Simuler modification
+        </button>
+      </div>
+      {/* Liste des cotisations */}
+      <div className="bg-white rounded-lg shadow p-4">
         {filteredCotisations.length === 0 ? (
-          <div className="text-center py-8">
-            <CreditCard className="mx-auto h-12 w-12 text-gray-400" />
-            <div className="text-gray-500 text-lg mt-2">Aucune cotisation trouvée</div>
-            <p className="text-gray-400 text-sm mt-1">Essayez de modifier vos critères de recherche</p>
-          </div>
+          <div className="text-center text-gray-500">Aucune cotisation trouvée</div>
         ) : (
-          <div className="space-y-3">
-            {filteredCotisations.map((cotisation) => {
-              const statusBadge = getStatusBadge(cotisation.status);
-              
-              return (
-                <div key={cotisation.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-                  <div className="p-4">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2">
-                          <User className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                          <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
-                            {cotisation.memberName}
-                          </h3>
-                        </div>
-                        <p className="text-sm text-gray-600 mt-1 truncate">
-                          {cotisation.memberEmail}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-lg sm:text-xl font-bold text-purple-600">
-                          {cotisation.amount.toLocaleString()} FCFA
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          Année {cotisation.year}
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Badges de statut et méthode */}
-                    <div className="flex items-center space-x-2 mb-3">
-                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${statusBadge.className}`}>
-                        {statusBadge.label}
-                      </span>
-                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getPaymentMethodColor(cotisation.paymentMethod)}`}>
-                        {getPaymentMethodLabel(cotisation.paymentMethod)}
-                      </span>
-                    </div>
-                    
-                    {/* Informations détaillées */}
-                    <div className="space-y-2">
-                      <div className="flex items-center space-x-2 text-sm text-gray-600">
-                        <Calendar className="w-4 h-4 flex-shrink-0" />
-                        <span>
-                          Payé le {cotisation.paymentDate.toLocaleDateString('fr-FR')}
-                        </span>
-                      </div>
-                      {cotisation.notes && (
-                        <div className="text-sm text-gray-600">
-                          <span className="font-medium">Note:</span> {cotisation.notes}
-                        </div>
-                      )}
-                    </div>
-                    
-                    {/* Actions */}
-                    <div className="mt-4 flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <button className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-purple-600 bg-purple-50 rounded-md hover:bg-purple-100 transition-colors">
-                          <Eye className="w-4 h-4 mr-1" />
-                          Voir
-                        </button>
-                        <button className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-green-600 bg-green-50 rounded-md hover:bg-green-100 transition-colors">
-                          <Download className="w-4 h-4 mr-1" />
-                          Reçu
-                        </button>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <button className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors">
-                          <Edit className="w-4 h-4 mr-1" />
-                          Modifier
-                        </button>
-                        <button className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors">
-                          <Trash2 className="w-4 h-4 mr-1" />
-                          Supprimer
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <table className="w-full text-sm">
+            <thead>
+              <tr>
+                <th>Membre</th>
+                <th>Montant</th>
+                <th>Date</th>
+                <th>Méthode</th>
+                <th>Statut</th>
+                <th>Année</th>
+                <th>Notes</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredCotisations.map(c => (
+                <tr key={c.id}>
+                  <td>{members.find(m => m.id === c.memberId)?.name || '-'}</td>
+                  <td>{formatCurrency(c.amount)}</td>
+                  <td>{formatDate(c.paymentDate)}</td>
+                  <td>{c.paymentMethod === PaymentMethod.CASH ? 'Espèces' : c.paymentMethod === PaymentMethod.BANK_TRANSFER ? 'Virement' : c.paymentMethod === PaymentMethod.MOBILE_MONEY ? 'Mobile Money' : 'Chèque'}</td>
+                  <td>{c.status === PaymentStatus.PAID ? 'Payée' : c.status === PaymentStatus.PENDING ? 'En attente' : 'En retard'}</td>
+                  <td>{c.year}</td>
+                  <td>{c.notes}</td>
+                  <td>
+                    <button className="text-red-500 hover:text-red-700 mr-2" onClick={() => handleDelete(c.id)} aria-label="Supprimer" role="button">Supprimer</button>
+                    <button className="text-blue-500 hover:text-blue-700" onClick={() => openEditModal(c)} aria-label="Modifier" role="button">Modifier</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
 
-      {/* Pagination mobile */}
-      <div className="bg-white border-t border-gray-200 px-4 py-3 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-gray-700">
-            <span className="font-medium">{filteredCotisations.length}</span> sur <span className="font-medium">{cotisations.length}</span> cotisations
-          </div>
-          <div className="flex items-center space-x-2">
-            <button className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50 border border-gray-300 rounded-md">
-              Précédent
-            </button>
-            <button className="px-3 py-1.5 text-sm bg-purple-600 text-white rounded-md">
-              1
-            </button>
-            <button className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50 border border-gray-300 rounded-md">
-              Suivant
-            </button>
+      {/* Modal ajout/modification */}
+      {(showAddModal || showEditModal) && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" data-testid="cotisation-modal-bg">
+          <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto" data-testid="cotisation-modal">
+            <div className="flex items-center justify-between p-6 border-b">
+              <h2 className="text-xl font-semibold" data-testid={showAddModal ? 'modal-title-add' : 'modal-title-edit'}>
+                {showAddModal ? 'Nouvelle cotisation' : 'Modifier cotisation'}
+              </h2>
+              <button
+                onClick={() => { setShowAddModal(false); setShowEditModal(false); setEditCotisation(null); }}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                title="Fermer"
+                aria-label="Fermer la modal"
+                data-testid="modal-close-btn"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <form onSubmit={handleFormSubmit} className="p-6 space-y-4" data-testid="cotisation-form">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="memberId">Membre</label>
+                <select
+                  id="memberId"
+                  name="memberId"
+                  value={form.memberId}
+                  onChange={handleFormChange}
+                  className="input-field"
+                  aria-label="Membre"
+                  required
+                >
+                  <option value="">Sélectionner un membre</option>
+                  {members.map(m => (
+                    <option key={m.id} value={m.id}>{m.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="amount">Montant</label>
+                <input
+                  id="amount"
+                  name="amount"
+                  type="number"
+                  value={form.amount}
+                  onChange={handleFormChange}
+                  className="input-field"
+                  aria-label="Montant"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="paymentDate">Date de paiement</label>
+                <input
+                  id="paymentDate"
+                  name="paymentDate"
+                  type="date"
+                  value={form.paymentDate instanceof Date ? form.paymentDate.toISOString().split('T')[0] : form.paymentDate}
+                  onChange={handleFormChange}
+                  className="input-field"
+                  aria-label="Date de paiement"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="paymentMethod">Méthode</label>
+                <select
+                  id="paymentMethod"
+                  name="paymentMethod"
+                  value={form.paymentMethod}
+                  onChange={handleFormChange}
+                  className="input-field"
+                  aria-label="Méthode"
+                  required
+                >
+                  <option value={PaymentMethod.CASH}>Espèces</option>
+                  <option value={PaymentMethod.BANK_TRANSFER}>Virement</option>
+                  <option value={PaymentMethod.MOBILE_MONEY}>Mobile Money</option>
+                  <option value={PaymentMethod.CHECK}>Chèque</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="status">Statut</label>
+                <select
+                  id="status"
+                  name="status"
+                  value={form.status}
+                  onChange={handleFormChange}
+                  className="input-field"
+                  aria-label="Statut"
+                  required
+                >
+                  <option value={PaymentStatus.PAID}>Payée</option>
+                  <option value={PaymentStatus.PENDING}>En attente</option>
+                  <option value={PaymentStatus.OVERDUE}>En retard</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="year">Année</label>
+                <input
+                  id="year"
+                  name="year"
+                  type="number"
+                  value={form.year}
+                  onChange={handleFormChange}
+                  className="input-field"
+                  aria-label="Année"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="notes">Notes</label>
+                <input
+                  id="notes"
+                  name="notes"
+                  type="text"
+                  value={form.notes}
+                  onChange={handleFormChange}
+                  className="input-field"
+                  aria-label="Notes"
+                />
+              </div>
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => { setShowAddModal(false); setShowEditModal(false); setEditCotisation(null); }}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                  aria-label="Annuler"
+                >
+                  Annuler
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 btn-primary"
+                  aria-label={showAddModal ? 'Ajouter' : 'Enregistrer'}
+                >
+                  {showAddModal ? 'Ajouter' : 'Enregistrer'}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

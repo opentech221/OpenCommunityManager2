@@ -1,6 +1,9 @@
+import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import MembersPage from '../pages/MembersPage';
-import { useMembers } from '../hooks/useMembers';
+
+import * as useMembersModule from '../hooks/useMembers';
 
 jest.mock('../hooks/useMembers');
 
@@ -27,7 +30,8 @@ const mockUseMembers = {
   filterMembers: jest.fn(() => mockMembers),
 };
 
-(useMembers as jest.Mock).mockReturnValue(mockUseMembers);
+// @ts-expect-error: Jest mock du hook useMembers pour tests
+useMembersModule.useMembers.mockReturnValue(mockUseMembers);
 
 describe('MembersPage', () => {
   it('affiche la liste des membres', () => {
@@ -56,6 +60,8 @@ describe('MembersPage', () => {
 
   it('supprime un membre', async () => {
     mockUseMembers.deleteMember.mockImplementationOnce(() => Promise.resolve());
+    // Mock window.confirm pour simuler la confirmation
+    window.confirm = jest.fn(() => true);
     render(<MembersPage />);
     fireEvent.click(screen.getByText(/Supprimer/i));
     await waitFor(() => expect(screen.getByText(/Membre supprimé avec succès/i)).toBeInTheDocument());

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { 
-  Upload, 
-  File, 
-  Download, 
-  Trash2, 
+import {
+  Upload,
+  File,
+  Download,
+  Trash2,
   Search,
   Filter,
   Eye,
@@ -17,9 +17,8 @@ import type { DocumentType } from '../types';
 import { DocumentTypeEnum } from '../types';
 
 const DocumentsPage: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState<'all' | DocumentTypeEnum>('all');
-  const [showUploadModal, setShowUploadModal] = useState(false);
+  // ...autres states...
+  const [uploadFileName, setUploadFileName] = useState('');
 
   // Données de démonstration
   const documents: DocumentType[] = [
@@ -75,8 +74,19 @@ const DocumentsPage: React.FC = () => {
     }
   ];
 
+  const [localDocuments, setLocalDocuments] = useState<DocumentType[]>(documents);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState<'all' | DocumentTypeEnum>('all');
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState<string>('');
+
+  // États locaux pour l’upload
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [uploadType, setUploadType] = useState<DocumentTypeEnum>(DocumentTypeEnum.PV);
+  const [uploadDescription, setUploadDescription] = useState('');
+
   // Filtrage des documents
-  const filteredDocuments = documents.filter(doc => {
+  const filteredDocuments = localDocuments.filter(doc => {
     const matchesSearch = doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          doc.uploadedBy.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = filterType === 'all' || doc.type === filterType;
@@ -142,8 +152,49 @@ const DocumentsPage: React.FC = () => {
     }
   };
 
+  function handleDeleteDocument(id: string): void {
+    setLocalDocuments(prevDocs => prevDocs.filter(doc => doc.id !== id));
+    setFeedbackMessage('Document supprimé avec succès.');
+    setTimeout(() => setFeedbackMessage(''), 2500);
+  }
+
+  function handleAddDocument(event: React.FormEvent<HTMLFormElement>): void {
+    event.preventDefault();
+    if (!uploadFile) {
+      setFeedbackMessage("Veuillez sélectionner un fichier.");
+      setTimeout(() => setFeedbackMessage(''), 2500);
+      return;
+    }
+
+    // Simule l'upload et ajoute le document localement
+    const newDocument: DocumentType = {
+      id: (Date.now() + Math.random()).toString(),
+      name: uploadFile.name,
+      type: uploadType,
+      url: URL.createObjectURL(uploadFile),
+      uploadDate: new Date(),
+      uploadedBy: "Vous", // À remplacer par l'utilisateur connecté
+      associationId: "assoc1",
+      size: uploadFile.size,
+      // description: uploadDescription, // Retiré car non présent dans DocumentType
+    };
+
+    setLocalDocuments(prevDocs => [newDocument, ...prevDocs]);
+    setShowUploadModal(false);
+    setUploadFile(null);
+    setUploadType(DocumentTypeEnum.PV);
+    setUploadDescription('');
+    setFeedbackMessage('Document ajouté avec succès.');
+    setTimeout(() => setFeedbackMessage(''), 2500);
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 pb-24">
+      {feedbackMessage && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50">
+          {feedbackMessage}
+        </div>
+      )}
       <div className="max-w-4xl mx-auto px-4 py-6">
         {/* En-tête responsive */}
         <div className="mb-6">
@@ -241,7 +292,7 @@ const DocumentsPage: React.FC = () => {
               <div className="flex items-center gap-3 pt-2">
                 <button className="text-violet-600 hover:text-violet-800 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500 rounded" title="Voir le document" aria-label="Voir le document"><Eye className="w-5 h-5" /></button>
                 <button className="text-blue-600 hover:text-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded" title="Télécharger" aria-label="Télécharger le document"><Download className="w-5 h-5" /></button>
-                <button className="text-red-600 hover:text-red-800 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 rounded" title="Supprimer" aria-label="Supprimer le document"><Trash2 className="w-5 h-5" /></button>
+                <button className="text-red-600 hover:text-red-800 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 rounded" title="Supprimer" aria-label="Supprimer le document" onClick={() => handleDeleteDocument(document.id)}><Trash2 className="w-5 h-5" /></button>
               </div>
             </div>
           ))}
@@ -295,7 +346,7 @@ const DocumentsPage: React.FC = () => {
                       <div className="flex items-center gap-2">
                         <button className="text-violet-600 hover:text-violet-800 transition-colors" title="Voir le document"><Eye className="w-4 h-4" /></button>
                         <button className="text-blue-600 hover:text-blue-800 transition-colors" title="Télécharger"><Download className="w-4 h-4" /></button>
-                        <button className="text-red-600 hover:text-red-800 transition-colors" title="Supprimer"><Trash2 className="w-4 h-4" /></button>
+                        <button className="text-red-600 hover:text-red-800 transition-colors" title="Supprimer" onClick={() => handleDeleteDocument(document.id)}><Trash2 className="w-4 h-4" /></button>
                       </div>
                     </td>
                   </tr>
@@ -310,8 +361,22 @@ const DocumentsPage: React.FC = () => {
             <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-screen overflow-y-auto">
               <div className="p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Télécharger un document</h3>
-                
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={handleAddDocument}>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="documentNameInput">
+                      Nom du document
+                    </label>
+                    <input
+                      id="documentNameInput"
+                      type="text"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                      aria-label="Nom du document"
+                      placeholder="Nom du document"
+                      value={uploadFileName}
+                      onChange={e => setUploadFileName(e.target.value)}
+                      required
+                    />
+                  </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Fichier
@@ -323,10 +388,13 @@ const DocumentsPage: React.FC = () => {
                       </p>
                       <input
                         type="file"
-                        className="hidden"
+                        className="mt-2"
                         accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
                         aria-label="Sélectionner un fichier"
+                        required
+                        onChange={e => setUploadFile(e.target.files ? e.target.files[0] : null)}
                       />
+                      {uploadFile && <div className="mt-2 text-xs text-gray-700">{uploadFile.name}</div>}
                     </div>
                   </div>
 
@@ -337,6 +405,9 @@ const DocumentsPage: React.FC = () => {
                     <select 
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                       aria-label="Type de document"
+                      value={uploadType}
+                      onChange={e => setUploadType(e.target.value as DocumentTypeEnum)}
+                      required
                     >
                       <option value={DocumentTypeEnum.PV}>Procès-verbal</option>
                       <option value={DocumentTypeEnum.FINANCIAL_REPORT}>Rapport financier</option>
@@ -353,13 +424,20 @@ const DocumentsPage: React.FC = () => {
                       rows={3}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                       placeholder="Description du document..."
+                      value={uploadDescription}
+                      onChange={e => setUploadDescription(e.target.value)}
                     />
                   </div>
 
                   <div className="flex gap-3 pt-4">
                     <button
                       type="button"
-                      onClick={() => setShowUploadModal(false)}
+                      onClick={() => {
+                        setShowUploadModal(false);
+                        setUploadFile(null);
+                        setUploadType(DocumentTypeEnum.PV);
+                        setUploadDescription('');
+                      }}
                       className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
                     >
                       Annuler

@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
-import { apiUrl } from '../utils';
+// @ts-ignore
+import { apiUrl } from '../utils/apiUrl.node';
 import type { MemberType } from '../types';
 
 interface UseMembersReturn {
