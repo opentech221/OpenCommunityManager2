@@ -296,7 +296,7 @@ export default function MembersPageMobile() {
                         </div>
                         <div className="flex items-center space-x-2 text-sm text-gray-500">
                           <Calendar className="w-4 h-4 flex-shrink-0" />
-                          <span>Adhéré le {member.joinDate.toLocaleDateString('fr-FR')}</span>
+                          <span>Adhéré le {member.joinDate ? new Date(member.joinDate).toLocaleDateString('fr-FR') : ''}</span>
                         </div>
                       </div>
                     </div>
