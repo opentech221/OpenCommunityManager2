@@ -31,7 +31,11 @@ def create_app():
     db.init_app(app)
     jwt.init_app(app)
     bcrypt.init_app(app)
-    cors.init_app(app, origins=app.config['CORS_ORIGINS'])
+    cors.init_app(
+        app,
+        origins=app.config['CORS_ORIGINS'],
+        supports_credentials=True
+    )
     migrate.init_app(app, db)
     
     # Création du dossier uploads
