@@ -32,11 +32,10 @@ export const useMembers = (): UseMembersReturn => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('auth_token');
+      const headers: Record<string, string> = {};
+      if (token) headers['Authorization'] = `Bearer ${token}`;
       const response = await fetch(apiUrl('/api/members/'), {
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-        },
+        headers,
       });
       if (response.ok) {
         const data = await response.json();
