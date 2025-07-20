@@ -184,7 +184,7 @@ export default function SettingsPage() {
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold text-gray-900">Sécurité</h2>
                 
-                <div className="space-y-6">
+                <form className="space-y-6" autoComplete="off">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Mot de passe actuel
@@ -210,6 +210,8 @@ export default function SettingsPage() {
                     <input
                       type="password"
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      name="new-password"
+                      autoComplete="new-password"
                     />
                   </div>
 
@@ -220,15 +222,17 @@ export default function SettingsPage() {
                     <input
                       type="password"
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      name="confirm-password"
+                      autoComplete="new-password"
                     />
                   </div>
                 </div>
 
                 <div className="flex flex-col md:flex-row items-center justify-end gap-3">
-                  <button className="w-full md:w-auto px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                  <button type="reset" className="w-full md:w-auto px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
                     Annuler
                   </button>
-                  <button className="w-full md:w-auto px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center space-x-2">
+                  <button type="submit" className="w-full md:w-auto px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors flex items-center justify-center space-x-2">
                     <Save className="w-4 h-4" />
                     <span>Changer le mot de passe</span>
                   </button>
@@ -273,7 +277,7 @@ export default function SettingsPage() {
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
                     </label>
                   </div>
-                </div>
+                </form>
               </div>
             )}
 

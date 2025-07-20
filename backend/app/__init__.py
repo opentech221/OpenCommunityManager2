@@ -21,9 +21,12 @@ def create_app():
         from flask_talisman import Talisman
         Talisman(app, content_security_policy=None)
 
-    # Redirige toute requête HTTP vers HTTPS
+    # Redirige toute requête HTTP vers HTTPS sauf pour les requêtes OPTIONS (préflight CORS)
     @app.before_request
     def before_request():
+        # Ne pas rediriger les requêtes OPTIONS (préflight CORS)
+        if request.method == 'OPTIONS':
+            return None
         if request.headers.get('X-Forwarded-Proto') != 'https':
             url = request.url.replace('http://', 'https://', 1)
             return redirect(url, code=301)
