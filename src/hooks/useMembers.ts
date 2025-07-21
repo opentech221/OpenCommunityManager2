@@ -20,6 +20,20 @@ interface MemberFilters {
   search?: string;
 }
 
+// Utilitaire pour convertir camelCase en snake_case
+function toSnakeCase(obj: any): any {
+  if (Array.isArray(obj)) {
+    return obj.map(toSnakeCase);
+  } else if (obj !== null && typeof obj === 'object') {
+    return Object.keys(obj).reduce((acc, key) => {
+      const snakeKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
+      acc[snakeKey] = toSnakeCase(obj[key]);
+      return acc;
+    }, {} as any);
+  }
+  return obj;
+}
+
 export const useMembers = (): UseMembersReturn => {
   const [members, setMembers] = useState<MemberType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -57,7 +71,7 @@ export const useMembers = (): UseMembersReturn => {
           'Content-Type': 'application/json',
           ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify(memberData),
+        body: JSON.stringify(toSnakeCase(memberData)),
       });
 
       if (response.ok) {
@@ -89,7 +103,7 @@ export const useMembers = (): UseMembersReturn => {
           'Content-Type': 'application/json',
           ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify(updates),
+        body: JSON.stringify(toSnakeCase(updates)),
       });
 
       if (response.ok) {
