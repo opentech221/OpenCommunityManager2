@@ -79,7 +79,8 @@ def create_member():
         db.session.rollback()
         return jsonify({'error': 'Erreur lors de la création du membre: ' + str(e)}), 500
 
-@members_bp.route('/<int:member_id>', methods=['GET'])
+@members_bp.route('/<int:member_id>', methods=['GET', 'OPTIONS'])
+@members_bp.route('/<int:member_id>/', methods=['GET', 'OPTIONS'])
 @jwt_required()
 def get_member(member_id):
     try:
@@ -94,7 +95,8 @@ def get_member(member_id):
     except Exception as e:
         return jsonify({'error': 'Erreur lors de la récupération du membre: ' + str(e)}), 500
 
-@members_bp.route('/<int:member_id>', methods=['PUT'])
+@members_bp.route('/<int:member_id>', methods=['PUT', 'OPTIONS'])
+@members_bp.route('/<int:member_id>/', methods=['PUT', 'OPTIONS'])
 @jwt_required()
 def update_member(member_id):
     try:
@@ -132,7 +134,8 @@ def update_member(member_id):
         db.session.rollback()
         return jsonify({'error': 'Erreur lors de la mise à jour du membre: ' + str(e)}), 500
 
-@members_bp.route('/<int:member_id>', methods=['DELETE'])
+@members_bp.route('/<int:member_id>', methods=['DELETE', 'OPTIONS'])
+@members_bp.route('/<int:member_id>/', methods=['DELETE', 'OPTIONS'])
 @jwt_required()
 def delete_member(member_id):
     try:
