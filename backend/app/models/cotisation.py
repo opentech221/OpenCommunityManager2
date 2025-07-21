@@ -12,8 +12,8 @@ class Cotisation(db.Model):
     status = db.Column(db.String(20), nullable=False, default='PENDING')
     year = db.Column(db.Integer, nullable=False)
     notes = db.Column(db.Text, nullable=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.timezone.utc)
+    updated_at = db.Column(db.DateTime, default=datetime.timezone.utc, onupdate=datetime.timezone.utc)
     
     def __repr__(self):
         return f'<Cotisation {self.member_id} - {self.year}>'

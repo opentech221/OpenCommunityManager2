@@ -13,8 +13,8 @@ class Association(db.Model):
     logo = db.Column(db.String(255), nullable=True)
     description = db.Column(db.Text, nullable=True)
     address = db.Column(db.Text, nullable=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.timezone.utc)
+    updated_at = db.Column(db.DateTime, default=datetime.timezone.utc, onupdate=datetime.timezone.utc)
     
     # Relations
     members = db.relationship('Member', backref='association', lazy=True, cascade='all, delete-orphan')

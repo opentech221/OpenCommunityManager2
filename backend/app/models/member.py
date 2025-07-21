@@ -11,10 +11,10 @@ class Member(db.Model):
     phone = db.Column(db.String(20), nullable=False)
     role = db.Column(db.String(50), nullable=False, default='MEMBER')
     status = db.Column(db.String(20), nullable=False, default='ACTIVE')
-    join_date = db.Column(db.DateTime, default=datetime.utcnow)
+    join_date = db.Column(db.DateTime, default=datetime.timezone.utc)
     association_id = db.Column(db.Integer, db.ForeignKey('associations.id'), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.timezone.utc)
+    updated_at = db.Column(db.DateTime, default=datetime.timezone.utc, onupdate=datetime.timezone.utc)
     
     # Relations
     cotisations = db.relationship('Cotisation', backref='member', lazy=True, cascade='all, delete-orphan')

@@ -15,8 +15,8 @@ class Event(db.Model):
     max_participants = db.Column(db.Integer, nullable=True)
     association_id = db.Column(db.Integer, db.ForeignKey('associations.id'), nullable=False)
     created_by = db.Column(db.String(100), nullable=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.timezone.utc)
+    updated_at = db.Column(db.DateTime, default=datetime.timezone.utc, onupdate=datetime.timezone.utc)
     
     def __repr__(self):
         return f'<Event {self.title}>'

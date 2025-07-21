@@ -81,7 +81,7 @@ def create_app():
         return jsonify({
             'message': 'API Open Community Manager by opentech221 - Backend Flask + PostgreSQL',
             'author': 'OpenTech221',
-            'description': "API de gestion d'associations communautaires (membres, cotisations, événements, finances, documents, messagerie)",
+            'description': "API de gestion d'associations communautaires (membres, cotisations, événements, finances, documents, notifications, messagerie)",
             'version': '1.0.0',
             'timestamp': datetime.now().isoformat(),
             'docs': 'https://github.com/opentech221/OpenCommunityManager2',
@@ -134,7 +134,7 @@ def create_app():
 
     @app.route('/api/docs')
     def docs():
-        return jsonify({'docs': 'https://github.com/opentech221/OpenCommunityManager2', 'user_guide': 'https://github.com/opentech221/OpenCommunityManager2/blob/master/docs/USER_GUIDE.md'})
+        return jsonify({'docs': 'https://github.com/opentech221/OpenCommunityManager2', 'user_guide': 'https://github.com/opentech221/OpenCommunityManager2/docs/USER_GUIDE.md'})
 
     @app.route('/api/time')
     def time():

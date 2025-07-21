@@ -1,6 +1,7 @@
 # Open Community Manager
 
-Une application web moderne de gestion d'associations qui permet aux organisations communautaires de digitaliser leur gestion administrative, financière et opérationnelle.
+Open Community Manager est le cœur de l'écosystème numérique Opentech221 : une API centralisée et mutualisée qui propulse la digitalisation des organisations communautaires(gestion administrative, 
+financière et opérationnelle.). Elle permet à chaque association ou fédération de bénéficier d'un site web personnalisé (vitrine, portail membres, etc.) dont toutes les fonctionnalités (adhésion, gestion documentaire, finances, communication...) sont directement connectées à l'API opencommunitymanager. Ce modèle garantit une gestion moderne, sécurisée et évolutive, tout en mutualisant les ressources et en facilitant l'accès à des services numériques adaptés aux besoins de chaque organisation.
 
 ## 🎯 Fonctionnalités principales
 
@@ -136,7 +137,18 @@ OpenCommunityManager2/
 ├── .github/workflows/ # CI/CD GitHub Actions
 ├── .env               # Variables d'environnement
 └── README.md
-```
+
+## 🌐 Architecture de l'écosystème numérique Opentech221
+
+L'écosystème numérique Opentech221 repose sur une architecture centralisée et mutualisée :
+
+- **Backend unique** : L'API `opencommunitymanager` sert de socle technique et de serveur principal pour tous les sites web clients (vitrines) que nous créons pour les organisations clientes.
+- **Multi-frontends** : Chaque site client dispose de ses propres fonctionnalités (adhésion, inscription/connexion, accès aux documents et données financières, etc.), toutes directement connectées à l'API `opencommunitymanager` pour récupérer et afficher dynamiquement les données de l'organisation concernée.
+- **Connexion directe** : Les modules d'adhésion, d'accès sécurisé, de gestion documentaire ou financière de chaque site sont synchronisés en temps réel avec l'API, garantissant une expérience fluide et centralisée.
+- **Scalabilité** : Cette approche permet de gérer plusieurs sites (frontends) pour différentes organisations, tout en maintenant un seul backend robuste, sécurisé et évolutif.
+- **Offre globale** : Au-delà de la plateforme logicielle, nous accompagnons nos organisations clientes avec une gamme de produits (création de supports, impression numérique, communication digitale, gestion de réseaux) et de services (aide à la formalisation, formation aux outils et compétences numériques, accompagnement à l'accès aux financements) adaptés à leurs besoins spécifiques.
+
+Cette architecture favorise la mutualisation des ressources, la rapidité de déploiement, la sécurité des données et l'accès à des services numériques de pointe pour toutes les organisations accompagnées par Opentech221.
 
 ## 🎯 Objectifs UX
 

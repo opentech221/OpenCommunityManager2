@@ -21,7 +21,7 @@ Open Community Manager est une plateforme complète de gestion d'associations qu
 
 - **Gestion des membres** : Inscription, suivi des adhérents, gestion des rôles
 - **Cotisations** : Suivi des paiements, rappels automatiques, rapports
-- **Événements** : Planification, inscriptions, suivi de participation
+- **Événements** : Planification, inscriptions, suivi des participations
 - **Finances** : Comptabilité simplifiée, bilans, rapports financiers
 - **Documents** : Archivage sécurisé, partage de documents
 - **Communication** : Messagerie interne, notifications
@@ -218,7 +218,7 @@ L'interface est organisée en plusieurs sections :
 ### Contact support
 
 - **Email** : support@opentech221.com
-- **Téléphone** : +33 1 23 45 67 89
+- **Téléphone** : +221 70 609 83 43
 - **Chat en ligne** : Disponible 9h-18h
 - **Centre d'aide** : help.opentech221.com
 
