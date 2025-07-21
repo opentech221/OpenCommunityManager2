@@ -81,8 +81,11 @@ def create_member():
 
 @members_bp.route('/<int:member_id>', methods=['GET', 'OPTIONS'])
 @members_bp.route('/<int:member_id>/', methods=['GET', 'OPTIONS'])
-@jwt_required()
 def get_member(member_id):
+    if request.method == 'OPTIONS':
+        return '', 204
+    from flask_jwt_extended import jwt_required
+    jwt_required()(lambda: None)()
     try:
         association_id = get_jwt_identity()
         member = Member.query.filter_by(id=member_id, association_id=association_id).first()
@@ -97,8 +100,11 @@ def get_member(member_id):
 
 @members_bp.route('/<int:member_id>', methods=['PUT', 'OPTIONS'])
 @members_bp.route('/<int:member_id>/', methods=['PUT', 'OPTIONS'])
-@jwt_required()
 def update_member(member_id):
+    if request.method == 'OPTIONS':
+        return '', 204
+    from flask_jwt_extended import jwt_required
+    jwt_required()(lambda: None)()
     try:
         association_id = get_jwt_identity()
         member = Member.query.filter_by(id=member_id, association_id=association_id).first()
@@ -136,8 +142,11 @@ def update_member(member_id):
 
 @members_bp.route('/<int:member_id>', methods=['DELETE', 'OPTIONS'])
 @members_bp.route('/<int:member_id>/', methods=['DELETE', 'OPTIONS'])
-@jwt_required()
 def delete_member(member_id):
+    if request.method == 'OPTIONS':
+        return '', 204
+    from flask_jwt_extended import jwt_required
+    jwt_required()(lambda: None)()
     try:
         association_id = get_jwt_identity()
         member = Member.query.filter_by(id=member_id, association_id=association_id).first()
