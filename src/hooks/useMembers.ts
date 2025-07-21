@@ -65,13 +65,15 @@ export const useMembers = (): UseMembersReturn => {
   const addMember = async (memberData: Omit<MemberType, 'id'>) => {
     try {
       const token = localStorage.getItem('auth_token');
+      // Retirer explicitement le champ id s'il existe (par précaution)
+      const { id, ...memberDataWithoutId } = memberData as any;
       const response = await fetch(apiUrl('/api/members/'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify(toSnakeCase(memberData)),
+        body: JSON.stringify(toSnakeCase(memberDataWithoutId)),
       });
 
       if (response.ok) {
