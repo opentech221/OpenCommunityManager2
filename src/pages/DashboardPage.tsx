@@ -98,7 +98,7 @@ export const DashboardPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       {/* En-tête de la page */}
       <div className="mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl md:text-3xl font-bold text-orange-500 mb-2">
           Tableau de bord
         </h1>
         <p className="text-gray-600">

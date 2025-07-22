@@ -74,7 +74,7 @@ export const HelpPage: React.FC = () => {
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Section Hero améliorée */}
         <section className="mb-8 rounded-xl bg-gradient-to-br from-purple-700 via-purple-600 to-orange-400 p-8 text-white shadow-lg">
-          <h1 className="text-4xl font-bold mb-4 font-montserrat drop-shadow">Centre d'aide</h1>
+          <h1 className="text-4xl font-bold mb-4 text-orange-500 font-montserrat drop-shadow">Centre d'aide</h1>
           <p className="text-xl font-poppins opacity-90">Trouvez rapidement les réponses à vos questions</p>
         </section>
         {/* Fil d'Ariane */}

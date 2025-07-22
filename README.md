@@ -1,7 +1,6 @@
 # Open Community Manager
 
-Open Community Manager est le cœur de l'écosystème numérique Opentech221 : une API centralisée et mutualisée qui propulse la digitalisation des organisations communautaires(gestion administrative, 
-financière et opérationnelle.). Elle permet à chaque association ou fédération de bénéficier d'un site web personnalisé (vitrine, portail membres, etc.) dont toutes les fonctionnalités (adhésion, gestion documentaire, finances, communication...) sont directement connectées à l'API opencommunitymanager. Ce modèle garantit une gestion moderne, sécurisée et évolutive, tout en mutualisant les ressources et en facilitant l'accès à des services numériques adaptés aux besoins de chaque organisation.
+Open Community Manager est le cœur de l'écosystème numérique Opentech221 : une API centralisée et mutualisée qui propulse la digitalisation des organisations communautaires(gestion administrative, financière et opérationnelle). Elle permet donc à chaque association ou fédération de bénéficier d'une application de gestion interne et d'un site web personnalisé (vitrine, portail membres, etc.) dont toutes les fonctionnalités (adhésion, gestion documentaire, finances, communication...) sont directement connectées à l'API opencommunitymanager. Ce modèle garantit une gestion moderne, sécurisée et évolutive, tout en mutualisant les ressources et en facilitant l'accès à des services numériques adaptés aux besoins de chaque organisation.
 
 ## 🎯 Fonctionnalités principales
 
@@ -22,7 +21,7 @@ financière et opérationnelle.). Elle permet à chaque association ou fédérat
 - **Typographie** : Montserrat (titres) + Poppins (corps)
 - **Backend** : Flask (Python) + SQLite/PostgreSQL
 - **API REST** : Flask RESTful
-- **CI/CD** : Netlify (frontend) + GitHub Actions (build, tests, déploiement)
+- **CI/CD** : Netlify (frontend), Railway (backend) + GitHub Actions (build, tests, déploiement)
 - **Documentation** : Markdown (docs/)
 
 ## 🎨 Design System
@@ -42,7 +41,7 @@ financière et opérationnelle.). Elle permet à chaque association ou fédérat
 
 - Node.js (v18+) et npm ou yarn (pour le frontend)
 - Python 3.10+ et pip (pour le backend)
-- SQLite (par défaut) ou PostgreSQL (optionnel)
+- PostgreSQL (En production) ou SQLite (En local, optionnel)
 
 ### Variables d'environnement
 
