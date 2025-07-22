@@ -136,10 +136,10 @@ export const DemoPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-purple-600 via-purple-800 to-purple-600 text-white py-16">
+      <div className="bg-gradient-to-r from-purple-600 via-purple-800 to-purple-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Play className="h-16 w-16 mx-auto mb-6 text-purple-200" />
-          <h1 className="text-4xl md:text-5xl text-orange-600 font-montserrat font-bold mb-4">
+          <h1 className="text-4xl md:text-7xl text-orange-600 font-montserrat font-bold mb-4">
             Démo en ligne
           </h1>
           <p className="text-xl text-purple-100 max-w-3xl mx-auto mb-8">

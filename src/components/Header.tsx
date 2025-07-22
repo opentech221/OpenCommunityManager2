@@ -151,7 +151,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMenuOpen }) => {
     },
     {
       id: 'event',
-      title: 'Nouvel événement',
+      title: 'Nouveau événement',
       description: 'Créer un événement ou une activité',
       icon: <Calendar className="w-4 h-4" />,
       route: '/events?action=add',
@@ -159,7 +159,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMenuOpen }) => {
     },
     {
       id: 'document',
-      title: 'Document',
+      title: 'Nouveau Document',
       description: 'Télécharger un document',
       icon: <FileText className="w-4 h-4" />,
       route: '/documents?action=upload',
@@ -167,7 +167,7 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, isMenuOpen }) => {
     },
     {
       id: 'cotisation',
-      title: 'Cotisation',
+      title: 'Nouvelle Cotisation',
       description: 'Enregistrer un paiement',
       icon: <DollarSign className="w-4 h-4" />,
       route: '/cotisations?action=add',
