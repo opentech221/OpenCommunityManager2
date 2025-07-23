@@ -1,147 +1,80 @@
 import React from 'react';
 import { useState } from 'react';
 import EventForm from '../components/EventForm';
+import { EventFilters } from '../components';
 import { Plus, Search, Calendar, MapPin, Users, Eye, Edit, Trash2, Clock, Filter } from 'lucide-react';
 import type { EventType } from '../types';
+import { useEvents } from '../hooks/useEvents';
 
-// Données de démonstration pour les événements
-const mockEvents: EventType[] = [
-  {
-    id: '1',
-    title: 'Assemblée Générale Ordinaire 2025',
-    description: 'Présentation du bilan financier et moral de l\'association, élection du nouveau bureau.',
-    startDate: new Date('2025-03-15T14:00:00'),
-    location: 'Salle polyvalente - Dakar',
-    type: 'MEETING',
-    status: 'PLANNED',
-    maxParticipants: 100,
-    associationId: 'assoc-1',
-    createdBy: 'user-1',
-    participants: [
-      {
-        memberId: '1',
-        registrationDate: new Date('2025-02-10'),
-        attended: false
-      },
-      {
-        memberId: '2',
-        registrationDate: new Date('2025-02-12'),
-        attended: false
-      }
-    ],
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
-  {
-    id: '2',
-    title: 'Journée de sensibilisation sur l\'environnement',
-    description: 'Campagne de sensibilisation et de nettoyage dans le quartier.',
-    startDate: new Date('2025-04-22T09:00:00'),
-    location: 'Place publique - Quartier Médina',
-    type: 'SOCIAL',
-    status: 'PLANNED',
-    maxParticipants: 50,
-    associationId: 'assoc-1',
-    createdBy: 'user-1',
-    participants: [
-      {
-        memberId: '1',
-        registrationDate: new Date('2025-03-01'),
-        attended: false
-      }
-    ],
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
-  {
-    id: '3',
-    title: 'Formation en informatique',
-    description: 'Session de formation en informatique de base pour les membres.',
-    startDate: new Date('2025-02-28T10:00:00'),
-    location: 'Centre de formation - Rufisque',
-    type: 'TRAINING',
-    status: 'COMPLETED',
-    maxParticipants: 25,
-    associationId: 'assoc-1',
-    createdBy: 'user-1',
-    participants: [],
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
-  {
-    id: '4',
-    title: 'Réunion mensuelle du bureau',
-    description: 'Réunion mensuelle du bureau exécutif pour faire le point sur les activités.',
-    startDate: new Date('2025-02-20T18:00:00'),
-    location: 'Siège de l\'association',
-    type: 'MEETING',
-    status: 'PLANNED',
-    maxParticipants: 15,
-    associationId: 'assoc-1',
-    createdBy: 'user-1',
-    participants: [],
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
-  {
-    id: '5',
-    title: 'Journée porte ouverte',
-    description: 'Présentation des activités de l\'association aux nouveaux membres potentiels.',
-    startDate: new Date('2025-05-10T10:00:00'),
-    location: 'Espace public - Plateau',
-    type: 'SOCIAL',
-    status: 'PLANNED',
-    maxParticipants: 200,
-    associationId: 'assoc-1',
-    createdBy: 'user-1',
-    participants: [],
-    createdAt: new Date(),
-    updatedAt: new Date()
-  }
-];
+interface EventFilters {
+  search?: string;
+  type?: 'all' | 'MEETING' | 'SOCIAL' | 'TRAINING';
+  status?: 'all' | 'PLANNED' | 'ONGOING' | 'COMPLETED' | 'CANCELLED';
+  dateRange?: 'all' | 'upcoming' | 'past' | 'thisWeek' | 'thisMonth' | 'thisYear';
+  startDate?: Date;
+  endDate?: Date;
+}
 
 export default function EventsPage() {
-  const [events, setEvents] = useState<EventType[]>(mockEvents);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [dateFilter, setDateFilter] = useState<'upcoming' | 'past' | 'all'>('upcoming');
-  const [typeFilter, setTypeFilter] = useState<'all' | 'MEETING' | 'SOCIAL' | 'TRAINING'>('all');
+  const { 
+    events, 
+    isLoading, 
+    addEvent, 
+    updateEvent, 
+    deleteEvent,
+    filterEvents,
+    addParticipant,
+    removeParticipant,
+    markAttendance
+  } = useEvents();
+  
+  const [eventFilters, setEventFilters] = useState<EventFilters>({
+    search: '',
+    type: 'all',
+    status: 'all',
+    dateRange: 'upcoming'
+  });
   const [showFilters, setShowFilters] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalEvent, setModalEvent] = useState<EventType | null>(null);
   const [feedback, setFeedback] = useState<string>('');
 
-  const now = new Date();
-  const filteredEvents = events.filter(event => {
-    const matchesSearch = 
-      event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      event.location.toLowerCase().includes(searchTerm.toLowerCase());
-    let matchesDate = true;
-    if (dateFilter === 'upcoming') {
-      matchesDate = event.startDate > now;
-    } else if (dateFilter === 'past') {
-      matchesDate = event.startDate < now;
+  // Logique de filtrage utilisant le hook
+  const filteredEvents = filterEvents(eventFilters);
+
+  // Handler pour les changements de filtres
+  const handleFiltersChange = (newFilters: EventFilters) => {
+    setEventFilters(newFilters);
+  };
+
+  // Handlers CRUD utilisant le hook
+  const handleAddEvent = async (newEvent: Omit<EventType, 'id'>) => {
+    try {
+      await addEvent(newEvent);
+      setFeedback('Événement ajouté avec succès');
+      setShowModal(false);
+    } catch {
+      setFeedback('Erreur lors de l\'ajout de l\'événement');
     }
-    const matchesType = typeFilter === 'all' || event.type === typeFilter;
-    return matchesSearch && matchesDate && matchesType;
-  });
-
-  // Handlers CRUD
-  const handleAddEvent = (newEvent: EventType) => {
-    setEvents(prev => [...prev, { ...newEvent, id: Date.now().toString() }]);
-    setFeedback('événement ajouté avec succès');
-    setShowModal(false);
   };
 
-  const handleEditEvent = (updatedEvent: EventType) => {
-    setEvents(prev => prev.map(ev => ev.id === updatedEvent.id ? updatedEvent : ev));
-    setFeedback('événement modifié avec succès');
-    setShowModal(false);
+  const handleEditEvent = async (updatedEvent: EventType) => {
+    try {
+      await updateEvent(updatedEvent.id, updatedEvent);
+      setFeedback('Événement modifié avec succès');
+      setShowModal(false);
+    } catch {
+      setFeedback('Erreur lors de la modification de l\'événement');
+    }
   };
 
-  const handleDeleteEvent = (id: string) => {
-    setEvents(prev => prev.filter(ev => ev.id !== id));
-    setFeedback('événement supprimé avec succès');
+  const handleDeleteEvent = async (id: string) => {
+    try {
+      await deleteEvent(id);
+      setFeedback('Événement supprimé avec succès');
+    } catch {
+      setFeedback('Erreur lors de la suppression de l\'événement');
+    }
   };
 
   // Modal form (simplifié)
@@ -190,6 +123,7 @@ export default function EventsPage() {
   };
 
   const getEventStats = () => {
+    const now = new Date();
     const upcoming = events.filter(event => event.startDate > now).length;
     const past = events.filter(event => event.startDate < now).length;
     const thisMonth = events.filter(event => {
@@ -200,6 +134,18 @@ export default function EventsPage() {
   };
 
   const stats = getEventStats();
+
+  // Affichage du loader
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Chargement des événements...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

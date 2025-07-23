@@ -4,3 +4,5 @@ export { Footer } from './Footer';
 export { PublicHeader } from './PublicHeader';
 export { PublicLayout } from './PublicLayout';
 export { AppLayout } from './AppLayout';
+export { default as EventFilters } from './EventFilters';
+export { default as EventParticipants } from './EventParticipants';

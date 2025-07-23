@@ -1,7 +1,15 @@
 import { useState, useEffect } from 'react';
 import { apiUrl } from '../utils';
 import type { EventType } from '../types';
-import { EventTypeEnum, EventStatus } from '../types';
+
+interface EventFilters {
+  search?: string;
+  type?: 'all' | 'MEETING' | 'SOCIAL' | 'TRAINING';
+  status?: 'all' | 'PLANNED' | 'ONGOING' | 'COMPLETED' | 'CANCELLED';
+  dateRange?: 'all' | 'upcoming' | 'past' | 'thisWeek' | 'thisMonth' | 'thisYear';
+  startDate?: Date;
+  endDate?: Date;
+}
 
 interface UseEventsReturn {
   events: EventType[];
@@ -12,6 +20,34 @@ interface UseEventsReturn {
   getEventById: (id: string) => EventType | undefined;
   getUpcomingEvents: () => EventType[];
   getPastEvents: () => EventType[];
+  filterEvents: (filters: EventFilters) => EventType[];
+  searchEvents: (query: string) => EventType[];
+  getEventsByType: (type: string) => EventType[];
+  getEventsByStatus: (status: string) => EventType[];
+  getEventsByDateRange: (startDate: Date, endDate: Date) => EventType[];
+  // Gestion des participants
+  addParticipant: (eventId: string, memberId: string) => Promise<void>;
+  removeParticipant: (eventId: string, memberId: string) => Promise<void>;
+  markAttendance: (eventId: string, memberId: string, attended: boolean) => Promise<void>;
+  getEventParticipants: (eventId: string) => Array<{
+    memberId: string;
+    registrationDate: Date;
+    attended: boolean;
+  }>;
+}
+
+// Utilitaire pour convertir camelCase en snake_case
+function toSnakeCase(obj: any): any {
+  if (Array.isArray(obj)) {
+    return obj.map(toSnakeCase);
+  } else if (obj !== null && typeof obj === 'object') {
+    return Object.keys(obj).reduce((acc, key) => {
+      const snakeKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
+      acc[snakeKey] = toSnakeCase(obj[key]);
+      return acc;
+    }, {} as any);
+  }
+  return obj;
 }
 
 export const useEvents = (): UseEventsReturn => {
@@ -25,14 +61,18 @@ export const useEvents = (): UseEventsReturn => {
   const fetchEvents = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(apiUrl('/api/events'));
+      const token = localStorage.getItem('auth_token');
+      const headers: Record<string, string> = {};
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+      const response = await fetch(apiUrl('/api/events/'), {
+        headers,
+      });
       if (response.ok) {
         const data = await response.json();
         setEvents(data);
       }
     } catch (error) {
       console.error('Erreur lors du chargement des événements:', error);
-      setEvents(getMockEvents());
     } finally {
       setIsLoading(false);
     }
@@ -40,38 +80,48 @@ export const useEvents = (): UseEventsReturn => {
 
   const addEvent = async (eventData: Omit<EventType, 'id'>) => {
     try {
-      const response = await fetch(apiUrl('/api/events'), {
+      const token = localStorage.getItem('auth_token');
+      // Retirer explicitement le champ id s'il existe (par précaution)
+      const { id: _, ...eventDataWithoutId } = eventData as any;
+      const response = await fetch(apiUrl('/api/events/'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify(eventData),
+        body: JSON.stringify(toSnakeCase(eventDataWithoutId)),
       });
 
       if (response.ok) {
         const newEvent = await response.json();
         setEvents(prev => [...prev, newEvent]);
+      } else {
+        let errorMsg = 'Erreur lors de l\'ajout de l\'événement.';
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.error || errorMsg;
+        } catch {
+          const errorText = await response.text();
+          if (errorText) errorMsg = errorText;
+        }
+        throw new Error(errorMsg);
       }
     } catch (error) {
-      console.error('Erreur lors de la création de l\'événement:', error);
-      const newEvent: EventType = {
-        ...eventData,
-        id: Date.now().toString(),
-      };
-      setEvents(prev => [...prev, newEvent]);
+      console.error('Erreur lors de l\'ajout de l\'événement:', error);
+      alert(error instanceof Error ? error.message : String(error));
     }
   };
 
   const updateEvent = async (id: string, updates: Partial<EventType>) => {
     try {
-      const response = await fetch(apiUrl(`/api/events/${id}`), {
+      const token = localStorage.getItem('auth_token');
+      const response = await fetch(apiUrl(`/api/events/${id}/`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify(updates),
+        body: JSON.stringify(toSnakeCase(updates)),
       });
 
       if (response.ok) {
@@ -88,10 +138,11 @@ export const useEvents = (): UseEventsReturn => {
 
   const deleteEvent = async (id: string) => {
     try {
-      const response = await fetch(apiUrl(`/api/events/${id}`), {
+      const token = localStorage.getItem('auth_token');
+      const response = await fetch(apiUrl(`/api/events/${id}/`), {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         },
       });
 
@@ -121,6 +172,191 @@ export const useEvents = (): UseEventsReturn => {
       .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
   };
 
+  // Nouvelles fonctions de filtrage
+  const searchEvents = (query: string): EventType[] => {
+    if (!query.trim()) return events;
+    
+    const lowercaseQuery = query.toLowerCase();
+    return events.filter(event =>
+      event.title.toLowerCase().includes(lowercaseQuery) ||
+      event.description.toLowerCase().includes(lowercaseQuery) ||
+      event.location.toLowerCase().includes(lowercaseQuery)
+    );
+  };
+
+  const getEventsByType = (type: string): EventType[] => {
+    if (type === 'all') return events;
+    return events.filter(event => event.type === type);
+  };
+
+  const getEventsByStatus = (status: string): EventType[] => {
+    if (status === 'all') return events;
+    return events.filter(event => event.status === status);
+  };
+
+  const getEventsByDateRange = (startDate: Date, endDate: Date): EventType[] => {
+    return events.filter(event => {
+      const eventDate = new Date(event.startDate);
+      return eventDate >= startDate && eventDate <= endDate;
+    });
+  };
+
+  const filterEvents = (filters: EventFilters): EventType[] => {
+    let filteredEvents = events;
+
+    // Filtrage par recherche textuelle
+    if (filters.search) {
+      filteredEvents = searchEvents(filters.search);
+    }
+
+    // Filtrage par type
+    if (filters.type && filters.type !== 'all') {
+      filteredEvents = filteredEvents.filter(event => event.type === filters.type);
+    }
+
+    // Filtrage par statut
+    if (filters.status && filters.status !== 'all') {
+      filteredEvents = filteredEvents.filter(event => event.status === filters.status);
+    }
+
+    // Filtrage par plage de dates
+    if (filters.dateRange && filters.dateRange !== 'all') {
+      const now = new Date();
+      switch (filters.dateRange) {
+        case 'upcoming':
+          filteredEvents = filteredEvents.filter(event => new Date(event.startDate) > now);
+          break;
+        case 'past':
+          filteredEvents = filteredEvents.filter(event => new Date(event.endDate || event.startDate) < now);
+          break;
+        case 'thisWeek': {
+          const startOfWeek = new Date(now);
+          startOfWeek.setDate(now.getDate() - now.getDay());
+          const endOfWeek = new Date(startOfWeek);
+          endOfWeek.setDate(startOfWeek.getDate() + 6);
+          filteredEvents = getEventsByDateRange(startOfWeek, endOfWeek);
+          break;
+        }
+        case 'thisMonth': {
+          const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+          const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+          filteredEvents = getEventsByDateRange(startOfMonth, endOfMonth);
+          break;
+        }
+        case 'thisYear': {
+          const startOfYear = new Date(now.getFullYear(), 0, 1);
+          const endOfYear = new Date(now.getFullYear(), 11, 31);
+          filteredEvents = getEventsByDateRange(startOfYear, endOfYear);
+          break;
+        }
+      }
+    }
+
+    // Filtrage par dates personnalisées
+    if (filters.startDate && filters.endDate) {
+      filteredEvents = getEventsByDateRange(filters.startDate, filters.endDate);
+    }
+
+    return filteredEvents;
+  };
+
+  // Gestion des participants
+  const addParticipant = async (eventId: string, memberId: string) => {
+    try {
+      const token = localStorage.getItem('auth_token');
+      const response = await fetch(apiUrl(`/api/events/${eventId}/participants/`), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(toSnakeCase({ member_id: memberId })),
+      });
+
+      if (response.ok) {
+        // Mettre à jour l'événement local avec le nouveau participant
+        const updatedParticipant = await response.json();
+        setEvents(prev =>
+          prev.map(event =>
+            event.id === eventId
+              ? {
+                  ...event,
+                  participants: [...(event.participants || []), updatedParticipant]
+                }
+              : event
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Erreur lors de l\'ajout du participant:', error);
+    }
+  };
+
+  const removeParticipant = async (eventId: string, memberId: string) => {
+    try {
+      const token = localStorage.getItem('auth_token');
+      const response = await fetch(apiUrl(`/api/events/${eventId}/participants/${memberId}/`), {
+        method: 'DELETE',
+        headers: {
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+        },
+      });
+
+      if (response.ok) {
+        // Mettre à jour l'événement local en supprimant le participant
+        setEvents(prev =>
+          prev.map(event =>
+            event.id === eventId
+              ? {
+                  ...event,
+                  participants: (event.participants || []).filter(p => p.memberId !== memberId)
+                }
+              : event
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Erreur lors de la suppression du participant:', error);
+    }
+  };
+
+  const markAttendance = async (eventId: string, memberId: string, attended: boolean) => {
+    try {
+      const token = localStorage.getItem('auth_token');
+      const response = await fetch(apiUrl(`/api/events/${eventId}/participants/${memberId}/attendance/`), {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(toSnakeCase({ attended })),
+      });
+
+      if (response.ok) {
+        // Mettre à jour l'état de présence du participant
+        setEvents(prev =>
+          prev.map(event =>
+            event.id === eventId
+              ? {
+                  ...event,
+                  participants: (event.participants || []).map(p =>
+                    p.memberId === memberId ? { ...p, attended } : p
+                  )
+                }
+              : event
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour de la présence:', error);
+    }
+  };
+
+  const getEventParticipants = (eventId: string) => {
+    const event = getEventById(eventId);
+    return event?.participants || [];
+  };
+
   return {
     events,
     isLoading,
@@ -130,54 +366,15 @@ export const useEvents = (): UseEventsReturn => {
     getEventById,
     getUpcomingEvents,
     getPastEvents,
+    filterEvents,
+    searchEvents,
+    getEventsByType,
+    getEventsByStatus,
+    getEventsByDateRange,
+    // Gestion des participants
+    addParticipant,
+    removeParticipant,
+    markAttendance,
+    getEventParticipants,
   };
 };
-
-// Données fictives pour le développement
-const getMockEvents = (): EventType[] => [
-  {
-    id: '1',
-    title: 'Assemblée Générale Annuelle',
-    description: 'Réunion annuelle pour faire le bilan de l\'année et élire le nouveau bureau',
-    startDate: new Date('2025-07-15T14:00:00'),
-    endDate: new Date('2025-07-15T17:00:00'),
-    location: 'Salle communautaire de Kaloum',
-    type: EventTypeEnum.MEETING,
-    status: EventStatus.PLANNED,
-    maxParticipants: 50,
-    participants: [],
-    associationId: '1',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: '2',
-    title: 'Formation en gestion financière',
-    description: 'Atelier de formation pour les trésoriers des associations membres',
-    startDate: new Date('2025-07-22T09:00:00'),
-    endDate: new Date('2025-07-22T16:00:00'),
-    location: 'Centre de formation OpenTech221',
-    type: EventTypeEnum.TRAINING,
-    status: EventStatus.PLANNED,
-    maxParticipants: 25,
-    participants: [],
-    associationId: '1',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: '3',
-    title: 'Journée de solidarité communautaire',
-    description: 'Activité de nettoyage et de sensibilisation dans le quartier',
-    startDate: new Date('2025-08-05T08:00:00'),
-    endDate: new Date('2025-08-05T12:00:00'),
-    location: 'Quartier Madina',
-    type: EventTypeEnum.SOCIAL,
-    status: EventStatus.PLANNED,
-    maxParticipants: 100,
-    participants: [],
-    associationId: '1',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-];
