@@ -20,11 +20,7 @@ def test_cors():
             'origin': request.headers.get('Origin', 'No origin header')
         })
     
-    # Headers CORS explicites
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'authorization,content-type')
-    response.headers.add('Access-Control-Allow-Methods', 'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT')
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    # Laisser Flask-CORS gérer les headers
     return response, 200
 
 # Route OPTIONS explicite pour debug CORS
@@ -33,10 +29,7 @@ def handle_preflight(event_id):
     """Handle CORS preflight requests explicitly"""
     try:
         response = jsonify({'message': 'CORS preflight OK', 'event_id': event_id})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Headers', 'authorization,content-type')
-        response.headers.add('Access-Control-Allow-Methods', 'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT')
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        # Laisser Flask-CORS gérer les headers
         return response, 200
     except Exception as e:
         error_response = {

@@ -52,7 +52,9 @@ def create_app():
     cors.init_app(
         app,
         origins=app.config['CORS_ORIGINS'],
-        supports_credentials=True
+        supports_credentials=True,
+        allow_headers=['authorization', 'content-type', 'accept', 'origin', 'x-requested-with'],
+        methods=['DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'POST', 'PUT']
     )
     migrate.init_app(app, db)
     
