@@ -25,4 +25,9 @@ class Config:
     #elif ENV == 'development':
         #CORS_ORIGINS = ['http://localhost:5173']
     else:
-        CORS_ORIGINS = ['https://opencommunitymanager2.netlify.app']
+        CORS_ORIGINS = [
+            'https://opencommunitymanager2.netlify.app',
+            'https://crud-events.netlify.app',
+            'http://localhost:5173',
+            'http://localhost:5174'
+        ]
