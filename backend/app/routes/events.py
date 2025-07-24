@@ -7,6 +7,26 @@ import traceback
 
 events_bp = Blueprint('events', __name__)
 
+# Route de test simple pour vérifier CORS
+@events_bp.route('/test', methods=['GET', 'OPTIONS'])
+def test_cors():
+    """Route de test pour vérifier la configuration CORS"""
+    if request.method == 'OPTIONS':
+        response = jsonify({'message': 'CORS test - OPTIONS successful'})
+    else:
+        response = jsonify({
+            'message': 'CORS test - GET successful',
+            'timestamp': datetime.now().isoformat(),
+            'origin': request.headers.get('Origin', 'No origin header')
+        })
+    
+    # Headers CORS explicites
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'authorization,content-type')
+    response.headers.add('Access-Control-Allow-Methods', 'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response, 200
+
 # Route OPTIONS explicite pour debug CORS
 @events_bp.route('/<int:event_id>', methods=['OPTIONS'])
 def handle_preflight(event_id):
