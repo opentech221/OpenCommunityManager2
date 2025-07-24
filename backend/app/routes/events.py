@@ -3,8 +3,28 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import db
 from app.models.event import Event
 from datetime import datetime
+import traceback
 
 events_bp = Blueprint('events', __name__)
+
+# Route OPTIONS explicite pour debug CORS
+@events_bp.route('/<int:event_id>', methods=['OPTIONS'])
+def handle_preflight(event_id):
+    """Handle CORS preflight requests explicitly"""
+    try:
+        response = jsonify({'message': 'CORS preflight OK', 'event_id': event_id})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'authorization,content-type')
+        response.headers.add('Access-Control-Allow-Methods', 'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response, 200
+    except Exception as e:
+        error_response = {
+            'error': f'CORS preflight error: {str(e)}',
+            'traceback': traceback.format_exc(),
+            'event_id': event_id
+        }
+        return jsonify(error_response), 500
 
 @events_bp.route('/', methods=['GET'])
 @jwt_required()
@@ -94,12 +114,22 @@ def get_event(event_id):
 def update_event(event_id):
     try:
         association_id = get_jwt_identity()
+        
+        # Log des données reçues pour debug
+        data = request.get_json()
+        print(f"DEBUG: Updating event {event_id} for association {association_id}")
+        print(f"DEBUG: Received data: {data}")
+        
         event = Event.query.filter_by(id=event_id, association_id=association_id).first()
         
         if not event:
-            return jsonify({'error': 'Événement non trouvé'}), 404
-        
-        data = request.get_json()
+            error_response = {
+                'error': 'Événement non trouvé',
+                'event_id': event_id,
+                'association_id': association_id,
+                'debug': 'Event not found in database for this association'
+            }
+            return jsonify(error_response), 404
         
         # Mise à jour des champs
         if 'title' in data:
@@ -121,11 +151,19 @@ def update_event(event_id):
         
         db.session.commit()
         
+        print(f"DEBUG: Event {event_id} updated successfully")
         return jsonify(event.to_dict()), 200
         
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': 'Erreur lors de la mise à jour de l\'événement: ' + str(e)}), 500
+        error_response = {
+            'error': f'Erreur lors de la mise à jour de l\'événement: {str(e)}',
+            'event_id': event_id,
+            'traceback': traceback.format_exc(),
+            'debug': 'Exception occurred during event update'
+        }
+        print(f"ERROR: {error_response}")
+        return jsonify(error_response), 500
 
 @events_bp.route('/<int:event_id>', methods=['DELETE'])
 @jwt_required()
