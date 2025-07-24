@@ -37,15 +37,16 @@ interface UseEventsReturn {
 }
 
 // Utilitaire pour convertir camelCase en snake_case
-function toSnakeCase(obj: any): any {
+function toSnakeCase(obj: unknown): unknown {
   if (Array.isArray(obj)) {
     return obj.map(toSnakeCase);
   } else if (obj !== null && typeof obj === 'object') {
-    return Object.keys(obj).reduce((acc, key) => {
+    const result: Record<string, unknown> = {};
+    Object.keys(obj as Record<string, unknown>).forEach(key => {
       const snakeKey = key.replace(/([A-Z])/g, '_$1').toLowerCase();
-      acc[snakeKey] = toSnakeCase(obj[key]);
-      return acc;
-    }, {} as any);
+      result[snakeKey] = toSnakeCase((obj as Record<string, unknown>)[key]);
+    });
+    return result;
   }
   return obj;
 }
@@ -82,7 +83,8 @@ export const useEvents = (): UseEventsReturn => {
     try {
       const token = localStorage.getItem('auth_token');
       // Retirer explicitement le champ id s'il existe (par précaution)
-      const { id: _, ...eventDataWithoutId } = eventData as any;
+      const eventDataWithoutId = { ...eventData };
+      delete (eventDataWithoutId as Record<string, unknown>).id;
       const response = await fetch(apiUrl('/api/events/'), {
         method: 'POST',
         headers: {

@@ -165,7 +165,7 @@ const EventParticipants: React.FC<EventParticipantsProps> = ({
         </div>
       ) : (
         <div className="space-y-3">
-          {participants.map((participant, index) => {
+          {participants.map((participant) => {
             const member = availableMembers.find(m => m.id === participant.memberId);
             return (
               <div

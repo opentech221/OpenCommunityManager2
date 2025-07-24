@@ -1,19 +1,8 @@
-import React from 'react';
 import { useState } from 'react';
 import EventForm from '../components/EventForm';
-import { EventFilters } from '../components';
 import { Plus, Search, Calendar, MapPin, Users, Eye, Edit, Trash2, Clock, Filter } from 'lucide-react';
 import type { EventType } from '../types';
 import { useEvents } from '../hooks/useEvents';
-
-interface EventFilters {
-  search?: string;
-  type?: 'all' | 'MEETING' | 'SOCIAL' | 'TRAINING';
-  status?: 'all' | 'PLANNED' | 'ONGOING' | 'COMPLETED' | 'CANCELLED';
-  dateRange?: 'all' | 'upcoming' | 'past' | 'thisWeek' | 'thisMonth' | 'thisYear';
-  startDate?: Date;
-  endDate?: Date;
-}
 
 export default function EventsPage() {
   const { 
@@ -22,30 +11,26 @@ export default function EventsPage() {
     addEvent, 
     updateEvent, 
     deleteEvent,
-    filterEvents,
-    addParticipant,
-    removeParticipant,
-    markAttendance
+    filterEvents
   } = useEvents();
   
-  const [eventFilters, setEventFilters] = useState<EventFilters>({
-    search: '',
-    type: 'all',
-    status: 'all',
-    dateRange: 'upcoming'
-  });
+  // States pour l'interface
   const [showFilters, setShowFilters] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalEvent, setModalEvent] = useState<EventType | null>(null);
   const [feedback, setFeedback] = useState<string>('');
+  
+  // States pour les filtres simples
+  const [searchTerm, setSearchTerm] = useState('');
+  const [dateFilter, setDateFilter] = useState<'all' | 'upcoming' | 'past'>('upcoming');
+  const [typeFilter, setTypeFilter] = useState<'all' | 'MEETING' | 'SOCIAL' | 'TRAINING'>('all');
 
-  // Logique de filtrage utilisant le hook
-  const filteredEvents = filterEvents(eventFilters);
-
-  // Handler pour les changements de filtres
-  const handleFiltersChange = (newFilters: EventFilters) => {
-    setEventFilters(newFilters);
-  };
+  // Logique de filtrage simple
+  const filteredEvents = filterEvents({
+    search: searchTerm,
+    type: typeFilter === 'all' ? undefined : typeFilter,
+    dateRange: dateFilter === 'all' ? undefined : dateFilter
+  });
 
   // Handlers CRUD utilisant le hook
   const handleAddEvent = async (newEvent: Omit<EventType, 'id'>) => {

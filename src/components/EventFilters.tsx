@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Filter, Calendar, Users, Tag, Clock } from 'lucide-react';
+import { Search, Filter, Calendar, Tag, Clock } from 'lucide-react';
 
 interface EventFiltersProps {
   onFiltersChange: (filters: EventFilters) => void;
@@ -29,7 +29,7 @@ const EventFilters: React.FC<EventFiltersProps> = ({
   });
   const [showAdvanced, setShowAdvanced] = useState(false);
 
-  const handleFilterChange = (key: keyof EventFilters, value: any) => {
+  const handleFilterChange = (key: keyof EventFilters, value: string | Date | undefined) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
     onFiltersChange(newFilters);
@@ -74,7 +74,7 @@ const EventFilters: React.FC<EventFiltersProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         {/* Type d'événement */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+          <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
             <Tag className="h-4 w-4 mr-1" />
             Type
           </label>
@@ -92,7 +92,7 @@ const EventFilters: React.FC<EventFiltersProps> = ({
 
         {/* Statut */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+          <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
             <Clock className="h-4 w-4 mr-1" />
             Statut
           </label>
@@ -111,7 +111,7 @@ const EventFilters: React.FC<EventFiltersProps> = ({
 
         {/* Plage de dates */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+          <label className="flex items-center text-sm font-medium text-gray-700 mb-1">
             <Calendar className="h-4 w-4 mr-1" />
             Période
           </label>
