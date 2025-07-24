@@ -85,13 +85,23 @@ export const useEvents = (): UseEventsReturn => {
       // Retirer explicitement le champ id s'il existe (par précaution)
       const eventDataWithoutId = { ...eventData };
       delete (eventDataWithoutId as Record<string, unknown>).id;
+      
+      // Convertir les dates en ISO string pour l'API
+      const eventForAPI = {
+        ...eventDataWithoutId,
+        startDate: eventDataWithoutId.startDate.toISOString(),
+        endDate: eventDataWithoutId.endDate ? eventDataWithoutId.endDate.toISOString() : null,
+        createdAt: eventDataWithoutId.createdAt.toISOString(),
+        updatedAt: eventDataWithoutId.updatedAt.toISOString()
+      };
+      
       const response = await fetch(apiUrl('/api/events/'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify(toSnakeCase(eventDataWithoutId)),
+        body: JSON.stringify(toSnakeCase(eventForAPI)),
       });
 
       if (response.ok) {
@@ -102,10 +112,13 @@ export const useEvents = (): UseEventsReturn => {
         try {
           const errorData = await response.json();
           errorMsg = errorData.error || errorMsg;
+          console.error('Erreur API:', errorData);
         } catch {
           const errorText = await response.text();
           if (errorText) errorMsg = errorText;
+          console.error('Erreur texte:', errorText);
         }
+        console.error('Données envoyées:', toSnakeCase(eventForAPI));
         throw new Error(errorMsg);
       }
     } catch (error) {
