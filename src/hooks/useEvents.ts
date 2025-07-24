@@ -40,6 +40,9 @@ interface UseEventsReturn {
 function toSnakeCase(obj: unknown): unknown {
   if (Array.isArray(obj)) {
     return obj.map(toSnakeCase);
+  } else if (obj instanceof Date) {
+    // Convertir les objets Date en string ISO
+    return obj.toISOString();
   } else if (obj !== null && typeof obj === 'object') {
     const result: Record<string, unknown> = {};
     Object.keys(obj as Record<string, unknown>).forEach(key => {
@@ -153,25 +156,53 @@ export const useEvents = (): UseEventsReturn => {
 
   const updateEvent = async (id: string, updates: Partial<EventType>) => {
     try {
+      console.log('Updating event with ID:', id, 'Updates:', updates);
+      
       const token = localStorage.getItem('auth_token');
+      
+      // Préparation des données pour l'API (conversion en snake_case)
+      const updatesForAPI = toSnakeCase(updates);
+      console.log('Data for API:', updatesForAPI);
+      
       const response = await fetch(apiUrl(`/api/events/${id}/`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify(toSnakeCase(updates)),
+        body: JSON.stringify(updatesForAPI),
       });
 
+      console.log('Response status:', response.status);
+      
       if (response.ok) {
+        const updatedEvent = await response.json();
+        console.log('Updated event from API:', updatedEvent);
+        
+        // Normaliser les données reçues
+        const normalizedEvent = normalizeEventFromAPI(updatedEvent);
+        
         setEvents(prev =>
           prev.map(event =>
-            event.id === id ? { ...event, ...updates } : event
+            event.id === id ? normalizedEvent : event
           )
         );
+      } else {
+        let errorMsg = 'Erreur lors de la mise à jour de l\'événement.';
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.error || errorMsg;
+          console.error('Erreur API:', errorData);
+        } catch {
+          const errorText = await response.text();
+          if (errorText) errorMsg = errorText;
+          console.error('Erreur texte:', errorText);
+        }
+        throw new Error(errorMsg);
       }
     } catch (error) {
       console.error('Erreur lors de la mise à jour de l\'événement:', error);
+      alert(error instanceof Error ? error.message : String(error));
     }
   };
 
