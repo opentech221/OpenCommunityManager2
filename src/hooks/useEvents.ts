@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { apiUrl } from '../utils';
-import type { EventType } from '../types';
+import type { EventType, EventTypeEnum, EventStatus, EventParticipant } from '../types';
 
 interface EventFilters {
   search?: string;
@@ -51,6 +51,26 @@ function toSnakeCase(obj: unknown): unknown {
   return obj;
 }
 
+// Utilitaire pour normaliser les données reçues de l'API (snake_case vers camelCase et dates en objets Date)
+function normalizeEventFromAPI(eventData: Record<string, unknown>): EventType {
+  return {
+    id: String(eventData.id),
+    title: String(eventData.title),
+    description: String(eventData.description || ''),
+    startDate: new Date(String(eventData.start_date)),
+    endDate: eventData.end_date ? new Date(String(eventData.end_date)) : undefined,
+    location: String(eventData.location),
+    type: String(eventData.event_type || eventData.type) as EventTypeEnum,
+    status: String(eventData.status) as EventStatus,
+    maxParticipants: eventData.max_participants ? Number(eventData.max_participants) : undefined,
+    associationId: String(eventData.association_id),
+    createdBy: eventData.created_by ? String(eventData.created_by) : undefined,
+    participants: Array.isArray(eventData.participants) ? eventData.participants as EventParticipant[] : [],
+    createdAt: new Date(String(eventData.created_at)),
+    updatedAt: new Date(String(eventData.updated_at))
+  };
+}
+
 export const useEvents = (): UseEventsReturn => {
   const [events, setEvents] = useState<EventType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -70,7 +90,9 @@ export const useEvents = (): UseEventsReturn => {
       });
       if (response.ok) {
         const data = await response.json();
-        setEvents(data);
+        // Normaliser les données reçues
+        const normalizedEvents = data.map((event: Record<string, unknown>) => normalizeEventFromAPI(event));
+        setEvents(normalizedEvents);
       }
     } catch (error) {
       console.error('Erreur lors du chargement des événements:', error);
@@ -106,7 +128,9 @@ export const useEvents = (): UseEventsReturn => {
 
       if (response.ok) {
         const newEvent = await response.json();
-        setEvents(prev => [...prev, newEvent]);
+        // Normaliser les données reçues et les ajouter aux événements
+        const normalizedEvent = normalizeEventFromAPI(newEvent);
+        setEvents(prev => [...prev, normalizedEvent]);
       } else {
         let errorMsg = 'Erreur lors de l\'ajout de l\'événement.';
         try {

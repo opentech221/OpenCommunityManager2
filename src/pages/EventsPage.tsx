@@ -78,6 +78,30 @@ export default function EventsPage() {
   };
 
   // Helpers
+  // Fonction utilitaire pour formater les dates de manière sûre
+  const formatDate = (date: Date | string, options: Intl.DateTimeFormatOptions) => {
+    try {
+      const dateObj = typeof date === 'string' ? new Date(date) : date;
+      if (isNaN(dateObj.getTime())) {
+        return 'Date invalide';
+      }
+      return dateObj.toLocaleDateString('fr-FR', options);
+    } catch {
+      return 'Date invalide';
+    }
+  };
+
+  const formatTime = (date: Date | string, options: Intl.DateTimeFormatOptions) => {
+    try {
+      const dateObj = typeof date === 'string' ? new Date(date) : date;
+      if (isNaN(dateObj.getTime())) {
+        return 'Heure invalide';
+      }
+      return dateObj.toLocaleTimeString('fr-FR', options);
+    } catch {
+      return 'Heure invalide';
+    }
+  };
   const getEventStatus = (eventDate: Date) => {
     const today = new Date();
     if (eventDate > today) {
@@ -109,12 +133,22 @@ export default function EventsPage() {
 
   const getEventStats = () => {
     const now = new Date();
-    const upcoming = events.filter(event => event.startDate > now).length;
-    const past = events.filter(event => event.startDate < now).length;
+    
+    const upcoming = events.filter(event => {
+      const eventDate = event.startDate instanceof Date ? event.startDate : new Date(event.startDate);
+      return eventDate > now;
+    }).length;
+    
+    const past = events.filter(event => {
+      const eventDate = event.startDate instanceof Date ? event.startDate : new Date(event.startDate);
+      return eventDate < now;
+    }).length;
+    
     const thisMonth = events.filter(event => {
-      const eventDate = event.startDate;
+      const eventDate = event.startDate instanceof Date ? event.startDate : new Date(event.startDate);
       return eventDate.getMonth() === now.getMonth() && eventDate.getFullYear() === now.getFullYear();
     }).length;
+    
     return { upcoming, past, thisMonth, total: events.length };
   };
 
@@ -304,7 +338,7 @@ export default function EventsPage() {
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
                         <Calendar className="w-4 h-4 flex-shrink-0" />
                         <span>
-                          {event.startDate.toLocaleDateString('fr-FR', {
+                          {formatDate(event.startDate, {
                             weekday: 'long',
                             year: 'numeric',
                             month: 'long',
@@ -315,7 +349,7 @@ export default function EventsPage() {
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
                         <Clock className="w-4 h-4 flex-shrink-0" />
                         <span>
-                          {event.startDate.toLocaleTimeString('fr-FR', {
+                          {formatTime(event.startDate, {
                             hour: '2-digit',
                             minute: '2-digit'
                           })}
