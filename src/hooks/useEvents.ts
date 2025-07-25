@@ -160,8 +160,43 @@ export const useEvents = (): UseEventsReturn => {
       
       const token = localStorage.getItem('auth_token');
       
-      // Préparation des données pour l'API (conversion en snake_case)
-      const updatesForAPI = toSnakeCase(updates);
+      // Préparation des données pour l'API - conversion des dates en chaînes ISO
+      const updatesForAPI = { ...updates };
+      
+      // Convertir les dates en chaînes ISO si elles existent
+      if (updates.startDate) {
+        (updatesForAPI as Record<string, unknown>).start_date = updates.startDate instanceof Date 
+          ? updates.startDate.toISOString() 
+          : new Date(updates.startDate).toISOString();
+        delete (updatesForAPI as Record<string, unknown>).startDate;
+      }
+      
+      if (updates.endDate) {
+        (updatesForAPI as Record<string, unknown>).end_date = updates.endDate instanceof Date 
+          ? updates.endDate.toISOString() 
+          : new Date(updates.endDate).toISOString();
+        delete (updatesForAPI as Record<string, unknown>).endDate;
+      }
+      
+      // Renommer les champs pour l'API backend
+      if (updates.type) {
+        (updatesForAPI as Record<string, unknown>).type = updates.type;
+        delete (updatesForAPI as Record<string, unknown>).type;
+      }
+      
+      if (updates.maxParticipants !== undefined) {
+        (updatesForAPI as Record<string, unknown>).max_participants = updates.maxParticipants;
+        delete (updatesForAPI as Record<string, unknown>).maxParticipants;
+      }
+      
+      // Supprimer les champs qui ne doivent pas être envoyés
+      delete (updatesForAPI as Record<string, unknown>).id;
+      delete (updatesForAPI as Record<string, unknown>).associationId;
+      delete (updatesForAPI as Record<string, unknown>).createdBy;
+      delete (updatesForAPI as Record<string, unknown>).participants;
+      delete (updatesForAPI as Record<string, unknown>).createdAt;
+      delete (updatesForAPI as Record<string, unknown>).updatedAt;
+      
       console.log('Data for API:', updatesForAPI);
       
       const response = await fetch(apiUrl(`/api/events/${id}/`), {
@@ -218,9 +253,22 @@ export const useEvents = (): UseEventsReturn => {
 
       if (response.ok) {
         setEvents(prev => prev.filter(event => event.id !== id));
+      } else {
+        let errorMsg = 'Erreur lors de la suppression de l\'événement.';
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.error || errorMsg;
+          console.error('Erreur API suppression:', errorData);
+        } catch {
+          const errorText = await response.text();
+          if (errorText) errorMsg = errorText;
+          console.error('Erreur texte suppression:', errorText);
+        }
+        throw new Error(errorMsg);
       }
     } catch (error) {
       console.error('Erreur lors de la suppression de l\'événement:', error);
+      throw error; // Re-lancer l'erreur pour que le composant puisse l'attraper
     }
   };
 

@@ -3,7 +3,7 @@ import { type EventType } from '../types';
 
 interface EventFormProps {
   event: EventType | null;
-  onSave: (event: EventType) => void;
+  onSave: (event: EventType | Omit<EventType, 'id'>) => void;
   onCancel: () => void;
 }
 
@@ -25,7 +25,12 @@ const defaultEvent: EventType = {
 };
 
 export default function EventForm({ event, onSave, onCancel }: EventFormProps) {
-  const [form, setForm] = useState<EventType>(event || defaultEvent);
+  const [form, setForm] = useState<EventType>(() => {
+    if (event) {
+      return { ...event };
+    }
+    return { ...defaultEvent, id: Date.now().toString() }; // ID temporaire pour les nouveaux événements
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -47,8 +52,18 @@ export default function EventForm({ event, onSave, onCancel }: EventFormProps) {
       alert('Veuillez remplir tous les champs obligatoires (titre, date de début, lieu, type)');
       return;
     }
+    
     console.log('Données du formulaire envoyées:', form);
-    onSave({ ...form, updatedAt: new Date() });
+    
+    // Pour un nouvel événement, on retire l'ID temporaire
+    if (!event) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id: _id, ...eventWithoutId } = form;
+      onSave({ ...eventWithoutId, updatedAt: new Date() });
+    } else {
+      // Pour une mise à jour, on garde l'ID
+      onSave({ ...form, updatedAt: new Date() });
+    }
   };
 
   return (

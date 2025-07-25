@@ -32,32 +32,40 @@ export default function EventsPage() {
     dateRange: dateFilter === 'all' ? undefined : dateFilter
   });
 
-  // Handlers CRUD utilisant le hook
-  const handleAddEvent = async (newEvent: Omit<EventType, 'id'>) => {
+  // Handler unifié pour ajouter et modifier
+  const handleSaveEvent = async (eventData: EventType | Omit<EventType, 'id'>) => {
     try {
-      await addEvent(newEvent);
-      setFeedback('Événement ajouté avec succès');
+      if (modalEvent) {
+        // Mode modification - eventData doit avoir un ID
+        const fullEvent = eventData as EventType;
+        await updateEvent(fullEvent.id, fullEvent);
+        setFeedback('Événement modifié avec succès');
+      } else {
+        // Mode ajout - eventData n'a pas d'ID
+        const newEvent = eventData as Omit<EventType, 'id'>;
+        await addEvent(newEvent);
+        setFeedback('Événement ajouté avec succès');
+      }
       setShowModal(false);
-    } catch {
-      setFeedback('Erreur lors de l\'ajout de l\'événement');
-    }
-  };
-
-  const handleEditEvent = async (updatedEvent: EventType) => {
-    try {
-      await updateEvent(updatedEvent.id, updatedEvent);
-      setFeedback('Événement modifié avec succès');
-      setShowModal(false);
-    } catch {
-      setFeedback('Erreur lors de la modification de l\'événement');
+      setModalEvent(null);
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde:', error);
+      const action = modalEvent ? 'modification' : 'ajout';
+      setFeedback(`Erreur lors de l'${action} de l'événement`);
     }
   };
 
   const handleDeleteEvent = async (id: string) => {
+    // Demander confirmation avant suppression
+    if (!window.confirm('Êtes-vous sûr de vouloir supprimer cet événement ?')) {
+      return;
+    }
+    
     try {
       await deleteEvent(id);
       setFeedback('Événement supprimé avec succès');
-    } catch {
+    } catch (error) {
+      console.error('Erreur lors de la suppression:', error);
       setFeedback('Erreur lors de la suppression de l\'événement');
     }
   };
@@ -421,7 +429,7 @@ export default function EventsPage() {
             <h2 className="text-lg font-bold mb-4">{modalEvent ? 'Modifier' : 'Ajouter'} un événement</h2>
             <EventForm
               event={modalEvent}
-              onSave={modalEvent ? handleEditEvent : handleAddEvent}
+              onSave={handleSaveEvent}
               onCancel={closeModal}
             />
           </div>
