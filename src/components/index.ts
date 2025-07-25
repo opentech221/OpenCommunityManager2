@@ -6,3 +6,5 @@ export { PublicLayout } from './PublicLayout';
 export { AppLayout } from './AppLayout';
 export { default as EventFilters } from './EventFilters';
 export { default as EventParticipants } from './EventParticipants';
+export { CotisationFormModal } from './CotisationFormModal';
+export { DeleteConfirmationModal } from './DeleteConfirmationModal';

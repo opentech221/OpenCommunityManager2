@@ -4,11 +4,18 @@ import { PaymentStatus, PaymentMethod, type CotisationType } from '../types';
 import { formatCurrency, formatDate } from '../utils';
 import { useCotisations } from '../hooks/useCotisations';
 import { useMembers } from '../hooks/useMembers';
+import { CotisationFormModal, DeleteConfirmationModal } from '../components';
 
 // Données de démonstration supprimées - nous utilisons les vraies données
 interface CotisationCardProps {
   cotisation: CotisationType;
-  member: any;
+  member: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+  } | undefined;
   onEdit: (cotisation: CotisationType) => void;
   onDelete: (id: string) => void;
 }
@@ -163,10 +170,16 @@ export default function CotisationsPageMobile() {
   
   const { members, isLoading: membersLoading } = useMembers();
   
-  // États locaux
+  // États locaux pour l'interface
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<keyof typeof PaymentStatus | 'ALL'>('ALL');
   const [showFilters, setShowFilters] = useState(false);
+  
+  // États pour les modals
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedCotisation, setSelectedCotisation] = useState<CotisationType | null>(null);
+  const [modalLoading, setModalLoading] = useState(false);
 
   // Stats basées sur les vraies données
   const total = cotisations.length;
@@ -196,19 +209,63 @@ export default function CotisationsPageMobile() {
   });
 
   const handleEdit = (cotisation: CotisationType) => {
-    console.log('Edit cotisation:', cotisation);
-    // TODO: Ouvrir modal d'édition
+    setSelectedCotisation(cotisation);
+    setIsFormModalOpen(true);
   };
 
   const handleDelete = (id: string) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette cotisation ?')) {
-      deleteCotisation(id);
+    const cotisation = cotisations.find(c => c.id === id);
+    if (cotisation) {
+      setSelectedCotisation(cotisation);
+      setIsDeleteModalOpen(true);
     }
   };
 
   const handleAddNew = () => {
-    console.log('Add new cotisation');
-    // TODO: Ouvrir modal d'ajout
+    setSelectedCotisation(null);
+    setIsFormModalOpen(true);
+  };
+
+  const handleFormSave = async (cotisationData: Partial<CotisationType>) => {
+    setModalLoading(true);
+    try {
+      if (selectedCotisation) {
+        // Modification
+        await updateCotisation(selectedCotisation.id, cotisationData);
+      } else {
+        // Création
+        await addCotisation(cotisationData as Omit<CotisationType, 'id'>);
+      }
+      setIsFormModalOpen(false);
+      setSelectedCotisation(null);
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde:', error);
+      // TODO: Afficher un message d'erreur
+    } finally {
+      setModalLoading(false);
+    }
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (selectedCotisation) {
+      setModalLoading(true);
+      try {
+        await deleteCotisation(selectedCotisation.id);
+        setIsDeleteModalOpen(false);
+        setSelectedCotisation(null);
+      } catch (error) {
+        console.error('Erreur lors de la suppression:', error);
+        // TODO: Afficher un message d'erreur
+      } finally {
+        setModalLoading(false);
+      }
+    }
+  };
+
+  const handleCloseModals = () => {
+    setIsFormModalOpen(false);
+    setIsDeleteModalOpen(false);
+    setSelectedCotisation(null);
   };
 
   if (isLoading || membersLoading) {
@@ -393,6 +450,29 @@ export default function CotisationsPageMobile() {
       >
         <Plus className="w-6 h-6" />
       </button>
+
+      {/* Modals */}
+      <CotisationFormModal
+        isOpen={isFormModalOpen}
+        onClose={handleCloseModals}
+        cotisation={selectedCotisation}
+        onSave={handleFormSave}
+        isLoading={modalLoading}
+      />
+
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={handleCloseModals}
+        cotisation={selectedCotisation}
+        memberName={
+          selectedCotisation 
+            ? members.find(m => m.id === selectedCotisation.memberId)
+                ?.firstName + ' ' + members.find(m => m.id === selectedCotisation.memberId)?.lastName
+            : undefined
+        }
+        onConfirm={handleDeleteConfirm}
+        isLoading={modalLoading}
+      />
     </div>
   );
 }
