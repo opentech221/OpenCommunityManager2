@@ -58,36 +58,6 @@ def create_app():
     )
     migrate.init_app(app, db)
     
-    # Handler global pour CORS - s'assurer que toutes les réponses ont les bons headers
-    @app.after_request
-    def after_request(response):
-        # Obtenir l'origine de la requête
-        origin = request.headers.get('Origin')
-        
-        # Vérifier si l'origine est autorisée
-        allowed_origins = app.config.get('CORS_ORIGINS', [])
-        if origin in allowed_origins:
-            response.headers.add('Access-Control-Allow-Origin', origin)
-            response.headers.add('Access-Control-Allow-Headers', 'authorization,content-type,accept,origin,x-requested-with')
-            response.headers.add('Access-Control-Allow-Methods', 'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT')
-            response.headers.add('Access-Control-Allow-Credentials', 'true')
-        
-        return response
-    
-    # Handler pour les requêtes OPTIONS globales
-    @app.before_request
-    def handle_preflight():
-        if request.method == "OPTIONS":
-            response = jsonify({'message': 'CORS preflight handled'})
-            origin = request.headers.get('Origin')
-            allowed_origins = app.config.get('CORS_ORIGINS', [])
-            if origin in allowed_origins:
-                response.headers.add('Access-Control-Allow-Origin', origin)
-                response.headers.add('Access-Control-Allow-Headers', 'authorization,content-type,accept,origin,x-requested-with')
-                response.headers.add('Access-Control-Allow-Methods', 'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT')
-                response.headers.add('Access-Control-Allow-Credentials', 'true')
-            return response
-    
     # Création du dossier uploads
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     
