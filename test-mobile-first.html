@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Test Mobile First - Open Community Manager</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { 
+            background: rgba(255,255,255,0.1); 
+            backdrop-filter: blur(10px);
+            border-radius: 20px; 
+            padding: 30px; 
+            margin: 20px 0; 
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .btn-primary { 
+            background: linear-gradient(135deg, #667eea, #764ba2); 
+            color: white; 
+        }
+        .btn-secondary { 
+            background: rgba(255,255,255,0.2); 
+            color: white; 
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2); 
+        }
+        .device-info {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #00ff88;
+        }
+        .test-result {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #ff6b6b;
+        }
+        .success { border-left-color: #00ff88; }
+        .warning { border-left-color: #ffa726; }
+        .error { border-left-color: #ff6b6b; }
+        h1 { 
+            font-size: 2.5rem; 
+            margin-bottom: 10px; 
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .emoji { font-size: 2rem; margin-right: 10px; }
+        .responsive-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .screen-size {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .mobile-only { display: block !important; }
+            .desktop-only { display: none !important; }
+            h1 { font-size: 2rem; }
+        }
+        @media (min-width: 769px) {
+            .mobile-only { display: none !important; }
+            .desktop-only { display: block !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1><span class="emoji">📱</span>Test Mobile First</h1>
+            <p>Test de l'approche Mobile First d'Open Community Manager</p>
+            
+            <div class="device-info" id="deviceInfo">
+                <h3>🔍 Détection de l'appareil</h3>
+                <div id="screenInfo"></div>
+            </div>
+            
+            <div class="mobile-only test-result success">
+                <h3>✅ Version Mobile Détectée</h3>
+                <p>Vous utilisez actuellement un appareil mobile. L'interface optimisée pour mobile sera utilisée.</p>
+            </div>
+            
+            <div class="desktop-only test-result warning">
+                <h3>🖥️ Version Desktop Détectée</h3>
+                <p>Vous utilisez actuellement un appareil desktop. L'interface complète sera utilisée.</p>
+            </div>
+            
+            <div class="responsive-demo">
+                <div class="screen-size">
+                    <h4>📱 Mobile</h4>
+                    <p>&lt; 768px</p>
+                    <p>Interface épurée, navigation tactile</p>
+                </div>
+                <div class="screen-size">
+                    <h4>📋 Tablette</h4>
+                    <p>768px - 1023px</p>
+                    <p>Interface adaptée, cartes organisées</p>
+                </div>
+                <div class="screen-size">
+                    <h4>🖥️ Desktop</h4>
+                    <p>&gt; 1024px</p>
+                    <p>Interface complète, tableaux détaillés</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>🎯 Tests de Navigation</h3>
+                <p>Testez l'application sur le site de production :</p>
+                
+                <a href="https://opencommunitymanager2.up.railway.app" class="btn btn-primary" target="_blank">
+                    🌐 Ouvrir l'Application
+                </a>
+                
+                <a href="https://opencommunitymanager2.up.railway.app/cotisations" class="btn btn-secondary" target="_blank">
+                    📊 Page Cotisations Directe
+                </a>
+                
+                <div class="test-result" id="testInstructions">
+                    <h4>📋 Instructions de Test</h4>
+                    <ol>
+                        <li><strong>Connectez-vous</strong> avec : contact@ajpikine.sn / admin2024</li>
+                        <li><strong>Naviguez</strong> vers la page Cotisations</li>
+                        <li><strong>Vérifiez</strong> que l'interface s'adapte à votre écran</li>
+                        <li><strong>Testez</strong> en redimensionnant la fenêtre (desktop)</li>
+                        <li><strong>Confirmez</strong> que les vraies données s'affichent</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>🛠️ Outils de Debug Mobile</h3>
+                <button class="btn btn-secondary" onclick="simulateMobile()">📱 Simuler Mobile</button>
+                <button class="btn btn-secondary" onclick="simulateTablet()">📋 Simuler Tablette</button>
+                <button class="btn btn-secondary" onclick="simulateDesktop()">🖥️ Simuler Desktop</button>
+                <button class="btn btn-secondary" onclick="testResponsive()">🔄 Test Responsive</button>
+            </div>
+            
+            <div id="responsiveResults" class="test-result" style="display: none;">
+                <h4>📊 Résultats du Test Responsive</h4>
+                <div id="responsiveData"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateDeviceInfo() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const isMobile = width < 768;
+            const isTablet = width >= 768 && width < 1024;
+            const isDesktop = width >= 1024;
+            const userAgent = navigator.userAgent;
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            
+            const deviceType = isMobile ? 'Mobile' : isTablet ? 'Tablette' : 'Desktop';
+            const deviceIcon = isMobile ? '📱' : isTablet ? '📋' : '🖥️';
+            
+            document.getElementById('screenInfo').innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div>
+                        <strong>${deviceIcon} Type:</strong><br>
+                        <span style="color: #00ff88;">${deviceType}</span>
+                    </div>
+                    <div>
+                        <strong>📐 Dimensions:</strong><br>
+                        <span style="color: #00d4ff;">${width} × ${height}px</span>
+                    </div>
+                    <div>
+                        <strong>👆 Tactile:</strong><br>
+                        <span style="color: ${isTouchDevice ? '#00ff88' : '#ffa726'};">${isTouchDevice ? 'Oui' : 'Non'}</span>
+                    </div>
+                    <div>
+                        <strong>🔧 User Agent:</strong><br>
+                        <span style="color: #ccc; font-size: 0.8em;">${userAgent.substring(0, 50)}...</span>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function simulateMobile() {
+            // Simuler un viewport mobile
+            const viewport = document.querySelector('meta[name=viewport]');
+            viewport.setAttribute('content', 'width=375, initial-scale=1.0');
+            alert('📱 Simulation mobile activée. Rechargez la page pour voir l\'effet.');
+        }
+        
+        function simulateTablet() {
+            const viewport = document.querySelector('meta[name=viewport]');
+            viewport.setAttribute('content', 'width=768, initial-scale=1.0');
+            alert('📋 Simulation tablette activée. Rechargez la page pour voir l\'effet.');
+        }
+        
+        function simulateDesktop() {
+            const viewport = document.querySelector('meta[name=viewport]');
+            viewport.setAttribute('content', 'width=1200, initial-scale=1.0');
+            alert('🖥️ Simulation desktop activée. Rechargez la page pour voir l\'effet.');
+        }
+        
+        function testResponsive() {
+            const sizes = [
+                { name: 'iPhone SE', width: 375, height: 667 },
+                { name: 'iPhone 12', width: 390, height: 844 },
+                { name: 'iPad', width: 768, height: 1024 },
+                { name: 'iPad Pro', width: 1024, height: 1366 },
+                { name: 'Desktop HD', width: 1920, height: 1080 }
+            ];
+            
+            let results = '<h5>🔍 Test de Détection Responsive</h5>';
+            
+            sizes.forEach(size => {
+                const isMobile = size.width < 768;
+                const isTablet = size.width >= 768 && size.width < 1024;
+                const isDesktop = size.width >= 1024;
+                
+                const versionUsed = isMobile || isTablet ? 'Mobile' : 'Desktop';
+                const icon = isMobile ? '📱' : isTablet ? '📋' : '🖥️';
+                
+                results += `
+                    <div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+                        <strong>${icon} ${size.name}</strong> (${size.width}×${size.height}px)<br>
+                        <span style="color: #00ff88;">→ Version ${versionUsed}</span>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('responsiveData').innerHTML = results;
+            document.getElementById('responsiveResults').style.display = 'block';
+        }
+        
+        // Mise à jour automatique
+        updateDeviceInfo();
+        window.addEventListener('resize', updateDeviceInfo);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(updateDeviceInfo, 500);
+        });
+        
+        // Test initial
+        console.log('📱 Mobile First Test initialized');
+        console.log('Screen:', window.innerWidth, 'x', window.innerHeight);
+        console.log('Mobile:', window.innerWidth < 768);
+        console.log('Tablet:', window.innerWidth >= 768 && window.innerWidth < 1024);
+        console.log('Desktop:', window.innerWidth >= 1024);
+    </script>
+</body>
+</html>

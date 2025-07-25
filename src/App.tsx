@@ -6,7 +6,7 @@ import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { DashboardPage } from './pages/DashboardPage';
 import MembersPage from './pages/MembersPage';
-import CotisationsPage from './pages/CotisationsPage';
+import CotisationsPageResponsive from './pages/CotisationsPageResponsive';
 import EventsPage from './pages/EventsPage';
 import FinancesPage from './pages/FinancesPage';
 import DocumentsPage from './pages/DocumentsPage';
@@ -132,7 +132,7 @@ function App() {
               onToggleSidebar={toggleSidebar}
               onCloseSidebar={closeSidebar}
             >
-              <CotisationsPage />
+              <CotisationsPageResponsive />
             </AppLayout>
           } />
 

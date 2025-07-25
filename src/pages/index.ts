@@ -4,6 +4,8 @@ export { RegisterPage } from './RegisterPage';
 export { DashboardPage } from './DashboardPage';
 export { default as MembersPage } from './MembersPage';
 export { default as CotisationsPage } from './CotisationsPage';
+export { default as CotisationsPageMobile } from './CotisationsPageMobile';
+export { default as CotisationsPageResponsive } from './CotisationsPageResponsive';
 export { default as EventsPage } from './EventsPage';
 export { default as FinancesPage } from './FinancesPage';
 export { default as DocumentsPage } from './DocumentsPage';
