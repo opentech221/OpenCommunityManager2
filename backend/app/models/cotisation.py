@@ -19,20 +19,6 @@ class Cotisation(db.Model):
         return f'<Cotisation {self.member_id} - {self.year}>'
     
     def to_dict(self):
-        return {
-            'id': str(self.id),
-            'memberId': str(self.member_id),
-            'amount': float(self.amount),
-            'paymentDate': self.payment_date.isoformat() if self.payment_date else None,
-            'paymentMethod': self.payment_method,
-            'status': self.status,
-            'year': self.year,
-            'notes': self.notes,
-            'created_at': self.created_at.isoformat() if self.created_at else None,
-            'updated_at': self.updated_at.isoformat() if self.updated_at else None
-        }
-
-    def to_dict(self):
         """Convertir l'objet en dictionnaire pour la sérialisation JSON"""
         return {
             'id': self.id,

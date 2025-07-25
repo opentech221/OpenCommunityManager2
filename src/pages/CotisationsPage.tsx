@@ -1,49 +1,23 @@
 import React, { useState } from 'react';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, Trash2, Edit } from 'lucide-react';
 import { PaymentStatus, PaymentMethod, type CotisationType } from '../types';
 import { formatCurrency, formatDate } from '../utils';
-
-const mockCotisations: CotisationType[] = [
-  {
-    id: '1',
-    memberId: '1',
-    amount: 15000,
-    paymentDate: new Date('2024-07-01'),
-    paymentMethod: PaymentMethod.CASH,
-    status: PaymentStatus.PAID,
-    year: 2024,
-    notes: 'Cotisation annuelle',
-  },
-  {
-    id: '2',
-    memberId: '2',
-    amount: 10000,
-    paymentDate: new Date('2024-07-10'),
-    paymentMethod: PaymentMethod.BANK_TRANSFER,
-    status: PaymentStatus.PENDING,
-    year: 2024,
-    notes: 'En attente',
-  },
-  {
-    id: '3',
-    memberId: '3',
-    amount: 8000,
-    paymentDate: new Date('2024-06-15'),
-    paymentMethod: PaymentMethod.MOBILE_MONEY,
-    status: PaymentStatus.OVERDUE,
-    year: 2024,
-    notes: 'Retard',
-  },
-];
-
-const members = [
-  { id: '1', name: 'Aminata Diallo' },
-  { id: '2', name: 'Mamadou Ba' },
-  { id: '3', name: 'Fatou Camara' },
-];
+import { useCotisations } from '../hooks/useCotisations';
+import { useMembers } from '../hooks/useMembers';
 
 export default function CotisationsPage() {
-  const [cotisations, setCotisations] = useState<CotisationType[]>(mockCotisations);
+  // Hooks pour les données
+  const { 
+    cotisations, 
+    isLoading, 
+    addCotisation, 
+    updateCotisation, 
+    deleteCotisation 
+  } = useCotisations();
+  
+  const { members, isLoading: membersLoading } = useMembers();
+  
+  // États locaux
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<keyof typeof PaymentStatus | 'ALL'>('ALL');
   const [feedback, setFeedback] = useState('');
@@ -57,36 +31,61 @@ export default function CotisationsPage() {
   const pending = cotisations.filter(c => c.status === PaymentStatus.PENDING).length;
   const overdue = cotisations.filter(c => c.status === PaymentStatus.OVERDUE).length;
   const totalAmount = cotisations.reduce((sum, c) => sum + c.amount, 0);
+  const paidAmount = cotisations.filter(c => c.status === PaymentStatus.PAID).reduce((sum, c) => sum + c.amount, 0);
 
-  // Filtrage
+  // Debug des données
+  console.log('🔍 [CotisationsPage] Données chargées:', {
+    total,
+    paid,
+    pending,
+    overdue,
+    totalAmount,
+    cotisations: cotisations.slice(0, 3) // Premières cotisations pour debug
+  });
+
   const filteredCotisations = cotisations.filter(c => {
-    const memberName = members.find(m => m.id === c.memberId)?.name || '';
+    const member = members.find(m => m.id === c.memberId);
+    const memberName = member ? `${member.firstName} ${member.lastName}` : '';
     const matchesSearch = memberName.toLowerCase().includes(search.toLowerCase()) || c.notes?.toLowerCase().includes(search.toLowerCase());
     const matchesStatus = statusFilter === 'ALL' || c.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
   // Handlers
-  const handleAdd = (cotisation: Omit<CotisationType, 'id'>) => {
-    const newCotisation: CotisationType = { ...cotisation, id: Date.now().toString() };
-    setCotisations(prev => [...prev, newCotisation]);
-    setFeedback('Cotisation ajoutée avec succès');
-    setShowAddModal(false);
-    setTimeout(() => setFeedback(''), 2000);
+  const handleAdd = async (cotisation: Omit<CotisationType, 'id'>) => {
+    try {
+      await addCotisation(cotisation);
+      setFeedback('Cotisation ajoutée avec succès');
+      setShowAddModal(false);
+      setTimeout(() => setFeedback(''), 2000);
+    } catch {
+      setFeedback('Erreur lors de l\'ajout de la cotisation');
+      setTimeout(() => setFeedback(''), 2000);
+    }
   };
 
-  const handleDelete = (id: string) => {
-    setCotisations(prev => prev.filter(c => c.id !== id));
-    setFeedback('Cotisation supprimée avec succès');
-    setTimeout(() => setFeedback(''), 2000);
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteCotisation(id);
+      setFeedback('Cotisation supprimée avec succès');
+      setTimeout(() => setFeedback(''), 2000);
+    } catch {
+      setFeedback('Erreur lors de la suppression de la cotisation');
+      setTimeout(() => setFeedback(''), 2000);
+    }
   };
 
-  const handleEdit = (cotisation: CotisationType) => {
-    setCotisations(prev => prev.map(c => c.id === cotisation.id ? cotisation : c));
-    setFeedback('Cotisation modifiée avec succès');
-    setShowEditModal(false);
-    setEditCotisation(null);
-    setTimeout(() => setFeedback(''), 2000);
+  const handleEdit = async (cotisation: CotisationType) => {
+    try {
+      await updateCotisation(cotisation.id, cotisation);
+      setFeedback('Cotisation modifiée avec succès');
+      setShowEditModal(false);
+      setEditCotisation(null);
+      setTimeout(() => setFeedback(''), 2000);
+    } catch {
+      setFeedback('Erreur lors de la modification de la cotisation');
+      setTimeout(() => setFeedback(''), 2000);
+    }
   };
 
   // Modal form state
@@ -158,7 +157,35 @@ export default function CotisationsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
-      <h1 className="text-2xl font-bold mb-4" data-testid="cotisations-title">Cotisations</h1>
+      {/* Header avec indicateur de statut */}
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold" data-testid="cotisations-title">Cotisations</h1>
+        
+        {/* Indicateur de statut API - Debug */}
+        <div className="flex items-center space-x-2 text-sm">
+          <div className={`w-2 h-2 rounded-full ${
+            isLoading ? 'bg-yellow-400 animate-pulse' : 
+            cotisations.length > 0 ? 'bg-green-400' : 'bg-red-400'
+          }`}></div>
+          <span className="text-gray-600">
+            {isLoading ? 'Chargement...' : 
+             cotisations.length > 0 ? `${cotisations.length} cotisations` : 'Aucune donnée'}
+          </span>
+        </div>
+      </div>
+      
+      {/* État de chargement */}
+      {(isLoading || membersLoading) && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <div className="flex items-center space-x-3">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+              <span>Chargement des données...</span>
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* Feedback */}
       {feedback && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50" role="alert">
@@ -186,7 +213,10 @@ export default function CotisationsPage() {
       </div>
       <div className="bg-white rounded-lg p-4 shadow mb-6" data-testid="stat-total-amount">
         <div className="text-sm text-gray-500" data-testid="stat-total-amount-label">Montant total perçu</div>
-        <div className="text-xl font-bold" data-testid="stat-total-amount-value">{formatCurrency(totalAmount)}</div>
+        <div className="text-xl font-bold text-green-600" data-testid="stat-total-amount-value">{formatCurrency(paidAmount)}</div>
+        <div className="text-xs text-gray-400 mt-1">
+          Total possible: {formatCurrency(totalAmount)} • Reste à percevoir: {formatCurrency(totalAmount - paidAmount)}
+        </div>
       </div>
       {/* Barre de recherche et bouton ajout */}
       <div className="flex flex-col md:flex-row gap-2 mb-4">
@@ -216,42 +246,146 @@ export default function CotisationsPage() {
       </div>
       {/* Liste des cotisations */}
       <div className="bg-white rounded-lg shadow p-4">
-        {filteredCotisations.length === 0 ? (
-          <div className="text-center text-gray-500">Aucune cotisation trouvée</div>
+        {isLoading || membersLoading ? (
+          <div className="text-center py-8">
+            <div className="animate-pulse">
+              <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
+            </div>
+            <p className="text-gray-500 mt-2">Chargement des cotisations...</p>
+          </div>
+        ) : cotisations.length === 0 ? (
+          <div className="text-center py-8">
+            <div className="text-gray-400 mb-4">
+              <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 14h.01M12 11h.01M12 7V4a1 1 0 011-1h4a1 1 0 011 1v3M8 21l4-7 4 7H8z" />
+              </svg>
+            </div>
+            <p className="text-lg font-medium text-gray-900 mb-2">Aucune cotisation enregistrée</p>
+            <p className="text-gray-500 mb-4">Commencez par ajouter la première cotisation de votre association</p>
+            <button
+              onClick={openAddModal}
+              className="btn-primary inline-flex items-center gap-2"
+            >
+              <Plus className="w-5 h-5" /> Ajouter une cotisation
+            </button>
+          </div>
+        ) : filteredCotisations.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-gray-500 mb-2">Aucune cotisation ne correspond à vos critères de recherche</p>
+            <p className="text-sm text-gray-400">
+              {total} cotisation{total > 1 ? 's' : ''} au total • 
+              Recherche: "{search}" • 
+              Filtre: {statusFilter === 'ALL' ? 'Tous' : statusFilter}
+            </p>
+            <button
+              onClick={() => { setSearch(''); setStatusFilter('ALL'); }}
+              className="btn-secondary mt-2"
+            >
+              Réinitialiser les filtres
+            </button>
+          </div>
         ) : (
-          <table className="w-full text-sm">
-            <thead>
-              <tr>
-                <th>Membre</th>
-                <th>Montant</th>
-                <th>Date</th>
-                <th>Méthode</th>
-                <th>Statut</th>
-                <th>Année</th>
-                <th>Notes</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredCotisations.map(c => (
-                <tr key={c.id}>
-                  <td>{members.find(m => m.id === c.memberId)?.name || '-'}</td>
-                  <td>{formatCurrency(c.amount)}</td>
-                  <td>{formatDate(c.paymentDate)}</td>
-                  <td>{c.paymentMethod === PaymentMethod.CASH ? 'Espèces' : c.paymentMethod === PaymentMethod.BANK_TRANSFER ? 'Virement' : c.paymentMethod === PaymentMethod.MOBILE_MONEY ? 'Mobile Money' : 'Chèque'}</td>
-                  <td>{c.status === PaymentStatus.PAID ? 'Payée' : c.status === PaymentStatus.PENDING ? 'En attente' : 'En retard'}</td>
-                  <td>{c.year}</td>
-                  <td>{c.notes}</td>
-                  <td>
-                    <button className="text-red-500 hover:text-red-700 mr-2" onClick={() => handleDelete(c.id)} aria-label="Supprimer" role="button">Supprimer</button>
-                    <button className="text-blue-500 hover:text-blue-700" onClick={() => openEditModal(c)} aria-label="Modifier" role="button">Modifier</button>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-gray-50 border-b">
+                  <th className="text-left p-3 font-medium text-gray-700">Membre</th>
+                  <th className="text-left p-3 font-medium text-gray-700">Montant</th>
+                  <th className="text-left p-3 font-medium text-gray-700">Date</th>
+                  <th className="text-left p-3 font-medium text-gray-700">Méthode</th>
+                  <th className="text-left p-3 font-medium text-gray-700">Statut</th>
+                  <th className="text-left p-3 font-medium text-gray-700">Année</th>
+                  <th className="text-left p-3 font-medium text-gray-700">Notes</th>
+                  <th className="text-left p-3 font-medium text-gray-700">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredCotisations.map((c, index) => (
+                  <tr key={c.id} className={`border-b hover:bg-gray-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-25'}`}>
+                    <td className="p-3">
+                      {(() => {
+                        const member = members.find(m => m.id === c.memberId);
+                        return member ? (
+                          <div>
+                            <div className="font-medium text-gray-900">{member.firstName} {member.lastName}</div>
+                            <div className="text-xs text-gray-500">{member.role}</div>
+                          </div>
+                        ) : (
+                          <span className="text-gray-400">Membre inconnu</span>
+                        );
+                      })()}
+                    </td>
+                    <td className="p-3">
+                      <span className="font-semibold text-gray-900">{formatCurrency(c.amount)}</span>
+                    </td>
+                    <td className="p-3 text-gray-600">{formatDate(c.paymentDate)}</td>
+                    <td className="p-3">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        {c.paymentMethod === PaymentMethod.CASH ? 'Espèces' : 
+                         c.paymentMethod === PaymentMethod.BANK_TRANSFER ? 'Virement' : 
+                         c.paymentMethod === PaymentMethod.MOBILE_MONEY ? 'Mobile Money' : 'Chèque'}
+                      </span>
+                    </td>
+                    <td className="p-3">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        c.status === PaymentStatus.PAID ? 'bg-green-100 text-green-800' :
+                        c.status === PaymentStatus.PENDING ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {c.status === PaymentStatus.PAID ? '✓ Payée' : 
+                         c.status === PaymentStatus.PENDING ? '⏳ En attente' : '⚠️ En retard'}
+                      </span>
+                    </td>
+                    <td className="p-3">
+                      <span className="inline-flex items-center px-2 py-1 rounded bg-gray-100 text-gray-700 text-xs font-medium">
+                        {c.year}
+                      </span>
+                    </td>
+                    <td className="p-3 text-gray-600 max-w-xs truncate" title={c.notes || ''}>
+                      {c.notes || '-'}
+                    </td>
+                    <td className="p-3">
+                      <div className="flex space-x-1">
+                        <button 
+                          className="inline-flex items-center justify-center w-8 h-8 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-full transition-colors" 
+                          onClick={() => openEditModal(c)} 
+                          aria-label="Modifier"
+                          title="Modifier cette cotisation"
+                        >
+                          <Edit size={14} />
+                        </button>
+                        <button 
+                          className="inline-flex items-center justify-center w-8 h-8 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors" 
+                          onClick={() => handleDelete(c.id)} 
+                          aria-label="Supprimer"
+                          title="Supprimer cette cotisation"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
+
+      {/* Résumé en bas de page */}
+      {cotisations.length > 0 && (
+        <div className="bg-white rounded-lg shadow p-4 mt-4">
+          <div className="text-sm text-gray-600">
+            Affichage de {filteredCotisations.length} cotisation{filteredCotisations.length > 1 ? 's' : ''} sur {total} au total
+            {filteredCotisations.length !== total && (
+              <span className="ml-2 text-blue-600">
+                • Filtres actifs
+              </span>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Modal ajout/modification */}
       {(showAddModal || showEditModal) && (
@@ -285,7 +419,7 @@ export default function CotisationsPage() {
                 >
                   <option value="">Sélectionner un membre</option>
                   {members.map(m => (
-                    <option key={m.id} value={m.id}>{m.name}</option>
+                    <option key={m.id} value={m.id}>{m.firstName} {m.lastName}</option>
                   ))}
                 </select>
               </div>

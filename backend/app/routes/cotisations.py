@@ -7,6 +7,49 @@ from datetime import datetime
 
 cotisations_bp = Blueprint('cotisations', __name__)
 
+# Route OPTIONS pour la collection de cotisations
+@cotisations_bp.route('/', methods=['OPTIONS'])
+def handle_preflight_collection():
+    """Handle CORS preflight requests for cotisations collection"""
+    response = jsonify({
+        'message': 'CORS preflight OK for cotisations collection',
+        'allowed_methods': ['GET', 'POST', 'OPTIONS'],
+        'status': 'success'
+    })
+    return response, 200
+
+# Route OPTIONS pour les opérations sur une cotisation spécifique
+@cotisations_bp.route('/<int:cotisation_id>/', methods=['OPTIONS'])
+@cotisations_bp.route('/<int:cotisation_id>', methods=['OPTIONS'])
+def handle_preflight(cotisation_id):
+    """Handle CORS preflight requests for cotisation operations"""
+    try:
+        response = jsonify({
+            'message': 'CORS preflight OK for cotisation operations', 
+            'cotisation_id': cotisation_id,
+            'allowed_methods': ['GET', 'PUT', 'DELETE', 'OPTIONS'],
+            'status': 'success'
+        })
+        return response, 200
+    except Exception as e:
+        error_response = {
+            'error': f'CORS preflight error: {str(e)}',
+            'cotisation_id': cotisation_id,
+            'status': 'error'
+        }
+        return jsonify(error_response), 200
+
+# Route OPTIONS pour les statistiques
+@cotisations_bp.route('/stats', methods=['OPTIONS'])
+def handle_preflight_stats():
+    """Handle CORS preflight requests for cotisations stats"""
+    response = jsonify({
+        'message': 'CORS preflight OK for cotisations stats',
+        'allowed_methods': ['GET', 'OPTIONS'],
+        'status': 'success'
+    })
+    return response, 200
+
 @cotisations_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_cotisations():
@@ -79,6 +122,7 @@ def create_cotisation():
         return jsonify({'error': 'Erreur lors de la création de la cotisation: ' + str(e)}), 500
 
 @cotisations_bp.route('/<int:cotisation_id>', methods=['GET'])
+@cotisations_bp.route('/<int:cotisation_id>/', methods=['GET'])
 @jwt_required()
 def get_cotisation(cotisation_id):
     try:
@@ -97,6 +141,7 @@ def get_cotisation(cotisation_id):
         return jsonify({'error': 'Erreur lors de la récupération de la cotisation: ' + str(e)}), 500
 
 @cotisations_bp.route('/<int:cotisation_id>', methods=['PUT'])
+@cotisations_bp.route('/<int:cotisation_id>/', methods=['PUT'])
 @jwt_required()
 def update_cotisation(cotisation_id):
     try:
@@ -134,6 +179,7 @@ def update_cotisation(cotisation_id):
         return jsonify({'error': 'Erreur lors de la mise à jour de la cotisation: ' + str(e)}), 500
 
 @cotisations_bp.route('/<int:cotisation_id>', methods=['DELETE'])
+@cotisations_bp.route('/<int:cotisation_id>/', methods=['DELETE'])
 @jwt_required()
 def delete_cotisation(cotisation_id):
     try:
