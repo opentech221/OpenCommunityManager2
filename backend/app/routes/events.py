@@ -23,22 +23,6 @@ def test_cors():
     # Laisser Flask-CORS gérer les headers
     return response, 200
 
-# Route OPTIONS explicite pour debug CORS
-@events_bp.route('/<int:event_id>', methods=['OPTIONS'])
-def handle_preflight(event_id):
-    """Handle CORS preflight requests explicitly"""
-    try:
-        response = jsonify({'message': 'CORS preflight OK', 'event_id': event_id})
-        # Laisser Flask-CORS gérer les headers
-        return response, 200
-    except Exception as e:
-        error_response = {
-            'error': f'CORS preflight error: {str(e)}',
-            'traceback': traceback.format_exc(),
-            'event_id': event_id
-        }
-        return jsonify(error_response), 500
-
 @events_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_events():
@@ -111,15 +95,19 @@ def create_event():
 @jwt_required()
 def get_event(event_id):
     try:
+        print(f"DEBUG: GET request for event {event_id}")
         association_id = get_jwt_identity()
         event = Event.query.filter_by(id=event_id, association_id=association_id).first()
         
         if not event:
+            print(f"DEBUG: Event {event_id} not found for association {association_id}")
             return jsonify({'error': 'Événement non trouvé'}), 404
         
+        print(f"DEBUG: Event {event_id} found and returned")
         return jsonify(event.to_dict()), 200
         
     except Exception as e:
+        print(f"DEBUG: Error in get_event: {str(e)}")
         return jsonify({'error': 'Erreur lors de la récupération de l\'événement: ' + str(e)}), 500
 
 @events_bp.route('/<int:event_id>', methods=['PUT'])
