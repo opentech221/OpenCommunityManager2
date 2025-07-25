@@ -23,21 +23,38 @@ def test_cors():
     # Laisser Flask-CORS gérer les headers
     return response, 200
 
-# Route OPTIONS explicite pour debug CORS
+# Route OPTIONS explicite pour toutes les opérations sur un événement spécifique
+@events_bp.route('/<int:event_id>/', methods=['OPTIONS'])
 @events_bp.route('/<int:event_id>', methods=['OPTIONS'])
 def handle_preflight(event_id):
-    """Handle CORS preflight requests explicitly"""
+    """Handle CORS preflight requests explicitly for event operations"""
     try:
-        response = jsonify({'message': 'CORS preflight OK', 'event_id': event_id})
-        # Laisser Flask-CORS gérer les headers
+        response = jsonify({
+            'message': 'CORS preflight OK for event operations', 
+            'event_id': event_id,
+            'allowed_methods': ['GET', 'PUT', 'DELETE', 'OPTIONS'],
+            'status': 'success'
+        })
+        # Les headers CORS sont gérés automatiquement par Flask-CORS
         return response, 200
     except Exception as e:
         error_response = {
             'error': f'CORS preflight error: {str(e)}',
-            'traceback': traceback.format_exc(),
-            'event_id': event_id
+            'event_id': event_id,
+            'status': 'error'
         }
-        return jsonify(error_response), 500
+        return jsonify(error_response), 200  # Retourner 200 pour les preflight même en cas d'erreur
+
+# Route OPTIONS pour la collection d'événements
+@events_bp.route('/', methods=['OPTIONS'])
+def handle_preflight_collection():
+    """Handle CORS preflight requests for events collection"""
+    response = jsonify({
+        'message': 'CORS preflight OK for events collection',
+        'allowed_methods': ['GET', 'POST', 'OPTIONS'],
+        'status': 'success'
+    })
+    return response, 200
 
 @events_bp.route('/', methods=['GET'])
 @jwt_required()
