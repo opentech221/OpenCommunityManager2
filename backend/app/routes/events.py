@@ -125,6 +125,7 @@ def create_event():
         return jsonify({'error': 'Erreur lors de la création de l\'événement: ' + str(e)}), 500
 
 @events_bp.route('/<int:event_id>', methods=['GET'])
+@events_bp.route('/<int:event_id>/', methods=['GET'])
 @jwt_required()
 def get_event(event_id):
     try:
@@ -140,6 +141,7 @@ def get_event(event_id):
         return jsonify({'error': 'Erreur lors de la récupération de l\'événement: ' + str(e)}), 500
 
 @events_bp.route('/<int:event_id>', methods=['PUT'])
+@events_bp.route('/<int:event_id>/', methods=['PUT'])
 @jwt_required()
 def update_event(event_id):
     try:
@@ -196,6 +198,7 @@ def update_event(event_id):
         return jsonify(error_response), 500
 
 @events_bp.route('/<int:event_id>', methods=['DELETE'])
+@events_bp.route('/<int:event_id>/', methods=['DELETE'])
 @jwt_required()
 def delete_event(event_id):
     try:
