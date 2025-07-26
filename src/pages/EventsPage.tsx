@@ -2,6 +2,7 @@ import { useState } from 'react';
 import EventForm from '../components/EventForm';
 import { Plus, Search, Calendar, MapPin, Users, Eye, Edit, Trash2, Clock, Filter } from 'lucide-react';
 import type { EventType } from '../types';
+import { EventStatus } from '../types';
 import { useEvents } from '../hooks/useEvents';
 
 export default function EventsPage() {
@@ -10,8 +11,7 @@ export default function EventsPage() {
     isLoading, 
     addEvent, 
     updateEvent, 
-    deleteEvent,
-    filterEvents
+    deleteEvent
   } = useEvents();
   
   // States pour l'interface
@@ -22,14 +22,16 @@ export default function EventsPage() {
   
   // States pour les filtres simples
   const [searchTerm, setSearchTerm] = useState('');
-  const [dateFilter, setDateFilter] = useState<'all' | 'upcoming' | 'past'>('upcoming');
+  const [statusFilter, setStatusFilter] = useState<'ALL' | 'PLANNED' | 'ONGOING' | 'COMPLETED' | 'CANCELLED'>('ALL');
   const [typeFilter, setTypeFilter] = useState<'all' | 'MEETING' | 'SOCIAL' | 'TRAINING'>('all');
 
   // Logique de filtrage simple
-  const filteredEvents = filterEvents({
-    search: searchTerm,
-    type: typeFilter === 'all' ? undefined : typeFilter,
-    dateRange: dateFilter === 'all' ? undefined : dateFilter
+  const filteredEvents = events.filter(event => {
+    const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         event.description?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesType = typeFilter === 'all' || event.type === typeFilter;
+    const matchesStatus = statusFilter === 'ALL' || event.status === statusFilter;
+    return matchesSearch && matchesType && matchesStatus;
   });
 
   // Handler unifié pour ajouter et modifier
@@ -140,24 +142,13 @@ export default function EventsPage() {
   };
 
   const getEventStats = () => {
-    const now = new Date();
+    const total = events.length;
+    const planned = events.filter(event => event.status === EventStatus.PLANNED).length;
+    const ongoing = events.filter(event => event.status === EventStatus.ONGOING).length;
+    const completed = events.filter(event => event.status === EventStatus.COMPLETED).length;
+    const cancelled = events.filter(event => event.status === EventStatus.CANCELLED).length;
     
-    const upcoming = events.filter(event => {
-      const eventDate = event.startDate instanceof Date ? event.startDate : new Date(event.startDate);
-      return eventDate > now;
-    }).length;
-    
-    const past = events.filter(event => {
-      const eventDate = event.startDate instanceof Date ? event.startDate : new Date(event.startDate);
-      return eventDate < now;
-    }).length;
-    
-    const thisMonth = events.filter(event => {
-      const eventDate = event.startDate instanceof Date ? event.startDate : new Date(event.startDate);
-      return eventDate.getMonth() === now.getMonth() && eventDate.getFullYear() === now.getFullYear();
-    }).length;
-    
-    return { upcoming, past, thisMonth, total: events.length };
+    return { total, planned, ongoing, completed, cancelled };
   };
 
   const stats = getEventStats();
@@ -206,24 +197,48 @@ export default function EventsPage() {
             </button>
           </div>
           
-          {/* Statistiques rapides */}
+          {/* Statistiques avec boutons fonctionnels */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <div className="bg-purple-50 p-3 rounded-lg">
-              <div className="text-lg sm:text-xl font-bold text-purple-600">{stats.total}</div>
-              <div className="text-xs sm:text-sm text-purple-600">Total</div>
-            </div>
-            <div className="bg-blue-50 p-3 rounded-lg">
-              <div className="text-lg sm:text-xl font-bold text-blue-600">{stats.upcoming}</div>
-              <div className="text-xs sm:text-sm text-blue-600">À venir</div>
-            </div>
-            <div className="bg-green-50 p-3 rounded-lg">
-              <div className="text-lg sm:text-xl font-bold text-green-600">{stats.thisMonth}</div>
-              <div className="text-xs sm:text-sm text-green-600">Ce mois</div>
-            </div>
-            <div className="bg-gray-50 p-3 rounded-lg">
-              <div className="text-lg sm:text-xl font-bold text-gray-600">{stats.past}</div>
-              <div className="text-xs sm:text-sm text-gray-600">Passés</div>
-            </div>
+            <button 
+              className={`bg-white rounded-lg p-3 shadow hover:bg-gray-50 transition-colors ${
+                statusFilter === 'ALL' ? 'ring-2 ring-violet-500' : ''
+              }`}
+              onClick={() => setStatusFilter('ALL')}
+              aria-label="Afficher tous les événements"
+            >
+              <div className="text-lg sm:text-xl font-bold text-gray-900">{stats.total}</div>
+              <div className="text-xs sm:text-sm text-gray-500">Total</div>
+            </button>
+            <button 
+              className={`bg-blue-50 rounded-lg p-3 shadow hover:bg-blue-100 transition-colors ${
+                statusFilter === EventStatus.PLANNED ? 'ring-2 ring-blue-500' : ''
+              }`}
+              onClick={() => setStatusFilter(statusFilter === EventStatus.PLANNED ? 'ALL' : EventStatus.PLANNED)}
+              aria-label="Filtrer les événements planifiés"
+            >
+              <div className="text-lg sm:text-xl font-bold text-blue-600">{stats.planned}</div>
+              <div className="text-xs sm:text-sm text-blue-600">Planifiés</div>
+            </button>
+            <button 
+              className={`bg-green-50 rounded-lg p-3 shadow hover:bg-green-100 transition-colors ${
+                statusFilter === EventStatus.ONGOING ? 'ring-2 ring-green-500' : ''
+              }`}
+              onClick={() => setStatusFilter(statusFilter === EventStatus.ONGOING ? 'ALL' : EventStatus.ONGOING)}
+              aria-label="Filtrer les événements en cours"
+            >
+              <div className="text-lg sm:text-xl font-bold text-green-600">{stats.ongoing}</div>
+              <div className="text-xs sm:text-sm text-green-600">En cours</div>
+            </button>
+            <button 
+              className={`bg-purple-50 rounded-lg p-3 shadow hover:bg-purple-100 transition-colors ${
+                statusFilter === EventStatus.COMPLETED ? 'ring-2 ring-purple-500' : ''
+              }`}
+              onClick={() => setStatusFilter(statusFilter === EventStatus.COMPLETED ? 'ALL' : EventStatus.COMPLETED)}
+              aria-label="Filtrer les événements terminés"
+            >
+              <div className="text-lg sm:text-xl font-bold text-purple-600">{stats.completed}</div>
+              <div className="text-xs sm:text-sm text-purple-600">Terminés</div>
+            </button>
           </div>
         </div>
       </div>
@@ -247,36 +262,6 @@ export default function EventsPage() {
 
           {/* Filtres rapides */}
           <div className="flex items-center space-x-2 overflow-x-auto">
-            <button
-              onClick={() => setDateFilter('upcoming')}
-              className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                dateFilter === 'upcoming' 
-                  ? 'bg-purple-600 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              À venir
-            </button>
-            <button
-              onClick={() => setDateFilter('past')}
-              className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                dateFilter === 'past' 
-                  ? 'bg-purple-600 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Passés
-            </button>
-            <button
-              onClick={() => setDateFilter('all')}
-              className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                dateFilter === 'all' 
-                  ? 'bg-purple-600 text-white' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Tous
-            </button>
             <button
               onClick={() => setShowFilters(!showFilters)}
               className="flex-shrink-0 flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"

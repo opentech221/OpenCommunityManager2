@@ -10,14 +10,27 @@ import { MemberForm } from '../components/MemberForm';
 export default function MembersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRole, setSelectedRole] = useState<string>('all');
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<keyof typeof MemberStatus | 'ALL'>('ALL');
   const [showFilters, setShowFilters] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editMember, setEditMember] = useState<MemberType | undefined>(undefined);
   const [feedbackMessage, setFeedbackMessage] = useState<string>('');
   const { members, isLoading, addMember, updateMember, deleteMember, filterMembers } = useMembers();
 
-  const filteredMembers = filterMembers({ role: selectedRole, status: selectedStatus, search: searchTerm });
+  const filteredMembers = members.filter(member => {
+    const matchesSearch = member.firstName.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                         member.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         member.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRole = selectedRole === 'all' || member.role === selectedRole;
+    const matchesStatus = statusFilter === 'ALL' || member.status === statusFilter;
+    return matchesSearch && matchesRole && matchesStatus;
+  });
+
+  // Stats pour les boutons
+  const total = members.length;
+  const active = members.filter(m => m.status === MemberStatus.ACTIVE).length;
+  const suspended = members.filter(m => m.status === MemberStatus.SUSPENDED).length;
+  const inactive = members.filter(m => m.status === MemberStatus.INACTIVE).length;
 
   const getRoleLabel = (role: MemberRoleType) => {
     switch (role) {
@@ -109,30 +122,48 @@ export default function MembersPage() {
               <span className="sm:hidden">Nouveau</span>
             </button>
           </div>
-          {/* Statistiques rapides */}
+          {/* Statistiques avec boutons fonctionnels */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <div className="bg-purple-50 p-3 rounded-lg">
-              <div className="text-lg sm:text-xl font-bold text-purple-600">{members.length}</div>
-              <div className="text-xs sm:text-sm text-purple-600">Total</div>
-            </div>
-            <div className="bg-green-50 p-3 rounded-lg">
-              <div className="text-lg sm:text-xl font-bold text-green-600">
-                {members.filter(m => m.status === MemberStatus.ACTIVE).length}
-              </div>
+            <button 
+              className={`bg-white rounded-lg p-3 shadow hover:bg-gray-50 transition-colors ${
+                statusFilter === 'ALL' ? 'ring-2 ring-violet-500' : ''
+              }`}
+              onClick={() => setStatusFilter('ALL')}
+              aria-label="Afficher tous les membres"
+            >
+              <div className="text-lg sm:text-xl font-bold text-gray-900">{total}</div>
+              <div className="text-xs sm:text-sm text-gray-500">Total</div>
+            </button>
+            <button 
+              className={`bg-green-50 rounded-lg p-3 shadow hover:bg-green-100 transition-colors ${
+                statusFilter === MemberStatus.ACTIVE ? 'ring-2 ring-green-500' : ''
+              }`}
+              onClick={() => setStatusFilter(statusFilter === MemberStatus.ACTIVE ? 'ALL' : MemberStatus.ACTIVE)}
+              aria-label="Filtrer les membres actifs"
+            >
+              <div className="text-lg sm:text-xl font-bold text-green-600">{active}</div>
               <div className="text-xs sm:text-sm text-green-600">Actifs</div>
-            </div>
-            <div className="bg-yellow-50 p-3 rounded-lg">
-              <div className="text-lg sm:text-xl font-bold text-yellow-600">
-                {members.filter(m => m.status === MemberStatus.SUSPENDED).length}
-              </div>
+            </button>
+            <button 
+              className={`bg-yellow-50 rounded-lg p-3 shadow hover:bg-yellow-100 transition-colors ${
+                statusFilter === MemberStatus.SUSPENDED ? 'ring-2 ring-yellow-500' : ''
+              }`}
+              onClick={() => setStatusFilter(statusFilter === MemberStatus.SUSPENDED ? 'ALL' : MemberStatus.SUSPENDED)}
+              aria-label="Filtrer les membres suspendus"
+            >
+              <div className="text-lg sm:text-xl font-bold text-yellow-600">{suspended}</div>
               <div className="text-xs sm:text-sm text-yellow-600">Suspendus</div>
-            </div>
-            <div className="bg-red-50 p-3 rounded-lg">
-              <div className="text-lg sm:text-xl font-bold text-red-600">
-                {members.filter(m => m.status === MemberStatus.INACTIVE).length}
-              </div>
+            </button>
+            <button 
+              className={`bg-red-50 rounded-lg p-3 shadow hover:bg-red-100 transition-colors ${
+                statusFilter === MemberStatus.INACTIVE ? 'ring-2 ring-red-500' : ''
+              }`}
+              onClick={() => setStatusFilter(statusFilter === MemberStatus.INACTIVE ? 'ALL' : MemberStatus.INACTIVE)}
+              aria-label="Filtrer les membres inactifs"
+            >
+              <div className="text-lg sm:text-xl font-bold text-red-600">{inactive}</div>
               <div className="text-xs sm:text-sm text-red-600">Inactifs</div>
-            </div>
+            </button>
           </div>
         </div>
       </div>
@@ -163,7 +194,7 @@ export default function MembersPage() {
               <Filter className="w-4 h-4" />
               <span>Filtres</span>
             </button>
-            {(selectedRole !== 'all' || selectedStatus !== 'all') && (
+            {(selectedRole !== 'all' || statusFilter !== 'ALL') && (
               <div className="flex items-center space-x-2">
                 <span className="text-xs text-gray-500">Filtres actifs:</span>
                 {selectedRole !== 'all' && (
@@ -171,9 +202,9 @@ export default function MembersPage() {
                     {getRoleLabel(selectedRole as MemberRoleType)}
                   </span>
                 )}
-                {selectedStatus !== 'all' && (
+                {statusFilter !== 'ALL' && (
                   <span className="inline-flex px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full">
-                    {getStatusLabel(selectedStatus as MemberStatusType)}
+                    {getStatusLabel(statusFilter as MemberStatusType)}
                   </span>
                 )}
               </div>
@@ -201,11 +232,11 @@ export default function MembersPage() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
                 <select
-                  value={selectedStatus}
-                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value as keyof typeof MemberStatus | 'ALL')}
                   className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                 >
-                  <option value="all">Tous les statuts</option>
+                  <option value="ALL">Tous les statuts</option>
                   <option value={MemberStatus.ACTIVE}>Actif</option>
                   <option value={MemberStatus.SUSPENDED}>Suspendu</option>
                   <option value={MemberStatus.INACTIVE}>Inactif</option>

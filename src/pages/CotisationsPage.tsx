@@ -194,10 +194,17 @@ export default function CotisationsPage() {
       )}
       {/* Statistiques */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white rounded-lg p-4 shadow" data-testid="stat-total">
+        <button 
+          className={`bg-white rounded-lg p-4 shadow hover:bg-gray-50 transition-colors ${
+            statusFilter === 'ALL' ? 'ring-2 ring-violet-500' : ''
+          }`} 
+          onClick={() => setStatusFilter('ALL')} 
+          aria-label="Afficher toutes les cotisations" 
+          data-testid="stat-total"
+        >
           <div className="text-sm text-gray-500" data-testid="stat-total-label">Total</div>
           <div className="text-xl font-bold" data-testid="stat-total-value">{total}</div>
-        </div>
+        </button>
         <button className={`bg-green-100 rounded-lg p-4 shadow ${statusFilter === PaymentStatus.PAID ? 'border-2 border-green-500' : ''}`} onClick={() => setStatusFilter(PaymentStatus.PAID)} aria-label="Filtrer payées" data-testid="stat-paid">
           <div className="text-sm text-green-700" data-testid="stat-paid-label">Payées</div>
           <div className="text-xl font-bold" data-testid="stat-paid-value">{paid}</div>
