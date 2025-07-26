@@ -111,26 +111,9 @@ export default function MembersPage() {
                   <Plus className="h-6 w-6 text-white" />
                 </div>
               </div>
-              <div>
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
-                  Gestion des Membres
-                </h1>
-                <div className="space-y-1">
-                  <p className="text-sm sm:text-base text-gray-700 font-medium">
-                    Gérez et développez votre communauté facilement
-                  </p>
-                  <div className="text-xs text-gray-600 space-y-1">
-                    <p className="flex items-center">
-                      <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                      <strong>Adhésions simplifiées :</strong> Inscriptions et renouvellements automatisés
-                    </p>
-                    <p className="flex items-center">
-                      <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                      <strong>Communication directe :</strong> Coordonnées et historique centralisés
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
+                Gestion des Membres
+              </h1>
             </div>
             <button
               className="bg-orange-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-orange-700 transition-colors flex items-center space-x-2 text-sm sm:text-base"
@@ -140,6 +123,21 @@ export default function MembersPage() {
               <span className="hidden sm:inline">Nouveau membre</span>
               <span className="sm:hidden">Nouveau</span>
             </button>
+          </div>
+          <div>
+            <p className="text-sm sm:text-base text-gray-700 font-medium">
+              Gérez et développez votre communauté facilement
+            </p>
+            <div className="text-xs text-gray-600 space-y-1">
+              <p className="flex items-center">
+                <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                <strong>Adhésions simplifiées :</strong> Inscriptions et renouvellements automatisés
+              </p>
+              <p className="flex items-center">
+                <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                <strong>Communication directe :</strong> Coordonnées et historique centralisés
+              </p>
+            </div>
           </div>
           {/* Statistiques avec boutons fonctionnels */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">

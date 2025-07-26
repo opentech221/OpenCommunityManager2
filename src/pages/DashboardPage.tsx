@@ -110,34 +110,34 @@ export const DashboardPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       {/* En-tête de la page */}
       <div className="mb-8 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500">
-        <div className="flex items-center space-x-3">
-          <div className="flex-shrink-0">
-            <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
-              <Activity className="h-6 w-6 text-white" />
+        <div className="space-y-4">
+          <div className="flex items-center space-x-3">
+            <div className="flex-shrink-0">
+              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                <Activity className="h-6 w-6 text-white" />
+              </div>
             </div>
-          </div>
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-orange-500 mb-2">
+            <h1 className="text-2xl md:text-3xl font-bold text-orange-500">
               Tableau de bord
             </h1>
-            <div className="space-y-2">
-              <p className="text-gray-700 font-medium text-lg">
-                Vue d'ensemble de votre association - Association des Jeunes Développeurs
+          </div>
+          <div>
+            <p className="text-gray-700 font-medium text-lg">
+              Vue d'ensemble de votre association - Association des Jeunes Développeurs
+            </p>
+            <div className="text-sm text-gray-600 space-y-1">
+              <p className="flex items-center">
+                <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                <strong>Gestion simplifiée :</strong> Pilotez votre association en temps réel avec des indicateurs clés
               </p>
-              <div className="text-sm text-gray-600 space-y-1">
-                <p className="flex items-center">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                  <strong>Gestion simplifiée :</strong> Pilotez votre association en temps réel avec des indicateurs clés
-                </p>
-                <p className="flex items-center">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                  <strong>Digitalisation complète :</strong> Fini la paperasse, tout votre écosystème associatif est centralisé
-                </p>
-                <p className="flex items-center">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                  <strong>Croissance assurée :</strong> Optimisez vos cotisations, événements et finances pour développer votre impact
-                </p>
-              </div>
+              <p className="flex items-center">
+                <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                <strong>Digitalisation complète :</strong> Fini la paperasse, tout votre écosystème associatif est centralisé
+              </p>
+              <p className="flex items-center">
+                <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                <strong>Croissance assurée :</strong> Optimisez vos cotisations, événements et finances pour développer votre impact
+              </p>
             </div>
           </div>
         </div>

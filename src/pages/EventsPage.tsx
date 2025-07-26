@@ -184,26 +184,9 @@ export default function EventsPage() {
                   <Calendar className="h-6 w-6 text-white" />
                 </div>
               </div>
-              <div>
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
-                  Gestion des Événements
-                </h1>
-                <div className="space-y-1 mt-2">
-                  <p className="text-sm sm:text-base text-gray-700 font-medium">
-                    Créez des expériences mémorables pour votre communauté
-                  </p>
-                  <div className="text-xs text-gray-600 space-y-1">
-                    <p className="flex items-center">
-                      <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                      <strong>Planification optimale :</strong> Calendrier intelligent et gestion des inscriptions
-                    </p>
-                    <p className="flex items-center">
-                      <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                      <strong>Engagement maximal :</strong> Communication automatisée et suivi des participants
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
+                Gestion des Événements
+              </h1>
             </div>
             <button
               className="bg-orange-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center space-x-2 text-sm sm:text-base shadow-sm hover:shadow-md"
@@ -214,6 +197,21 @@ export default function EventsPage() {
               <span className="hidden sm:inline">Nouvel événement</span>
               <span className="sm:hidden">Nouveau</span>
             </button>
+          </div>
+          <div>
+            <p className="text-sm sm:text-base text-gray-700 font-medium">
+              Créez des expériences mémorables pour votre communauté
+            </p>
+            <div className="text-xs text-gray-600 space-y-1">
+              <p className="flex items-center">
+                <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                <strong>Planification optimale :</strong> Calendrier intelligent et gestion des inscriptions
+              </p>
+              <p className="flex items-center">
+                <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                <strong>Engagement maximal :</strong> Communication automatisée et suivi des participants
+              </p>
+            </div>
           </div>
           
           {/* Statistiques avec boutons fonctionnels */}

@@ -123,20 +123,22 @@ const BillingPage: React.FC = () => {
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* En-tête décoré avec couleur orange */}
         <div className="mb-8 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
-          <div className="flex items-center space-x-3">
-            <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
-                <CreditCard className="h-6 w-6 text-white" />
+          <div className="space-y-4">
+            <div className="flex items-center space-x-3">
+              <div className="flex-shrink-0">
+                <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                  <CreditCard className="h-6 w-6 text-white" />
+                </div>
               </div>
-            </div>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-orange-500 mb-2" data-testid="billing-title">
+              <h1 className="text-2xl md:text-3xl font-bold text-orange-500" data-testid="billing-title">
                 Facturation & Abonnements
               </h1>
-              <div className="space-y-1">
-                <p className="text-gray-700 font-medium">
-                  Gestion transparente et contrôle total de vos paiements
-                </p>
+            </div>
+            <div>
+              <p className="text-gray-700 font-medium text-lg">
+                Gestion transparente et contrôle total de vos paiements
+              </p>
+              <div className="text-sm text-gray-600 space-y-1">
                 <div className="text-sm text-gray-600 space-y-1">
                   <p className="flex items-center">
                     <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>

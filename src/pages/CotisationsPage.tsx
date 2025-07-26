@@ -118,39 +118,45 @@ export default function CotisationsPage() {
                 <Plus className="h-6 w-6 text-white" />
               </div>
             </div>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-orange-500" data-testid="cotisations-title">
-                Gestion des Cotisations
-              </h1>
-              <div className="space-y-1 mt-2">
-                <p className="text-gray-700 font-medium">
-                  Optimisez vos revenus associatifs avec un suivi professionnel
-                </p>
-                <div className="text-sm text-gray-600 space-y-1">
-                  <p className="flex items-center">
-                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                    <strong>Recouvrement automatisé :</strong> Relances et rappels intelligents
-                  </p>
-                  <p className="flex items-center">
-                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                    <strong>Revenus prévisibles :</strong> Planification budgétaire et croissance assurée
-                  </p>
-                </div>
-              </div>
-            </div>
+            <h1 className="text-2xl md:text-3xl font-bold text-orange-500" data-testid="cotisations-title">
+              Gestion des Cotisations
+            </h1>
           </div>
-          
-          {/* Indicateur de statut API - Debug */}
-          <div className="flex items-center space-x-2 text-sm">
-            <div className={`w-2 h-2 rounded-full ${
-              isLoading ? 'bg-yellow-400 animate-pulse' : 
-              cotisations.length > 0 ? 'bg-green-400' : 'bg-red-400'
-            }`}></div>
-            <span className="text-gray-600">
-              {isLoading ? 'Chargement...' : 
-               cotisations.length > 0 ? `${cotisations.length} cotisations` : 'Aucune donnée'}
-            </span>
+          <button 
+            onClick={() => setShowModal(true)}
+            className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors flex items-center space-x-2"
+            data-testid="add-cotisation-btn"
+          >
+            <Plus className="w-5 h-5" />
+            <span>Nouvelle cotisation</span>
+          </button>
+        </div>
+        <div className="mt-4">
+          <p className="text-gray-700 font-medium">
+            Optimisez vos revenus associatifs avec un suivi professionnel
+          </p>
+          <div className="text-sm text-gray-600 space-y-1">
+            <p className="flex items-center">
+              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+              <strong>Recouvrement automatisé :</strong> Relances et rappels intelligents
+            </p>
+            <p className="flex items-center">
+              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+              <strong>Revenus prévisibles :</strong> Planification budgétaire et croissance assurée
+            </p>
           </div>
+        </div>
+        
+        {/* Indicateur de statut API - Debug */}
+        <div className="flex items-center space-x-2 text-sm">
+          <div className={`w-2 h-2 rounded-full ${
+            isLoading ? 'bg-yellow-400 animate-pulse' : 
+            cotisations.length > 0 ? 'bg-green-400' : 'bg-red-400'
+          }`}></div>
+          <span className="text-gray-600">
+            {isLoading ? 'Chargement...' : 
+             cotisations.length > 0 ? `${cotisations.length} cotisations` : 'Aucune donnée'}
+          </span>
         </div>
       </div>
       
