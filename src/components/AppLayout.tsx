@@ -22,9 +22,9 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <div className="flex flex-1">
         <Sidebar isOpen={sidebarOpen} closeSidebar={onCloseSidebar} />
-        <div className="flex-1 lg:ml-64 flex flex-col">
+        <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
           <Header onMenuToggle={onToggleSidebar} isMenuOpen={sidebarOpen} />
-          <main className="flex-1 p-6">
+          <main className="flex-1 p-6 pt-6">
             {children}
           </main>
           {showFooter && <Footer />}
