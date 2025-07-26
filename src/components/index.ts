@@ -8,3 +8,5 @@ export { default as EventFilters } from './EventFilters';
 export { default as EventParticipants } from './EventParticipants';
 export { CotisationFormModal } from './CotisationFormModal';
 export { DeleteConfirmationModal } from './DeleteConfirmationModal';
+export { TransactionFormModal } from './TransactionFormModal';
+export { DocumentFormModal } from './DocumentFormModal';

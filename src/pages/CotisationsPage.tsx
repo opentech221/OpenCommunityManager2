@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Plus, X, Trash2, Edit } from 'lucide-react';
+import { Plus, Trash2, Edit } from 'lucide-react';
 import { PaymentStatus, PaymentMethod, type CotisationType } from '../types';
 import { formatCurrency, formatDate } from '../utils';
 import { useCotisations } from '../hooks/useCotisations';
 import { useMembers } from '../hooks/useMembers';
+import { CotisationFormModal } from '../components';
 
 export default function CotisationsPage() {
   // Hooks pour les données
@@ -52,9 +53,9 @@ export default function CotisationsPage() {
   });
 
   // Handlers
-  const handleAdd = async (cotisation: Omit<CotisationType, 'id'>) => {
+  const handleAdd = async (cotisationData: Partial<CotisationType>) => {
     try {
-      await addCotisation(cotisation);
+      await addCotisation(cotisationData as Omit<CotisationType, 'id'>);
       setFeedback('Cotisation ajoutée avec succès');
       setShowAddModal(false);
       setTimeout(() => setFeedback(''), 2000);
@@ -75,9 +76,10 @@ export default function CotisationsPage() {
     }
   };
 
-  const handleEdit = async (cotisation: CotisationType) => {
+  const handleEdit = async (cotisationData: Partial<CotisationType>) => {
+    if (!editCotisation) return;
     try {
-      await updateCotisation(cotisation.id, cotisation);
+      await updateCotisation(editCotisation.id, { ...editCotisation, ...cotisationData });
       setFeedback('Cotisation modifiée avec succès');
       setShowEditModal(false);
       setEditCotisation(null);
@@ -88,43 +90,13 @@ export default function CotisationsPage() {
     }
   };
 
-  // Modal form state
-  const [form, setForm] = useState<Omit<CotisationType, 'id'>>({
-    memberId: '',
-    amount: 0,
-    paymentDate: new Date(),
-    paymentMethod: PaymentMethod.CASH,
-    status: PaymentStatus.PAID,
-    year: new Date().getFullYear(),
-    notes: '',
-  });
-
-  // Add modal open
+  // Modal form handlers
   const openAddModal = () => {
-    setForm({
-      memberId: '',
-      amount: 0,
-      paymentDate: new Date(),
-      paymentMethod: PaymentMethod.CASH,
-      status: PaymentStatus.PAID,
-      year: new Date().getFullYear(),
-      notes: '',
-    });
     setShowAddModal(true);
   };
 
-  // Edit modal open
   const openEditModal = (cotisation: CotisationType) => {
     setEditCotisation(cotisation);
-    setForm({
-      memberId: cotisation.memberId,
-      amount: cotisation.amount,
-      paymentDate: cotisation.paymentDate,
-      paymentMethod: cotisation.paymentMethod,
-      status: cotisation.status,
-      year: cotisation.year,
-      notes: cotisation.notes || '',
-    });
     setShowEditModal(true);
   };
 
@@ -132,26 +104,6 @@ export default function CotisationsPage() {
   const simulateEdit = () => {
     if (cotisations.length > 0) {
       openEditModal(cotisations[0]);
-    }
-  };
-
-  // Form change
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setForm(prev => ({
-      ...prev,
-      [name]: name === 'amount' || name === 'year' ? Number(value) : value,
-      paymentDate: name === 'paymentDate' ? new Date(value) : prev.paymentDate,
-    }));
-  };
-
-  // Form submit
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (showAddModal) {
-      handleAdd(form);
-    } else if (showEditModal && editCotisation) {
-      handleEdit({ ...editCotisation, ...form });
     }
   };
 
@@ -394,147 +346,17 @@ export default function CotisationsPage() {
         </div>
       )}
 
-      {/* Modal ajout/modification */}
-      {(showAddModal || showEditModal) && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" data-testid="cotisation-modal-bg">
-          <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto" data-testid="cotisation-modal">
-            <div className="flex items-center justify-between p-6 border-b">
-              <h2 className="text-xl font-semibold" data-testid={showAddModal ? 'modal-title-add' : 'modal-title-edit'}>
-                {showAddModal ? 'Nouvelle cotisation' : 'Modifier cotisation'}
-              </h2>
-              <button
-                onClick={() => { setShowAddModal(false); setShowEditModal(false); setEditCotisation(null); }}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                title="Fermer"
-                aria-label="Fermer la modal"
-                data-testid="modal-close-btn"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <form onSubmit={handleFormSubmit} className="p-6 space-y-4" data-testid="cotisation-form">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="memberId">Membre</label>
-                <select
-                  id="memberId"
-                  name="memberId"
-                  value={form.memberId}
-                  onChange={handleFormChange}
-                  className="input-field"
-                  aria-label="Membre"
-                  required
-                >
-                  <option value="">Sélectionner un membre</option>
-                  {members.map(m => (
-                    <option key={m.id} value={m.id}>{m.firstName} {m.lastName}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="amount">Montant</label>
-                <input
-                  id="amount"
-                  name="amount"
-                  type="number"
-                  value={form.amount}
-                  onChange={handleFormChange}
-                  className="input-field"
-                  aria-label="Montant"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="paymentDate">Date de paiement</label>
-                <input
-                  id="paymentDate"
-                  name="paymentDate"
-                  type="date"
-                  value={form.paymentDate instanceof Date ? form.paymentDate.toISOString().split('T')[0] : form.paymentDate}
-                  onChange={handleFormChange}
-                  className="input-field"
-                  aria-label="Date de paiement"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="paymentMethod">Méthode</label>
-                <select
-                  id="paymentMethod"
-                  name="paymentMethod"
-                  value={form.paymentMethod}
-                  onChange={handleFormChange}
-                  className="input-field"
-                  aria-label="Méthode"
-                  required
-                >
-                  <option value={PaymentMethod.CASH}>Espèces</option>
-                  <option value={PaymentMethod.BANK_TRANSFER}>Virement</option>
-                  <option value={PaymentMethod.MOBILE_MONEY}>Mobile Money</option>
-                  <option value={PaymentMethod.CHECK}>Chèque</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="status">Statut</label>
-                <select
-                  id="status"
-                  name="status"
-                  value={form.status}
-                  onChange={handleFormChange}
-                  className="input-field"
-                  aria-label="Statut"
-                  required
-                >
-                  <option value={PaymentStatus.PAID}>Payée</option>
-                  <option value={PaymentStatus.PENDING}>En attente</option>
-                  <option value={PaymentStatus.OVERDUE}>En retard</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="year">Année</label>
-                <input
-                  id="year"
-                  name="year"
-                  type="number"
-                  value={form.year}
-                  onChange={handleFormChange}
-                  className="input-field"
-                  aria-label="Année"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="notes">Notes</label>
-                <input
-                  id="notes"
-                  name="notes"
-                  type="text"
-                  value={form.notes}
-                  onChange={handleFormChange}
-                  className="input-field"
-                  aria-label="Notes"
-                />
-              </div>
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="button"
-                  onClick={() => { setShowAddModal(false); setShowEditModal(false); setEditCotisation(null); }}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-                  aria-label="Annuler"
-                >
-                  Annuler
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 btn-primary"
-                  aria-label={showAddModal ? 'Ajouter' : 'Enregistrer'}
-                >
-                  {showAddModal ? 'Ajouter' : 'Enregistrer'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      {/* Modal ajout/modification harmonisé */}
+      <CotisationFormModal
+        isOpen={showAddModal || showEditModal}
+        onClose={() => { 
+          setShowAddModal(false); 
+          setShowEditModal(false); 
+          setEditCotisation(null); 
+        }}
+        cotisation={editCotisation}
+        onSave={showAddModal ? handleAdd : handleEdit}
+      />
     </div>
   );
 }

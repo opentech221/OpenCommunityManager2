@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Plus, TrendingUp, TrendingDown, Wallet, Filter } from 'lucide-react';
 import type { TransactionType } from '../types';
 import { TransactionTypeEnum } from '../types';
+import { TransactionFormModal } from '../components';
 
 const transactionsData: TransactionType[] = [
   {
@@ -62,9 +63,17 @@ const FinancesPage: React.FC = () => {
   const [feedbackMessage, setFeedbackMessage] = useState<string>('');
   const [localTransactions, setLocalTransactions] = useState<TransactionType[]>(transactionsData);
 
-  const handleAddTransaction = (transaction: TransactionType) => {
+  const handleAddTransaction = (transactionData: Partial<TransactionType>) => {
+    const transaction: TransactionType = {
+      id: Date.now().toString(),
+      ...transactionData,
+      associationId: 'assoc1',
+      receipt: ''
+    } as TransactionType;
+    
     setLocalTransactions(prev => [...prev, transaction]);
     setFeedbackMessage('Transaction ajoutée avec succès');
+    setShowAddModal(false);
     setTimeout(() => setFeedbackMessage(''), 2000);
   };
 
@@ -77,13 +86,6 @@ const FinancesPage: React.FC = () => {
   const totalIncome = localTransactions.filter(t => t.type === TransactionTypeEnum.INCOME).reduce((sum, t) => sum + t.amount, 0);
   const totalExpenses = localTransactions.filter(t => t.type === TransactionTypeEnum.EXPENSE).reduce((sum, t) => sum + t.amount, 0);
   const balance = totalIncome - totalExpenses;
-
-
-  // États locaux pour le formulaire d'ajout
-  const [newDescription, setNewDescription] = useState('');
-  const [newAmount, setNewAmount] = useState<number>(0);
-  const [newType, setNewType] = useState<TransactionTypeEnum | ''>('');
-  const [newCategory, setNewCategory] = useState('');
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 md:px-12">
@@ -198,87 +200,13 @@ const FinancesPage: React.FC = () => {
               </table>
             </div>
           </div>
-          {/* Modal d'ajout mobile-first */}
-          {showAddModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-              <div className="bg-white rounded-xl p-6 shadow-lg w-full max-w-sm">
-                <h2 className="text-lg font-bold mb-4">Ajouter une transaction</h2>
-                <form onSubmit={e => {
-                  e.preventDefault();
-                  if (
-                    newDescription &&
-                    newAmount > 0 &&
-                    newType !== '' &&
-                    newCategory
-                  ) {
-                    const transaction: TransactionType = {
-                      id: Date.now().toString(),
-                      description: newDescription,
-                      amount: newAmount,
-                      type: newType as TransactionTypeEnum,
-                      category: newCategory,
-                      date: new Date(),
-                      associationId: 'assoc1',
-                      receipt: ''
-                    };
-                    handleAddTransaction(transaction);
-                    setShowAddModal(false);
-                    setNewDescription('');
-                    setNewAmount(0);
-                    setNewType('');
-                    setNewCategory('');
-                  }
-                }}>
-                  <input
-                    type="text"
-                    placeholder="Description"
-                    className="border rounded w-full mb-2 px-2 py-1"
-                    required
-                    value={newDescription}
-                    onChange={e => setNewDescription(e.target.value)}
-                  />
-                  <input
-                    type="number"
-                    placeholder="Montant"
-                    className="border rounded w-full mb-2 px-2 py-1"
-                    required
-                    min={1}
-                    value={newAmount === 0 ? '' : newAmount}
-                    onChange={e => setNewAmount(Number(e.target.value))}
-                  />
-                  <select
-                    className="border rounded w-full mb-2 px-2 py-1"
-                    required
-                    value={newType}
-                    onChange={e => setNewType(e.target.value as TransactionTypeEnum | '')}
-                  >
-                    <option value="">Type</option>
-                    <option value={TransactionTypeEnum.INCOME}>Entrée</option>
-                    <option value={TransactionTypeEnum.EXPENSE}>Sortie</option>
-                  </select>
-                  <select
-                    className="border rounded w-full mb-2 px-2 py-1"
-                    required
-                    value={newCategory}
-                    onChange={e => setNewCategory(e.target.value)}
-                  >
-                    <option value="">Catégorie</option>
-                    {categories.map(cat => (
-                      <option key={cat} value={cat}>{cat}</option>
-                    ))}
-                  </select>
-                  <button type="submit" className="bg-violet-700 text-white px-4 py-2 rounded w-full mt-2">Ajouter</button>
-                  <button type="button" className="mt-2 w-full text-gray-500 underline" onClick={() => {
-                    setShowAddModal(false);
-                    setNewDescription('');
-                    setNewAmount(0);
-                    setNewType('');
-                    setNewCategory('');
-                  }}>Annuler</button>
-                </form>
-              </div>
-            </div>
-          )}
+
+          {/* Modal d'ajout avec composant harmonisé */}
+          <TransactionFormModal
+            isOpen={showAddModal}
+            onClose={() => setShowAddModal(false)}
+            onSave={handleAddTransaction}
+          />
         </div>
       </div>
     </div>
