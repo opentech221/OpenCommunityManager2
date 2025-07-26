@@ -1,13 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Users,
   CreditCard,
   Calendar,
   DollarSign,
   Activity,
+  ArrowRight,
 } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
+  const navigate = useNavigate();
+
   const stats = [
     {
       name: 'Membres actifs',
@@ -15,6 +19,8 @@ export const DashboardPage: React.FC = () => {
       change: '+12%',
       changeType: 'increase',
       icon: Users,
+      route: '/members',
+      description: 'Voir tous les membres'
     },
     {
       name: 'Cotisations ce mois',
@@ -22,6 +28,8 @@ export const DashboardPage: React.FC = () => {
       change: '+8%',
       changeType: 'increase',
       icon: CreditCard,
+      route: '/cotisations',
+      description: 'Gérer les cotisations'
     },
     {
       name: 'Événements prévus',
@@ -29,6 +37,8 @@ export const DashboardPage: React.FC = () => {
       change: '+2',
       changeType: 'increase',
       icon: Calendar,
+      route: '/events',
+      description: 'Voir les événements'
     },
     {
       name: 'Solde actuel',
@@ -36,6 +46,8 @@ export const DashboardPage: React.FC = () => {
       change: '+15%',
       changeType: 'increase',
       icon: DollarSign,
+      route: '/finances',
+      description: 'Voir les finances'
     },
   ];
 
@@ -109,8 +121,8 @@ export const DashboardPage: React.FC = () => {
       {/* Statistiques */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {stats.map((stat) => (
-          <div key={stat.name} className="bg-white rounded-lg shadow-sm p-6">
-            <div className="flex items-center justify-between">
+          <div key={stat.name} className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-between mb-4">
               <div>
                 <p className="text-sm font-medium text-gray-600">{stat.name}</p>
                 <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
@@ -130,6 +142,16 @@ export const DashboardPage: React.FC = () => {
                 </span>
               </div>
             </div>
+            
+            {/* Bouton Détails */}
+            <button
+              onClick={() => navigate(stat.route)}
+              className="w-full flex items-center justify-between p-2 text-sm text-violet-600 hover:text-violet-700 hover:bg-violet-50 rounded-lg transition-colors border border-violet-200 hover:border-violet-300"
+              aria-label={stat.description}
+            >
+              <span className="font-medium">Détails</span>
+              <ArrowRight className="h-4 w-4" />
+            </button>
           </div>
         ))}
       </div>
