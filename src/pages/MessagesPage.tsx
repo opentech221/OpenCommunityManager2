@@ -119,10 +119,44 @@ export default function MessagesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row">
-      {/* Feedback */}
-      {feedback && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50">
+    <div className="min-h-screen bg-gray-50">
+      {/* En-tête décoré avec couleur orange */}
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 border-l-4 border-orange-500 shadow-sm p-6 mb-0">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center space-x-3">
+            <div className="flex-shrink-0">
+              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                <Send className="h-6 w-6 text-white" />
+              </div>
+            </div>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-orange-500 mb-2">
+                Messagerie Instantanée
+              </h1>
+              <div className="space-y-1">
+                <p className="text-gray-700 font-medium">
+                  Communication fluide et collaboration renforcée avec votre équipe
+                </p>
+                <div className="text-sm text-gray-600 space-y-1">
+                  <p className="flex items-center">
+                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                    <strong>Messages en temps réel :</strong> Échangez instantanément avec les membres
+                  </p>
+                  <p className="flex items-center">
+                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                    <strong>Historique complet :</strong> Retrouvez facilement vos conversations
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col md:flex-row">
+        {/* Feedback */}
+        {feedback && (
+          <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50">
           {feedback}
         </div>
       )}
@@ -130,13 +164,12 @@ export default function MessagesPage() {
       <div className="w-full md:w-80 bg-white border-b md:border-r border-gray-200 flex-shrink-0">
         {/* En-tête */}
         <div className="p-4 border-b border-gray-200">
-          <h1 className="text-xl font-semibold text-gray-900 mb-4">Messagerie</h1>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
               placeholder="Rechercher une conversation..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
             />
           </div>
         </div>
@@ -147,12 +180,12 @@ export default function MessagesPage() {
               key={conversation.id}
               onClick={() => setSelectedConversation(conversation.id)}
               className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors ${
-                selectedConversation === conversation.id ? 'bg-purple-50 border-purple-200' : ''
+                selectedConversation === conversation.id ? 'bg-orange-50 border-orange-200' : ''
               }`}
             >
               <div className="flex items-center space-x-3">
                 <div className="relative">
-                  <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
+                  <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-semibold">
                     {conversation.avatar}
                   </div>
                   {conversation.isOnline && (
@@ -171,7 +204,7 @@ export default function MessagesPage() {
                   <p className="text-xs text-gray-600 truncate">{conversation.lastMessage}</p>
                 </div>
                 {conversation.unreadCount > 0 && (
-                  <div className="w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
+                  <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
                     <span className="text-xs text-white font-medium">{conversation.unreadCount}</span>
                   </div>
                 )}
@@ -188,7 +221,7 @@ export default function MessagesPage() {
             <div className="bg-white border-b border-gray-200 p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
+                  <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-semibold">
                     {selectedConv?.avatar}
                   </div>
                   <div>
@@ -221,7 +254,7 @@ export default function MessagesPage() {
                   <div
                     className={`relative max-w-[80vw] md:max-w-md px-4 py-2 rounded-lg ${
                       message.senderId === 'me'
-                        ? 'bg-purple-500 text-white'
+                        ? 'bg-orange-500 text-white'
                         : 'bg-gray-200 text-gray-900'
                     }`}
                   >
@@ -260,7 +293,7 @@ export default function MessagesPage() {
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                     placeholder="Tapez votre message..."
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                   />
                 </div>
                 <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
@@ -268,7 +301,7 @@ export default function MessagesPage() {
                 </button>
                 <button
                   onClick={handleSendMessage}
-                  className="p-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+                  className="p-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
                   aria-label="Envoyer le message"
                 >
                   <SendIcon className="w-5 h-5" />
@@ -288,6 +321,7 @@ export default function MessagesPage() {
             </div>
           </div>
         )}
+      </div>
       </div>
     </div>
   );

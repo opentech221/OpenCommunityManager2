@@ -121,9 +121,35 @@ const BillingPage: React.FC = () => {
         </div>
       )}
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2" data-testid="billing-title">Facturation</h1>
-          <p className="text-gray-600" data-testid="billing-desc">Gérez votre abonnement et consultez vos factures</p>
+        {/* En-tête décoré avec couleur orange */}
+        <div className="mb-8 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
+          <div className="flex items-center space-x-3">
+            <div className="flex-shrink-0">
+              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                <CreditCard className="h-6 w-6 text-white" />
+              </div>
+            </div>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-orange-500 mb-2" data-testid="billing-title">
+                Facturation & Abonnements
+              </h1>
+              <div className="space-y-1">
+                <p className="text-gray-700 font-medium">
+                  Gestion transparente et contrôle total de vos paiements
+                </p>
+                <div className="text-sm text-gray-600 space-y-1">
+                  <p className="flex items-center">
+                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                    <strong>Facturation automatique :</strong> Paiements sécurisés et sans interruption
+                  </p>
+                  <p className="flex items-center">
+                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                    <strong>Historique complet :</strong> Accès à toutes vos factures et reçus
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -170,10 +196,10 @@ const BillingPage: React.FC = () => {
 
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <div className="flex space-x-4">
-                  <button className="flex-1 bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors" onClick={handleChangePlan} data-testid="change-plan-btn">
+                  <button className="flex-1 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors" onClick={handleChangePlan} data-testid="change-plan-btn">
                     Modifier le plan
                   </button>
-                  <button className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors" onClick={handleCancelSubscription} data-testid="cancel-subscription-btn">
+                  <button className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors" onClick={handleCancelSubscription} data-testid="cancel-subscription-btn">
                     Annuler l'abonnement
                   </button>
                 </div>

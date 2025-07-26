@@ -102,19 +102,38 @@ export default function MembersPage() {
         </div>
       )}
       {/* En-tête Mobile-First */}
-      <div className="bg-white border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
         <div className="flex flex-col space-y-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">
-                Membres
-              </h1>
-              <p className="text-sm sm:text-base text-gray-600 mt-1">
-                Gérez les membres de votre association
-              </p>
+            <div className="flex items-center space-x-3">
+              <div className="flex-shrink-0">
+                <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                  <Plus className="h-6 w-6 text-white" />
+                </div>
+              </div>
+              <div>
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
+                  Gestion des Membres
+                </h1>
+                <div className="space-y-1">
+                  <p className="text-sm sm:text-base text-gray-700 font-medium">
+                    Gérez et développez votre communauté facilement
+                  </p>
+                  <div className="text-xs text-gray-600 space-y-1">
+                    <p className="flex items-center">
+                      <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                      <strong>Adhésions simplifiées :</strong> Inscriptions et renouvellements automatisés
+                    </p>
+                    <p className="flex items-center">
+                      <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                      <strong>Communication directe :</strong> Coordonnées et historique centralisés
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
             <button
-              className="bg-purple-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2 text-sm sm:text-base"
+              className="bg-orange-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-orange-700 transition-colors flex items-center space-x-2 text-sm sm:text-base"
               onClick={() => { setShowForm(true); setEditMember(undefined); }}
             >
               <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -126,7 +145,7 @@ export default function MembersPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
             <button 
               className={`bg-white rounded-lg p-3 shadow hover:bg-gray-50 transition-colors ${
-                statusFilter === 'ALL' ? 'ring-2 ring-violet-500' : ''
+                statusFilter === 'ALL' ? 'ring-2 ring-orange-500' : ''
               }`}
               onClick={() => setStatusFilter('ALL')}
               aria-label="Afficher tous les membres"
@@ -181,7 +200,7 @@ export default function MembersPage() {
               placeholder="Rechercher un membre..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm sm:text-base"
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base"
             />
           </div>
 
@@ -219,7 +238,7 @@ export default function MembersPage() {
                 <select
                   value={selectedRole}
                   onChange={(e) => setSelectedRole(e.target.value)}
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                 >
                   <option value="all">Tous les rôles</option>
                   <option value={MemberRole.PRESIDENT}>Président</option>
@@ -234,7 +253,7 @@ export default function MembersPage() {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value as keyof typeof MemberStatus | 'ALL')}
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                 >
                   <option value="ALL">Tous les statuts</option>
                   <option value={MemberStatus.ACTIVE}>Actif</option>
@@ -307,7 +326,7 @@ export default function MembersPage() {
                   <div className="mt-4 flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <button
-                        className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors"
+                        className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-600 bg-orange-50 rounded-md hover:bg-orange-100 transition-colors"
                         onClick={() => { setEditMember(member); setShowForm(true); }}
                       >
                         <Edit className="w-4 h-4 mr-1" />
@@ -339,7 +358,7 @@ export default function MembersPage() {
             <button className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50 border border-gray-300 rounded-md">
               Précédent
             </button>
-            <button className="px-3 py-1.5 text-sm bg-purple-600 text-white rounded-md">
+            <button className="px-3 py-1.5 text-sm bg-orange-600 text-white rounded-md">
               1
             </button>
             <button className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50 border border-gray-300 rounded-md">

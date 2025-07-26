@@ -101,16 +101,43 @@ const NotificationsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* En-tête décoré avec couleur orange */}
+        <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
+          <div className="flex items-center space-x-3">
+            <div className="flex-shrink-0">
+              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                <Bell className="h-6 w-6 text-white" />
+              </div>
+            </div>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-orange-500 mb-2">
+                Centre de Notifications
+              </h1>
+              <div className="space-y-1">
+                <p className="text-gray-700 font-medium">
+                  Restez informé en temps réel de toutes les activités importantes
+                </p>
+                <div className="text-sm text-gray-600 space-y-1">
+                  <p className="flex items-center">
+                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                    <strong>Alertes personnalisées :</strong> Recevez uniquement ce qui vous concerne
+                  </p>
+                  <p className="flex items-center">
+                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                    <strong>Suivi en temps réel :</strong> Ne manquez aucune information importante
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           {/* Header */}
-          <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-purple-50 to-purple-100">
+          <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="p-2 bg-purple-500 rounded-lg">
-                  <Bell className="w-6 h-6 text-white" />
-                </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">Notifications</h1>
                   <p className="text-sm text-gray-600">
                     {unreadCount} notification{unreadCount > 1 ? 's' : ''} non lue{unreadCount > 1 ? 's' : ''}
                   </p>
@@ -119,7 +146,7 @@ const NotificationsPage: React.FC = () => {
               {unreadCount > 0 && (
                 <button
                   onClick={markAllAsRead}
-                  className="flex items-center space-x-2 bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors"
+                  className="flex items-center space-x-2 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors"
                 >
                   <Check className="w-4 h-4" />
                   <span>Tout marquer comme lu</span>

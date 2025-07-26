@@ -196,10 +196,35 @@ const DocumentsPage: React.FC = () => {
         </div>
       )}
       <div className="max-w-4xl mx-auto px-4 py-6">
-        {/* En-tête responsive */}
-        <div className="mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold font-montserrat text-purple-700 mb-2">Documents</h1>
-          <p className="text-gray-600 font-poppins">Gestion des documents de l'association</p>
+        {/* En-tête décoré avec couleur orange */}
+        <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
+          <div className="flex items-center space-x-3">
+            <div className="flex-shrink-0">
+              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                <FileText className="h-6 w-6 text-white" />
+              </div>
+            </div>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-orange-500 mb-2">
+                Gestion Documentaire
+              </h1>
+              <div className="space-y-1">
+                <p className="text-gray-700 font-medium">
+                  Archivage intelligent et conformité juridique assurée
+                </p>
+                <div className="text-sm text-gray-600 space-y-1">
+                  <p className="flex items-center">
+                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                    <strong>Sécurité renforcée :</strong> Stockage sécurisé et accès contrôlé
+                  </p>
+                  <p className="flex items-center">
+                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                    <strong>Recherche instantanée :</strong> Retrouvez tous vos documents en un clic
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <button 
           onClick={() => setShowUploadModal(true)}
@@ -212,7 +237,7 @@ const DocumentsPage: React.FC = () => {
           <button 
             onClick={() => setFilterType('all')}
             className={`bg-white p-4 rounded-lg shadow flex items-center justify-between flex-1 transition-colors hover:bg-gray-50 cursor-pointer ${
-              filterType === 'all' ? 'ring-2 ring-violet-500' : ''
+              filterType === 'all' ? 'ring-2 ring-orange-500' : ''
             }`}
             aria-label="Afficher tous les documents"
           >
@@ -265,7 +290,7 @@ const DocumentsPage: React.FC = () => {
               placeholder="Rechercher un document..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent font-poppins"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent font-poppins"
             />
           </div>
           <div className="flex items-center gap-2">
@@ -273,7 +298,7 @@ const DocumentsPage: React.FC = () => {
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value as 'all' | DocumentTypeEnum)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent font-poppins"
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent font-poppins"
               aria-label="Filtrer par type de document"
             >
               <option value="all">Tous les types</option>
@@ -285,7 +310,7 @@ const DocumentsPage: React.FC = () => {
           </div>
         </div>
         {/* Liste des documents - cards mobile, table desktop */}
-        <div className="block md:hidden flex flex-col gap-3">
+        <div className="md:hidden flex flex-col gap-3">
           {filteredDocuments.length === 0 && (
             <div className="text-center py-12">
               <File className="mx-auto h-12 w-12 text-gray-400" />
@@ -308,7 +333,7 @@ const DocumentsPage: React.FC = () => {
                 <span className="ml-auto text-xs text-gray-700">{formatFileSize(document.size)}</span>
               </div>
               <div className="flex items-center gap-3 pt-2">
-                <button className="text-violet-600 hover:text-violet-800 transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500 rounded" title="Voir le document" aria-label="Voir le document"><Eye className="w-5 h-5" /></button>
+                <button className="text-orange-600 hover:text-orange-800 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 rounded" title="Voir le document" aria-label="Voir le document"><Eye className="w-5 h-5" /></button>
                 <button className="text-blue-600 hover:text-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded" title="Télécharger" aria-label="Télécharger le document"><Download className="w-5 h-5" /></button>
                 <button className="text-red-600 hover:text-red-800 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 rounded" title="Supprimer" aria-label="Supprimer le document" onClick={() => handleDeleteDocument(document.id)}><Trash2 className="w-5 h-5" /></button>
               </div>
@@ -387,7 +412,7 @@ const DocumentsPage: React.FC = () => {
                     <input
                       id="documentNameInput"
                       type="text"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       aria-label="Nom du document"
                       placeholder="Nom du document"
                       value={uploadFileName}
@@ -421,7 +446,7 @@ const DocumentsPage: React.FC = () => {
                       Type de document
                     </label>
                     <select 
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       aria-label="Type de document"
                       value={uploadType}
                       onChange={e => setUploadType(e.target.value as DocumentTypeEnum)}
@@ -440,7 +465,7 @@ const DocumentsPage: React.FC = () => {
                     </label>
                     <textarea
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       placeholder="Description du document..."
                       value={uploadDescription}
                       onChange={e => setUploadDescription(e.target.value)}
@@ -462,7 +487,7 @@ const DocumentsPage: React.FC = () => {
                     </button>
                     <button
                       type="submit"
-                      className="flex-1 px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors"
+                      className="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
                     >
                       Télécharger
                     </button>

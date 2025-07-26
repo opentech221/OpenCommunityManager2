@@ -174,20 +174,39 @@ export default function EventsPage() {
           <button className="ml-2 text-xs text-green-700 underline" onClick={() => setFeedback('')}>Fermer</button>
         </div>
       )}
-      {/* En-tête Mobile-First */}
-      <div className="bg-white border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
+      {/* En-tête décoré avec couleur orange */}
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6 mx-4 mt-4">
         <div className="flex flex-col space-y-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">
-                Événements
-              </h1>
-              <p className="text-sm sm:text-base text-gray-600 mt-1">
-                Gérez les événements de votre association
-              </p>
+            <div className="flex items-center space-x-3">
+              <div className="flex-shrink-0">
+                <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                  <Calendar className="h-6 w-6 text-white" />
+                </div>
+              </div>
+              <div>
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
+                  Gestion des Événements
+                </h1>
+                <div className="space-y-1 mt-2">
+                  <p className="text-sm sm:text-base text-gray-700 font-medium">
+                    Créez des expériences mémorables pour votre communauté
+                  </p>
+                  <div className="text-xs text-gray-600 space-y-1">
+                    <p className="flex items-center">
+                      <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                      <strong>Planification optimale :</strong> Calendrier intelligent et gestion des inscriptions
+                    </p>
+                    <p className="flex items-center">
+                      <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                      <strong>Engagement maximal :</strong> Communication automatisée et suivi des participants
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
             <button
-              className="bg-purple-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2 text-sm sm:text-base"
+              className="bg-orange-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center space-x-2 text-sm sm:text-base shadow-sm hover:shadow-md"
               onClick={openAddModal}
               aria-label="ouvrir modal ajout événement"
             >
@@ -201,7 +220,7 @@ export default function EventsPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
             <button 
               className={`bg-white rounded-lg p-3 shadow hover:bg-gray-50 transition-colors ${
-                statusFilter === 'ALL' ? 'ring-2 ring-violet-500' : ''
+                statusFilter === 'ALL' ? 'ring-2 ring-orange-500' : ''
               }`}
               onClick={() => setStatusFilter('ALL')}
               aria-label="Afficher tous les événements"
@@ -256,7 +275,7 @@ export default function EventsPage() {
               placeholder="Rechercher un événement..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm sm:text-base"
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base"
             />
           </div>
 
@@ -279,7 +298,7 @@ export default function EventsPage() {
                 <select
                   value={typeFilter}
                   onChange={(e) => setTypeFilter(e.target.value as typeof typeFilter)}
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                 >
                   <option value="all">Tous les types</option>
                   <option value="MEETING">Réunion</option>
@@ -377,12 +396,12 @@ export default function EventsPage() {
                     {/* Actions */}
                     <div className="mt-4 flex items-center justify-between">
                       <div className="flex items-center space-x-2">
-                        <button className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-purple-600 bg-purple-50 rounded-md hover:bg-purple-100 transition-colors">
+                        <button className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-600 bg-orange-50 rounded-md hover:bg-orange-100 transition-colors">
                           <Eye className="w-4 h-4 mr-1" />
                           Voir
                         </button>
                         <button
-                          className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors"
+                          className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-600 bg-orange-50 rounded-md hover:bg-orange-100 transition-colors"
                           onClick={() => openEditModal(event)}
                           aria-label="modifier l'événement"
                         >
@@ -431,7 +450,7 @@ export default function EventsPage() {
             <button className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50 border border-gray-300 rounded-md">
               Précédent
             </button>
-            <button className="px-3 py-1.5 text-sm bg-purple-600 text-white rounded-md">
+            <button className="px-3 py-1.5 text-sm bg-orange-600 text-white rounded-md">
               1
             </button>
             <button className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50 border border-gray-300 rounded-md">

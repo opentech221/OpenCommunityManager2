@@ -345,7 +345,7 @@ export default function EventsPageMobile() {
           <button 
             onClick={() => setStatusFilter('ALL')}
             className={`bg-white rounded-xl p-4 shadow-sm transition-all hover:bg-gray-50 ${
-              statusFilter === 'ALL' ? 'ring-2 ring-violet-500' : ''
+              statusFilter === 'ALL' ? 'ring-2 ring-orange-500' : ''
             }`}
             aria-label="Afficher tous les événements"
           >
@@ -407,13 +407,13 @@ export default function EventsPageMobile() {
               placeholder="Rechercher un événement..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 bg-white"
+              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white"
             />
           </div>
           <button
             onClick={() => setShowFilters(!showFilters)}
             className={`px-4 py-3 rounded-xl transition-all ${
-              showFilters ? 'bg-violet-100 text-violet-700' : 'bg-white text-gray-600'
+              showFilters ? 'bg-orange-100 text-orange-700' : 'bg-white text-gray-600'
             } border border-gray-200`}
           >
             <Filter className="w-5 h-5" />
@@ -430,7 +430,7 @@ export default function EventsPageMobile() {
             <p className="text-gray-600 mb-6">Commencez par planifier votre premier événement</p>
             <button 
               onClick={handleAddNew}
-              className="bg-violet-600 text-white px-6 py-3 rounded-xl font-medium"
+              className="bg-orange-600 text-white px-6 py-3 rounded-xl font-medium"
             >
               Créer un événement
             </button>
@@ -469,7 +469,7 @@ export default function EventsPageMobile() {
       {/* Bouton flottant d'ajout - Mobile First */}
       <button
         onClick={handleAddNew}
-        className="fixed bottom-6 right-6 bg-violet-600 text-white p-4 rounded-full shadow-lg hover:bg-violet-700 transition-colors z-10"
+        className="fixed bottom-6 right-6 bg-orange-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors z-10"
         aria-label="Créer un événement"
       >
         <Plus className="w-6 h-6" />

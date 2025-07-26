@@ -95,11 +95,40 @@ const FinancesPage: React.FC = () => {
         </div>
       )}
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-2xl font-montserrat font-bold text-violet-700 mb-6" data-testid="finances-title">Gestion des finances</h1>
+        {/* En-tête décoré avec couleur orange */}
+        <div className="mb-8 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
+          <div className="flex items-center space-x-3">
+            <div className="flex-shrink-0">
+              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                <Wallet className="h-6 w-6 text-white" />
+              </div>
+            </div>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-orange-500 mb-2" data-testid="finances-title">
+                Gestion Financière
+              </h1>
+              <div className="space-y-1">
+                <p className="text-gray-700 font-medium">
+                  Maximisez vos ressources et développez votre impact
+                </p>
+                <div className="text-sm text-gray-600 space-y-1">
+                  <p className="flex items-center">
+                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                    <strong>Transparence totale :</strong> Suivi en temps réel et rapports automatisés
+                  </p>
+                  <p className="flex items-center">
+                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                    <strong>Croissance maîtrisée :</strong> Budgets prévisionnels et optimisation des coûts
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <button 
             className={`bg-white rounded-xl shadow-sm border p-6 flex flex-col items-center hover:bg-gray-50 transition-colors ${
-              filterType === 'all' ? 'ring-2 ring-violet-500' : ''
+              filterType === 'all' ? 'ring-2 ring-orange-500' : ''
             }`}
             onClick={() => setFilterType('all')}
             aria-label="Afficher toutes les transactions"
@@ -146,7 +175,7 @@ const FinancesPage: React.FC = () => {
               ))}
             </select>
           </div>
-          <button onClick={() => setShowAddModal(true)} className="bg-violet-700 text-white px-4 py-2 rounded flex items-center gap-2 font-poppins" aria-label="ajouter une transaction" data-testid="add-transaction-btn">
+          <button onClick={() => setShowAddModal(true)} className="bg-orange-700 text-white px-4 py-2 rounded flex items-center gap-2 font-poppins" aria-label="ajouter une transaction" data-testid="add-transaction-btn">
             <Plus size={18} /> Ajouter une transaction
           </button>
         </div>

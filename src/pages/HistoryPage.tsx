@@ -121,44 +121,116 @@ const HistoryPage: React.FC = () => {
 
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center space-x-4">
-          <button
-            onClick={() => navigate('/dashboard')}
-            className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
-            aria-label="Retour au dashboard"
-          >
-            <ArrowLeft className="h-5 w-5 mr-2" />
-            Retour
-          </button>
+        <button
+          onClick={() => navigate('/dashboard')}
+          className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+          aria-label="Retour au dashboard"
+        >
+          <ArrowLeft className="h-5 w-5 mr-2" />
+          Retour
+        </button>
+      </div>
+
+      {/* En-tête décoré avec couleur orange */}
+      <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
+        <div className="flex items-center space-x-3">
+          <div className="flex-shrink-0">
+            <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+              <Clock className="h-6 w-6 text-white" />
+            </div>
+          </div>
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-orange-500">
-              Historique des activités
+            <h1 className="text-2xl md:text-3xl font-bold text-orange-500 mb-2">
+              Historique des Activités
             </h1>
-            <p className="text-gray-600 mt-1">
-              Consultez toutes les actions effectuées dans votre association
-            </p>
+            <div className="space-y-1">
+              <p className="text-gray-700 font-medium">
+                Traçabilité complète et audit de toutes les actions
+              </p>
+              <div className="text-sm text-gray-600 space-y-1">
+                <p className="flex items-center">
+                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                  <strong>Suivi en temps réel :</strong> Toutes les actions sont automatiquement enregistrées
+                </p>
+                <p className="flex items-center">
+                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                  <strong>Filtrage avancé :</strong> Recherchez par type, date ou utilisateur
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Statistiques rapides */}
+      {/* Statistiques rapides - Boutons fonctionnels */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white rounded-lg p-4 shadow-sm">
+        <button
+          onClick={() => {
+            setDateFilter('ALL');
+            setTypeFilter('ALL');
+            setActionFilter('ALL');
+            setSearchTerm('');
+          }}
+          className={`bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200 text-left ${
+            dateFilter === 'ALL' && typeFilter === 'ALL' && actionFilter === 'ALL' && !searchTerm
+              ? 'ring-2 ring-violet-500 bg-violet-50'
+              : 'hover:bg-gray-50'
+          }`}
+        >
           <div className="text-sm text-gray-500">Total activités</div>
           <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
-        </div>
-        <div className="bg-blue-50 rounded-lg p-4 shadow-sm">
+        </button>
+        
+        <button
+          onClick={() => {
+            setDateFilter('TODAY');
+            setTypeFilter('ALL');
+            setActionFilter('ALL');
+            setSearchTerm('');
+          }}
+          className={`bg-blue-50 rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200 text-left ${
+            dateFilter === 'TODAY'
+              ? 'ring-2 ring-blue-500 bg-blue-100'
+              : 'hover:bg-blue-100'
+          }`}
+        >
           <div className="text-sm text-blue-600">Aujourd'hui</div>
           <div className="text-2xl font-bold text-blue-900">{stats.today}</div>
-        </div>
-        <div className="bg-green-50 rounded-lg p-4 shadow-sm">
+        </button>
+        
+        <button
+          onClick={() => {
+            setDateFilter('WEEK');
+            setTypeFilter('ALL');
+            setActionFilter('ALL');
+            setSearchTerm('');
+          }}
+          className={`bg-green-50 rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200 text-left ${
+            dateFilter === 'WEEK'
+              ? 'ring-2 ring-green-500 bg-green-100'
+              : 'hover:bg-green-100'
+          }`}
+        >
           <div className="text-sm text-green-600">Cette semaine</div>
           <div className="text-2xl font-bold text-green-900">{stats.thisWeek}</div>
-        </div>
-        <div className="bg-purple-50 rounded-lg p-4 shadow-sm">
+        </button>
+        
+        <button
+          onClick={() => {
+            setDateFilter('MONTH');
+            setTypeFilter('ALL');
+            setActionFilter('ALL');
+            setSearchTerm('');
+          }}
+          className={`bg-purple-50 rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200 text-left ${
+            dateFilter === 'MONTH'
+              ? 'ring-2 ring-purple-500 bg-purple-100'
+              : 'hover:bg-purple-100'
+          }`}
+        >
           <div className="text-sm text-purple-600">Ce mois</div>
           <div className="text-2xl font-bold text-purple-900">{stats.thisMonth}</div>
-        </div>
+        </button>
       </div>
 
       {/* Filtres et recherche */}
@@ -173,7 +245,7 @@ const HistoryPage: React.FC = () => {
                 placeholder="Rechercher dans l'historique..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -183,7 +255,7 @@ const HistoryPage: React.FC = () => {
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             >
               {activityTypes.map(type => (
                 <option key={type.value} value={type.value}>{type.label}</option>
@@ -193,7 +265,7 @@ const HistoryPage: React.FC = () => {
             <select
               value={actionFilter}
               onChange={(e) => setActionFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             >
               {actionTypes.map(action => (
                 <option key={action.value} value={action.value}>{action.label}</option>
@@ -203,7 +275,7 @@ const HistoryPage: React.FC = () => {
             <select
               value={dateFilter}
               onChange={(e) => setDateFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             >
               {dateFilters.map(filter => (
                 <option key={filter.value} value={filter.value}>{filter.label}</option>
@@ -244,8 +316,11 @@ const HistoryPage: React.FC = () => {
                 setDateFilter('ALL');
                 setSearchTerm('');
               }}
-              className="text-sm text-gray-500 hover:text-gray-700"
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
             >
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
               Réinitialiser
             </button>
           </div>
@@ -326,7 +401,7 @@ const HistoryPage: React.FC = () => {
           <div className="text-sm text-gray-600 text-center">
             Affichage de {filteredActivities.length} activité{filteredActivities.length > 1 ? 's' : ''} sur {activities.length} au total
             {filteredActivities.length !== activities.length && (
-              <span className="ml-2 text-violet-600">• Filtres actifs</span>
+              <span className="ml-2 text-orange-600">• Filtres actifs</span>
             )}
           </div>
         </div>

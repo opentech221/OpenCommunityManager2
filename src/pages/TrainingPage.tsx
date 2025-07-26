@@ -234,7 +234,7 @@ export const TrainingPage: React.FC = () => {
                     </div>
                     <button 
                       onClick={() => setSelectedTraining(program.id)}
-                      className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+                      className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors"
                     >
                       Réserver
                     </button>
@@ -293,7 +293,7 @@ export const TrainingPage: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <p className="text-sm text-green-600 font-medium">{training.spots}</p>
-                      <button className="mt-2 bg-purple-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-purple-700 transition-colors">
+                      <button className="mt-2 bg-orange-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-orange-700 transition-colors">
                         S'inscrire
                       </button>
                     </div>
