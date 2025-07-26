@@ -285,17 +285,27 @@ export default function MembersPageMobile() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header mobile optimisé */}
-      <div className="bg-white shadow-sm">
-        <div className="px-4 py-6">
-          <h1 className="text-xl font-bold text-gray-900 mb-1">Membres</h1>
-          <p className="text-sm text-gray-600">
-            {total} membre{total > 1 ? 's' : ''} • {active} actif{active > 1 ? 's' : ''}
-          </p>
+      {/* En-tête décoré avec couleur orange */}
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 border-l-4 border-orange-500 shadow-sm p-6">
+        <div className="flex items-center space-x-3">
+          <div className="flex-shrink-0">
+            <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+              <User className="h-6 w-6 text-white" />
+            </div>
+          </div>
+          <h1 className="text-xl md:text-2xl font-bold text-orange-500">
+            Membres
+          </h1>
         </div>
       </div>
 
       <div className="px-4 py-4">
+        {/* Statistiques résumé */}
+        <div className="mb-4 p-3 bg-white rounded-lg shadow-sm">
+          <p className="text-gray-700 font-medium">
+            {total} membre{total > 1 ? 's' : ''} • {active} actif{active > 1 ? 's' : ''}
+          </p>
+        </div>
         {/* Stats en grille compacte - Mobile First */}
         <div className="grid grid-cols-2 gap-3 mb-6">
           <button 

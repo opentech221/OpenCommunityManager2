@@ -135,7 +135,7 @@ export default function CotisationsPage() {
           <p className="text-gray-700 font-medium">
             Optimisez vos revenus associatifs avec un suivi professionnel
           </p>
-          <div className="text-sm text-gray-600 space-y-1">
+          <div className="text-sm text-gray-600 space-y-1 mt-2">
             <p className="flex items-center">
               <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
               <strong>Recouvrement automatisé :</strong> Relances et rappels intelligents
@@ -148,7 +148,7 @@ export default function CotisationsPage() {
         </div>
         
         {/* Indicateur de statut API - Debug */}
-        <div className="flex items-center space-x-2 text-sm">
+        <div className="flex items-center space-x-2 text-sm mt-3">
           <div className={`w-2 h-2 rounded-full ${
             isLoading ? 'bg-yellow-400 animate-pulse' : 
             cotisations.length > 0 ? 'bg-green-400' : 'bg-red-400'
@@ -178,37 +178,40 @@ export default function CotisationsPage() {
           {feedback}
         </div>
       )}
+
       {/* Statistiques */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <button 
-          className={`bg-white rounded-lg p-4 shadow hover:bg-gray-50 transition-colors ${
-            statusFilter === 'ALL' ? 'ring-2 ring-orange-500' : ''
-          }`} 
-          onClick={() => setStatusFilter('ALL')} 
-          aria-label="Afficher toutes les cotisations" 
-          data-testid="stat-total"
-        >
-          <div className="text-sm text-gray-500" data-testid="stat-total-label">Total</div>
-          <div className="text-xl font-bold" data-testid="stat-total-value">{total}</div>
-        </button>
-        <button className={`bg-green-100 rounded-lg p-4 shadow ${statusFilter === PaymentStatus.PAID ? 'border-2 border-green-500' : ''}`} onClick={() => setStatusFilter(PaymentStatus.PAID)} aria-label="Filtrer payées" data-testid="stat-paid">
-          <div className="text-sm text-green-700" data-testid="stat-paid-label">Payées</div>
-          <div className="text-xl font-bold" data-testid="stat-paid-value">{paid}</div>
-        </button>
-        <button className={`bg-yellow-100 rounded-lg p-4 shadow ${statusFilter === PaymentStatus.PENDING ? 'border-2 border-yellow-500' : ''}`} onClick={() => setStatusFilter(PaymentStatus.PENDING)} aria-label="Filtrer en attente" data-testid="stat-pending">
-          <div className="text-sm text-yellow-700" data-testid="stat-pending-label">En attente</div>
-          <div className="text-xl font-bold" data-testid="stat-pending-value">{pending}</div>
-        </button>
-        <button className={`bg-red-100 rounded-lg p-4 shadow ${statusFilter === PaymentStatus.OVERDUE ? 'border-2 border-red-500' : ''}`} onClick={() => setStatusFilter(PaymentStatus.OVERDUE)} aria-label="Filtrer en retard" data-testid="stat-overdue">
-          <div className="text-sm text-red-700" data-testid="stat-overdue-label">En retard</div>
-          <div className="text-xl font-bold" data-testid="stat-overdue-value">{overdue}</div>
-        </button>
-      </div>
-      <div className="bg-white rounded-lg p-4 shadow mb-6" data-testid="stat-total-amount">
-        <div className="text-sm text-gray-500" data-testid="stat-total-amount-label">Montant total perçu</div>
-        <div className="text-xl font-bold text-green-600" data-testid="stat-total-amount-value">{formatCurrency(paidAmount)}</div>
-        <div className="text-xs text-gray-400 mt-1">
-          Total possible: {formatCurrency(totalAmount)} • Reste à percevoir: {formatCurrency(totalAmount - paidAmount)}
+      <div className="bg-white rounded-lg p-4 shadow mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+          <button 
+            className={`bg-white rounded-lg p-4 shadow hover:bg-gray-50 transition-colors border ${
+              statusFilter === 'ALL' ? 'ring-2 ring-orange-500' : ''
+            }`} 
+            onClick={() => setStatusFilter('ALL')} 
+            aria-label="Afficher toutes les cotisations" 
+            data-testid="stat-total"
+          >
+            <div className="text-sm text-gray-500" data-testid="stat-total-label">Total</div>
+            <div className="text-xl font-bold" data-testid="stat-total-value">{total}</div>
+          </button>
+          <button className={`bg-green-100 rounded-lg p-4 shadow hover:bg-green-200 transition-colors ${statusFilter === PaymentStatus.PAID ? 'ring-2 ring-green-500' : ''}`} onClick={() => setStatusFilter(PaymentStatus.PAID)} aria-label="Filtrer payées" data-testid="stat-paid">
+            <div className="text-sm text-green-700" data-testid="stat-paid-label">Payées</div>
+            <div className="text-xl font-bold" data-testid="stat-paid-value">{paid}</div>
+          </button>
+          <button className={`bg-yellow-100 rounded-lg p-4 shadow hover:bg-yellow-200 transition-colors ${statusFilter === PaymentStatus.PENDING ? 'ring-2 ring-yellow-500' : ''}`} onClick={() => setStatusFilter(PaymentStatus.PENDING)} aria-label="Filtrer en attente" data-testid="stat-pending">
+            <div className="text-sm text-yellow-700" data-testid="stat-pending-label">En attente</div>
+            <div className="text-xl font-bold" data-testid="stat-pending-value">{pending}</div>
+          </button>
+          <button className={`bg-red-100 rounded-lg p-4 shadow hover:bg-red-200 transition-colors ${statusFilter === PaymentStatus.OVERDUE ? 'ring-2 ring-red-500' : ''}`} onClick={() => setStatusFilter(PaymentStatus.OVERDUE)} aria-label="Filtrer en retard" data-testid="stat-overdue">
+            <div className="text-sm text-red-700" data-testid="stat-overdue-label">En retard</div>
+            <div className="text-xl font-bold" data-testid="stat-overdue-value">{overdue}</div>
+          </button>
+        </div>
+        <div className="bg-gray-50 rounded-lg p-4" data-testid="stat-total-amount">
+          <div className="text-sm text-gray-500" data-testid="stat-total-amount-label">Montant total perçu</div>
+          <div className="text-xl font-bold text-green-600" data-testid="stat-total-amount-value">{formatCurrency(paidAmount)}</div>
+          <div className="text-xs text-gray-400 mt-1">
+            Total possible: {formatCurrency(totalAmount)} • Reste à percevoir: {formatCurrency(totalAmount - paidAmount)}
+          </div>
         </div>
       </div>
       {/* Barre de recherche et bouton ajout */}

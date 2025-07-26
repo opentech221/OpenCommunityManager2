@@ -176,87 +176,87 @@ export default function EventsPage() {
       )}
       {/* En-tête décoré avec couleur orange */}
       <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6 mx-4 mt-4">
-        <div className="flex flex-col space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="flex-shrink-0">
-                <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
-                  <Calendar className="h-6 w-6 text-white" />
-                </div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="flex-shrink-0">
+              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                <Calendar className="h-6 w-6 text-white" />
               </div>
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
-                Gestion des Événements
-              </h1>
             </div>
-            <button
-              className="bg-orange-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center space-x-2 text-sm sm:text-base shadow-sm hover:shadow-md"
-              onClick={openAddModal}
-              aria-label="ouvrir modal ajout événement"
-            >
-              <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
-              <span className="hidden sm:inline">Nouvel événement</span>
-              <span className="sm:hidden">Nouveau</span>
-            </button>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
+              Gestion des Événements
+            </h1>
           </div>
-          <div>
-            <p className="text-sm sm:text-base text-gray-700 font-medium">
-              Créez des expériences mémorables pour votre communauté
+          <button
+            className="bg-orange-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center space-x-2 text-sm sm:text-base shadow-sm hover:shadow-md"
+            onClick={openAddModal}
+            aria-label="ouvrir modal ajout événement"
+          >
+            <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="hidden sm:inline">Nouvel événement</span>
+            <span className="sm:hidden">Nouveau</span>
+          </button>
+        </div>
+        <div className="mt-4">
+          <p className="text-sm sm:text-base text-gray-700 font-medium">
+            Créez des expériences mémorables pour votre communauté
+          </p>
+          <div className="text-xs text-gray-600 space-y-1 mt-2">
+            <p className="flex items-center">
+              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+              <strong>Planification optimale :</strong> Calendrier intelligent et gestion des inscriptions
             </p>
-            <div className="text-xs text-gray-600 space-y-1">
-              <p className="flex items-center">
-                <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                <strong>Planification optimale :</strong> Calendrier intelligent et gestion des inscriptions
-              </p>
-              <p className="flex items-center">
-                <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                <strong>Engagement maximal :</strong> Communication automatisée et suivi des participants
-              </p>
-            </div>
+            <p className="flex items-center">
+              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+              <strong>Engagement maximal :</strong> Communication automatisée et suivi des participants
+            </p>
           </div>
-          
-          {/* Statistiques avec boutons fonctionnels */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <button 
-              className={`bg-white rounded-lg p-3 shadow hover:bg-gray-50 transition-colors ${
-                statusFilter === 'ALL' ? 'ring-2 ring-orange-500' : ''
-              }`}
-              onClick={() => setStatusFilter('ALL')}
-              aria-label="Afficher tous les événements"
-            >
-              <div className="text-lg sm:text-xl font-bold text-gray-900">{stats.total}</div>
-              <div className="text-xs sm:text-sm text-gray-500">Total</div>
-            </button>
-            <button 
-              className={`bg-blue-50 rounded-lg p-3 shadow hover:bg-blue-100 transition-colors ${
-                statusFilter === EventStatus.PLANNED ? 'ring-2 ring-blue-500' : ''
-              }`}
-              onClick={() => setStatusFilter(statusFilter === EventStatus.PLANNED ? 'ALL' : EventStatus.PLANNED)}
-              aria-label="Filtrer les événements planifiés"
-            >
-              <div className="text-lg sm:text-xl font-bold text-blue-600">{stats.planned}</div>
-              <div className="text-xs sm:text-sm text-blue-600">Planifiés</div>
-            </button>
-            <button 
-              className={`bg-green-50 rounded-lg p-3 shadow hover:bg-green-100 transition-colors ${
-                statusFilter === EventStatus.ONGOING ? 'ring-2 ring-green-500' : ''
-              }`}
-              onClick={() => setStatusFilter(statusFilter === EventStatus.ONGOING ? 'ALL' : EventStatus.ONGOING)}
-              aria-label="Filtrer les événements en cours"
-            >
-              <div className="text-lg sm:text-xl font-bold text-green-600">{stats.ongoing}</div>
-              <div className="text-xs sm:text-sm text-green-600">En cours</div>
-            </button>
-            <button 
-              className={`bg-purple-50 rounded-lg p-3 shadow hover:bg-purple-100 transition-colors ${
-                statusFilter === EventStatus.COMPLETED ? 'ring-2 ring-purple-500' : ''
-              }`}
-              onClick={() => setStatusFilter(statusFilter === EventStatus.COMPLETED ? 'ALL' : EventStatus.COMPLETED)}
-              aria-label="Filtrer les événements terminés"
-            >
-              <div className="text-lg sm:text-xl font-bold text-purple-600">{stats.completed}</div>
-              <div className="text-xs sm:text-sm text-purple-600">Terminés</div>
-            </button>
-          </div>
+        </div>
+      </div>
+
+      {/* Statistiques avec boutons fonctionnels */}
+      <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6 mx-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          <button 
+            className={`bg-white rounded-lg p-3 shadow hover:bg-violet-50 transition-colors border ${
+              statusFilter === 'ALL' ? 'ring-2 ring-violet-500' : ''
+            }`}
+            onClick={() => setStatusFilter('ALL')}
+            aria-label="Afficher tous les événements"
+          >
+            <div className="text-lg sm:text-xl font-bold text-gray-900">{stats.total}</div>
+            <div className="text-xs sm:text-sm text-gray-500">Total</div>
+          </button>
+          <button 
+            className={`bg-blue-50 rounded-lg p-3 shadow hover:bg-blue-100 transition-colors ${
+              statusFilter === EventStatus.PLANNED ? 'ring-2 ring-blue-500' : ''
+            }`}
+            onClick={() => setStatusFilter(statusFilter === EventStatus.PLANNED ? 'ALL' : EventStatus.PLANNED)}
+            aria-label="Filtrer les événements planifiés"
+          >
+            <div className="text-lg sm:text-xl font-bold text-blue-600">{stats.planned}</div>
+            <div className="text-xs sm:text-sm text-blue-600">Planifiés</div>
+          </button>
+          <button 
+            className={`bg-green-50 rounded-lg p-3 shadow hover:bg-green-100 transition-colors ${
+              statusFilter === EventStatus.ONGOING ? 'ring-2 ring-green-500' : ''
+            }`}
+            onClick={() => setStatusFilter(statusFilter === EventStatus.ONGOING ? 'ALL' : EventStatus.ONGOING)}
+            aria-label="Filtrer les événements en cours"
+          >
+            <div className="text-lg sm:text-xl font-bold text-green-600">{stats.ongoing}</div>
+            <div className="text-xs sm:text-sm text-green-600">En cours</div>
+          </button>
+          <button 
+            className={`bg-purple-50 rounded-lg p-3 shadow hover:bg-purple-100 transition-colors ${
+              statusFilter === EventStatus.COMPLETED ? 'ring-2 ring-purple-500' : ''
+            }`}
+            onClick={() => setStatusFilter(statusFilter === EventStatus.COMPLETED ? 'ALL' : EventStatus.COMPLETED)}
+            aria-label="Filtrer les événements terminés"
+          >
+            <div className="text-lg sm:text-xl font-bold text-purple-600">{stats.completed}</div>
+            <div className="text-xs sm:text-sm text-purple-600">Terminés</div>
+          </button>
         </div>
       </div>
 
