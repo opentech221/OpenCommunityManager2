@@ -16,6 +16,7 @@ import SettingsPage from './pages/SettingsPage';
 import NotificationsPage from './pages/NotificationsPage';
 import BillingPage from './pages/BillingPage';
 import SecurityPage from './pages/SecurityPage';
+import HistoryPage from './pages/HistoryPage';
 import { LegalPage } from './pages/LegalPage';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { TermsPage } from './pages/TermsPage';
@@ -223,6 +224,16 @@ function App() {
               onCloseSidebar={closeSidebar}
             >
               <SecurityPage />
+            </AppLayout>
+          } />
+
+          <Route path="/history" element={
+            <AppLayout
+              sidebarOpen={sidebarOpen}
+              onToggleSidebar={toggleSidebar}
+              onCloseSidebar={closeSidebar}
+            >
+              <HistoryPage />
             </AppLayout>
           } />
 

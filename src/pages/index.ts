@@ -15,6 +15,7 @@ export { default as SettingsPage } from './SettingsPage';
 export { default as NotificationsPage } from './NotificationsPage';
 export { default as BillingPage } from './BillingPage';
 export { default as SecurityPage } from './SecurityPage';
+export { default as HistoryPage } from './HistoryPage';
 
 // Pages légales et support
 export { LegalPage } from './LegalPage';

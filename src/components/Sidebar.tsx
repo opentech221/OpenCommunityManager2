@@ -11,7 +11,8 @@ import {
   Globe, 
   Settings,
   Building2,
-  Bell
+  Bell,
+  History
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -34,6 +35,7 @@ const menuItems: MenuItem[] = [
   { name: 'Finances', path: '/finances', icon: DollarSign },
   { name: 'Documents', path: '/documents', icon: FolderOpen },
   { name: 'Messagerie', path: '/messages', icon: MessageSquare, badge: 5 },
+  { name: 'Historique', path: '/history', icon: History },
   { name: 'Notifications', path: '/notifications', icon: Bell },
   { name: 'Paramètres', path: '/settings', icon: Settings },
   { name: 'Profil public', path: '/public-profile', icon: Globe },

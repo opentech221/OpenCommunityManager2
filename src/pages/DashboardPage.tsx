@@ -181,8 +181,11 @@ export const DashboardPage: React.FC = () => {
             ))}
           </div>
           <div className="mt-6 pt-4 border-t border-gray-200">
-            <button className="text-sm text-purple-600 hover:text-purple-500 font-medium">
-              Voir toutes les activités
+            <button 
+              onClick={() => navigate('/history')}
+              className="text-sm text-purple-600 hover:text-purple-500 font-medium transition-colors"
+            >
+              Voir l'historique complet
             </button>
           </div>
         </div>
