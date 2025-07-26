@@ -183,8 +183,8 @@ export default function CotisationsPage() {
       <div className="bg-white rounded-lg p-4 shadow mb-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
           <button 
-            className={`bg-white rounded-lg p-4 shadow hover:bg-gray-50 transition-colors border ${
-              statusFilter === 'ALL' ? 'ring-2 ring-orange-500' : ''
+            className={`bg-white rounded-lg p-4 shadow hover:bg-violet-50 transition-colors border ${
+              statusFilter === 'ALL' ? 'ring-2 ring-violet-500' : ''
             }`} 
             onClick={() => setStatusFilter('ALL')} 
             aria-label="Afficher toutes les cotisations" 

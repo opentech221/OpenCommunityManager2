@@ -100,7 +100,7 @@ const NotificationsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="px-4 py-8 sm:px-6 lg:px-8">
         {/* En-tête décoré avec couleur orange */}
         <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
           <div className="space-y-4">

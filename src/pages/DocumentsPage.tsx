@@ -195,7 +195,7 @@ const DocumentsPage: React.FC = () => {
           {feedbackMessage}
         </div>
       )}
-      <div className="max-w-4xl mx-auto px-4 py-6">
+      <div className="px-4 py-6 sm:px-6 lg:px-8">
         {/* En-tête décoré avec couleur orange */}
         <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
           <div className="space-y-4">
@@ -238,8 +238,8 @@ const DocumentsPage: React.FC = () => {
         <div className="flex flex-col md:flex-row gap-4 mb-4">
           <button 
             onClick={() => setFilterType('all')}
-            className={`bg-white p-4 rounded-lg shadow flex items-center justify-between flex-1 transition-colors hover:bg-gray-50 cursor-pointer ${
-              filterType === 'all' ? 'ring-2 ring-orange-500' : ''
+            className={`bg-white p-4 rounded-lg shadow flex items-center justify-between flex-1 transition-colors hover:bg-violet-50 cursor-pointer ${
+              filterType === 'all' ? 'ring-2 ring-violet-500' : ''
             }`}
             aria-label="Afficher tous les documents"
           >

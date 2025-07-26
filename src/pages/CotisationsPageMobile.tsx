@@ -345,8 +345,8 @@ export default function CotisationsPageMobile() {
         <div className="grid grid-cols-2 gap-3 mb-6">
           <button 
             onClick={() => setStatusFilter('ALL')}
-            className={`bg-white rounded-xl p-4 shadow-sm transition-all hover:bg-gray-50 ${
-              statusFilter === 'ALL' ? 'ring-2 ring-orange-500' : ''
+            className={`bg-white rounded-xl p-4 shadow-sm transition-all hover:bg-violet-50 ${
+              statusFilter === 'ALL' ? 'ring-2 ring-violet-500' : ''
             }`}
             aria-label="Afficher toutes les cotisations"
           >
