@@ -209,27 +209,45 @@ const DocumentsPage: React.FC = () => {
         </button>
         {/* Statistiques - colonne mobile, ligne desktop */}
         <div className="flex flex-col md:flex-row gap-4 mb-4">
-          <div className="bg-white p-4 rounded-lg shadow flex items-center justify-between flex-1">
+          <button 
+            onClick={() => setFilterType('all')}
+            className={`bg-white p-4 rounded-lg shadow flex items-center justify-between flex-1 transition-colors hover:bg-gray-50 cursor-pointer ${
+              filterType === 'all' ? 'ring-2 ring-violet-500' : ''
+            }`}
+            aria-label="Afficher tous les documents"
+          >
             <div>
               <p className="text-xs font-poppins text-gray-600">Total documents</p>
               <p className="text-xl font-bold font-montserrat text-gray-900">{documents.length}</p>
             </div>
             <File className="w-6 h-6 text-blue-600" />
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow flex items-center justify-between flex-1">
+          </button>
+          <button 
+            onClick={() => setFilterType(filterType === DocumentTypeEnum.PV ? 'all' : DocumentTypeEnum.PV)}
+            className={`bg-white p-4 rounded-lg shadow flex items-center justify-between flex-1 transition-colors hover:bg-blue-50 cursor-pointer ${
+              filterType === DocumentTypeEnum.PV ? 'ring-2 ring-blue-500' : ''
+            }`}
+            aria-label="Filtrer par procès-verbaux"
+          >
             <div>
               <p className="text-xs font-poppins text-gray-600">Procès-verbaux</p>
               <p className="text-xl font-bold text-blue-600">{documents.filter(d => d.type === DocumentTypeEnum.PV).length}</p>
             </div>
             <FileText className="w-6 h-6 text-blue-600" />
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow flex items-center justify-between flex-1">
+          </button>
+          <button 
+            onClick={() => setFilterType(filterType === DocumentTypeEnum.FINANCIAL_REPORT ? 'all' : DocumentTypeEnum.FINANCIAL_REPORT)}
+            className={`bg-white p-4 rounded-lg shadow flex items-center justify-between flex-1 transition-colors hover:bg-green-50 cursor-pointer ${
+              filterType === DocumentTypeEnum.FINANCIAL_REPORT ? 'ring-2 ring-green-500' : ''
+            }`}
+            aria-label="Filtrer par rapports financiers"
+          >
             <div>
               <p className="text-xs font-poppins text-gray-600">Rapports financiers</p>
               <p className="text-xl font-bold text-green-600">{documents.filter(d => d.type === DocumentTypeEnum.FINANCIAL_REPORT).length}</p>
             </div>
             <FileSpreadsheet className="w-6 h-6 text-green-600" />
-          </div>
+          </button>
           <div className="bg-white p-4 rounded-lg shadow flex items-center justify-between flex-1">
             <div>
               <p className="text-xs font-poppins text-gray-600">Taille totale</p>

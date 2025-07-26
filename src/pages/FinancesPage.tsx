@@ -95,21 +95,39 @@ const FinancesPage: React.FC = () => {
       <div className="max-w-4xl mx-auto">
         <h1 className="text-2xl font-montserrat font-bold text-violet-700 mb-6" data-testid="finances-title">Gestion des finances</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-sm border p-6 flex flex-col items-center">
+          <button 
+            className={`bg-white rounded-xl shadow-sm border p-6 flex flex-col items-center hover:bg-gray-50 transition-colors ${
+              filterType === 'all' ? 'ring-2 ring-violet-500' : ''
+            }`}
+            onClick={() => setFilterType('all')}
+            aria-label="Afficher toutes les transactions"
+          >
             <Wallet className="text-violet-700 mb-2" size={32} />
             <span className="font-bold text-lg text-gray-900 font-montserrat">Solde</span>
             <span className="font-bold text-2xl text-violet-700" data-testid="finances-balance">{balance} €</span>
-          </div>
-          <div className="bg-white rounded-xl shadow-sm border p-6 flex flex-col items-center">
+          </button>
+          <button 
+            className={`bg-white rounded-xl shadow-sm border p-6 flex flex-col items-center hover:bg-green-50 transition-colors ${
+              filterType === TransactionTypeEnum.INCOME ? 'ring-2 ring-green-500' : ''
+            }`}
+            onClick={() => setFilterType(TransactionTypeEnum.INCOME)}
+            aria-label="Filtrer les entrées"
+          >
             <TrendingUp className="text-green-600 mb-2" size={32} />
             <span className="font-bold text-lg text-gray-900 font-montserrat">Entrées</span>
             <span className="font-bold text-2xl text-green-600" data-testid="finances-income">{totalIncome} €</span>
-          </div>
-          <div className="bg-white rounded-xl shadow-sm border p-6 flex flex-col items-center">
+          </button>
+          <button 
+            className={`bg-white rounded-xl shadow-sm border p-6 flex flex-col items-center hover:bg-red-50 transition-colors ${
+              filterType === TransactionTypeEnum.EXPENSE ? 'ring-2 ring-red-500' : ''
+            }`}
+            onClick={() => setFilterType(TransactionTypeEnum.EXPENSE)}
+            aria-label="Filtrer les sorties"
+          >
             <TrendingDown className="text-red-500 mb-2" size={32} />
             <span className="font-bold text-lg text-gray-900 font-montserrat">Sorties</span>
             <span className="font-bold text-2xl text-red-500" data-testid="finances-expenses">{totalExpenses} €</span>
-          </div>
+          </button>
         </div>
         <div className="mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex gap-2 items-center">

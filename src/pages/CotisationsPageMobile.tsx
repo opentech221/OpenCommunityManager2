@@ -319,10 +319,11 @@ export default function CotisationsPageMobile() {
         {/* Stats en grille compacte - Mobile First */}
         <div className="grid grid-cols-2 gap-3 mb-6">
           <button 
-            onClick={() => setStatusFilter(statusFilter === 'ALL' ? 'ALL' : 'ALL')}
-            className={`bg-white rounded-xl p-4 shadow-sm transition-all ${
+            onClick={() => setStatusFilter('ALL')}
+            className={`bg-white rounded-xl p-4 shadow-sm transition-all hover:bg-gray-50 ${
               statusFilter === 'ALL' ? 'ring-2 ring-violet-500' : ''
             }`}
+            aria-label="Afficher toutes les cotisations"
           >
             <div className="text-xs text-gray-500 mb-1">Total</div>
             <div className="text-xl font-bold text-gray-900">{total}</div>
