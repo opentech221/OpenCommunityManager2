@@ -198,7 +198,7 @@ const DocumentsPage: React.FC = () => {
       <div className="px-4 py-6 sm:px-6 lg:px-8">
         {/* En-tête décoré avec couleur orange */}
         <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
-          <div className="space-y-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="flex-shrink-0">
                 <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
@@ -209,31 +209,31 @@ const DocumentsPage: React.FC = () => {
                 Gestion Documentaire
               </h1>
             </div>
-            <div>
-              <p className="text-gray-700 font-medium text-lg">
-                Archivage intelligent et conformité juridique assurée
+            <button 
+              onClick={() => setShowUploadModal(true)}
+              className="bg-orange-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-orange-700 transition-colors flex items-center space-x-2 text-sm sm:text-base"
+            >
+              <Upload className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">Nouveau document</span>
+              <span className="sm:hidden">Nouveau</span>
+            </button>
+          </div>
+          <div className="mt-4">
+            <p className="text-gray-700 font-medium text-lg">
+              Archivage intelligent et conformité juridique assurée
+            </p>
+            <div className="text-sm text-gray-600 space-y-1 mt-2">
+              <p className="flex items-center">
+                <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                <strong>Sécurité renforcée :</strong> Stockage sécurisé et accès contrôlé
               </p>
-              <div className="text-sm text-gray-600 space-y-1">
-                <div className="text-sm text-gray-600 space-y-1">
-                  <p className="flex items-center">
-                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                    <strong>Sécurité renforcée :</strong> Stockage sécurisé et accès contrôlé
-                  </p>
-                  <p className="flex items-center">
-                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                    <strong>Recherche instantanée :</strong> Retrouvez tous vos documents en un clic
-                  </p>
-                </div>
-              </div>
+              <p className="flex items-center">
+                <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                <strong>Recherche instantanée :</strong> Retrouvez tous vos documents en un clic
+              </p>
             </div>
           </div>
         </div>
-        <button 
-          onClick={() => setShowUploadModal(true)}
-          className="w-full md:w-auto flex items-center justify-center gap-2 px-4 py-3 bg-orange-500 text-white rounded-lg font-bold shadow-lg mb-4 focus:outline-none focus:ring-2 focus:ring-orange-400"
-        >
-          <Upload className="w-5 h-5" /> Télécharger un document
-        </button>
         {/* Statistiques - colonne mobile, ligne desktop */}
         <div className="flex flex-col md:flex-row gap-4 mb-4">
           <button 

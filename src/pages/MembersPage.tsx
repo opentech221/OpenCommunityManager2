@@ -115,7 +115,7 @@ export default function MembersPage() {
             </h1>
           </div>
           <button
-            className="bg-orange-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-orange-700 transition-colors flex items-center space-x-2 text-sm sm:text-base"
+            className="bg-orange-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-orange-500 transition-colors flex items-center space-x-2 text-sm sm:text-base"
             onClick={() => { setShowForm(true); setEditMember(undefined); }}
           >
             <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -192,7 +192,7 @@ export default function MembersPage() {
           {/* Barre de recherche */}
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
+              <Search className="h-5 w-5 text-violet-800" />
             </div>
             <input
               type="text"

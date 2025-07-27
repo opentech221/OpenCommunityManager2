@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
-import { Plus, Trash2, Edit } from 'lucide-react';
+import { Plus, Trash2, Edit, Search } from 'lucide-react';
 import { PaymentStatus, PaymentMethod, type CotisationType } from '../types';
 import { formatCurrency, formatDate } from '../utils';
 import { useCotisations } from '../hooks/useCotisations';
@@ -123,8 +124,8 @@ export default function CotisationsPage() {
             </h1>
           </div>
           <button 
-            onClick={() => setShowModal(true)}
-            className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors flex items-center space-x-2"
+            onClick={() => setShowAddModal(true)}
+            className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-500 transition-colors flex items-center space-x-2"
             data-testid="add-cotisation-btn"
           >
             <Plus className="w-5 h-5" />
@@ -215,30 +216,17 @@ export default function CotisationsPage() {
         </div>
       </div>
       {/* Barre de recherche et bouton ajout */}
-      <div className="flex flex-col md:flex-row gap-2 mb-4">
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <Search className="h-5 w-5 text-violet-800" />
+        </div>
         <input
           type="text"
           placeholder="Rechercher une cotisation..."
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="input-field flex-1"
-          aria-label="Rechercher une cotisation"
+          className="block flex-1 w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base"
         />
-        <button
-          className="btn-primary flex items-center gap-2"
-          onClick={openAddModal}
-          aria-label="Nouvelle cotisation"
-          data-testid="add-cotisation-btn"
-        >
-          <Plus className="w-5 h-5" /> Nouvelle cotisation
-        </button>
-        <button
-          className="btn-secondary"
-          onClick={simulateEdit}
-          aria-label="Simuler modification"
-        >
-          Simuler modification
-        </button>
       </div>
       {/* Liste des cotisations */}
       <div className="bg-white rounded-lg shadow p-4">
@@ -259,12 +247,6 @@ export default function CotisationsPage() {
             </div>
             <p className="text-lg font-medium text-gray-900 mb-2">Aucune cotisation enregistrée</p>
             <p className="text-gray-500 mb-4">Commencez par ajouter la première cotisation de votre association</p>
-            <button
-              onClick={openAddModal}
-              className="btn-primary inline-flex items-center gap-2"
-            >
-              <Plus className="w-5 h-5" /> Ajouter une cotisation
-            </button>
           </div>
         ) : filteredCotisations.length === 0 ? (
           <div className="text-center py-8">

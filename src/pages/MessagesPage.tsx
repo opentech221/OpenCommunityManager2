@@ -7,7 +7,8 @@ import {
   Video, 
   Paperclip,
   Smile,
-  Send as SendIcon
+  Send as SendIcon,
+  Plus
 } from 'lucide-react';
 
 interface Message {
@@ -123,7 +124,7 @@ export default function MessagesPage() {
       {/* En-tête décoré avec couleur orange */}
       <div className="bg-gradient-to-r from-orange-50 to-orange-100 border-l-4 border-orange-500 shadow-sm p-6 mb-0">
         <div className="max-w-7xl mx-auto">
-          <div className="space-y-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="flex-shrink-0">
                 <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
@@ -134,22 +135,31 @@ export default function MessagesPage() {
                 Messagerie Instantanée
               </h1>
             </div>
-            <div>
-              <p className="text-gray-700 font-medium text-lg">
-                Communication fluide et collaboration renforcée avec votre équipe
+            <button
+              className="bg-orange-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-orange-700 transition-colors flex items-center space-x-2 text-sm sm:text-base"
+              onClick={() => {
+                setFeedback('Fonction nouvelle discussion bientôt disponible');
+                setTimeout(() => setFeedback(''), 2000);
+              }}
+            >
+              <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">Nouvelle discussion</span>
+              <span className="sm:hidden">Nouveau</span>
+            </button>
+          </div>
+          <div className="mt-4">
+            <p className="text-gray-700 font-medium text-lg">
+              Communication fluide et collaboration renforcée avec votre équipe
+            </p>
+            <div className="text-sm text-gray-600 space-y-1 mt-2">
+              <p className="flex items-center">
+                <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                <strong>Messages en temps réel :</strong> Échangez instantanément avec les membres
               </p>
-              <div className="text-sm text-gray-600 space-y-1">
-                <div className="text-sm text-gray-600 space-y-1">
-                  <p className="flex items-center">
-                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                    <strong>Messages en temps réel :</strong> Échangez instantanément avec les membres
-                  </p>
-                  <p className="flex items-center">
-                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                    <strong>Historique complet :</strong> Retrouvez facilement vos conversations
-                  </p>
-                </div>
-              </div>
+              <p className="flex items-center">
+                <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                <strong>Historique complet :</strong> Retrouvez facilement vos conversations
+              </p>
             </div>
           </div>
         </div>
