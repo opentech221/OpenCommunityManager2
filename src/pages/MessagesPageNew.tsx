@@ -232,9 +232,9 @@ export default function MessagesPage() {
   };
 
   return (
-    <div className="min-h-screen max-h-screen bg-gray-50 flex flex-col">
-      {/* En-tête décoré avec couleur orange - Compact et flexible */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 border-l-4 border-orange-500 shadow-sm p-2 md:p-4 flex-shrink-0">
+    <div className="h-screen bg-gray-50 flex flex-col">
+      {/* En-tête décoré avec couleur orange - Fixe */}
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 border-l-4 border-orange-500 shadow-sm p-4 md:p-6 flex-shrink-0">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 md:space-x-3">
@@ -256,11 +256,11 @@ export default function MessagesPage() {
               <span className="md:hidden">Nouveau</span>
             </button>
           </div>
-          <div className="mt-1 md:mt-2 hidden md:block">
-            <p className="text-gray-700 font-medium text-sm md:text-base">
+          <div className="mt-2 md:mt-4 hidden md:block">
+            <p className="text-gray-700 font-medium text-sm md:text-lg">
               Communication fluide et collaboration renforcée avec votre équipe
             </p>
-            <div className="text-xs md:text-sm text-gray-600 space-y-0.5 mt-1">
+            <div className="text-xs md:text-sm text-gray-600 space-y-1 mt-2">
               <p className="flex items-center">
                 <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
                 <strong>Messages en temps réel :</strong> Échangez instantanément avec les membres
@@ -274,26 +274,26 @@ export default function MessagesPage() {
         </div>
       </div>
 
-      {/* Container principal avec hauteur dynamique optimisée */}
-      <div className="flex flex-1 min-h-0 overflow-hidden">
+      {/* Container principal avec hauteur fixe - Layout mobile/desktop */}
+      <div className="flex flex-1 overflow-hidden">
         {/* Liste des conversations - Mobile: pleine largeur si pas de conversation sélectionnée, sinon cachée */}
         <div className={`${
           selectedConversation ? 'hidden md:flex' : 'flex'
         } w-full md:w-80 bg-white border-b md:border-r border-gray-200 flex-shrink-0 flex-col`}>
-          {/* En-tête de recherche - Compact */}
-          <div className="p-2 md:p-3 border-b border-gray-200 flex-shrink-0">
+          {/* En-tête de recherche - Fixe */}
+          <div className="p-3 md:p-4 border-b border-gray-200 flex-shrink-0">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
                 placeholder="Rechercher une conversation..."
-                className="w-full pl-10 pr-4 py-1.5 md:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
               />
             </div>
           </div>
           
-          {/* Liste des conversations - Hauteur optimisée */}
-          <div className="flex-1 min-h-0 overflow-y-auto">
+          {/* Liste des conversations - Scrollable */}
+          <div className="flex-1 overflow-y-auto">
             {conversations.map((conversation) => (
               <div
                 key={conversation.id}
@@ -339,8 +339,8 @@ export default function MessagesPage() {
         } flex-1 flex-col bg-white`}>
           {selectedConversation ? (
             <>
-              {/* En-tête du chat - Compact avec bouton retour mobile */}
-              <div className="bg-white border-b border-gray-200 p-2 md:p-3 flex-shrink-0">
+              {/* En-tête du chat - Fixe avec bouton retour mobile */}
+              <div className="bg-white border-b border-gray-200 p-3 md:p-4 flex-shrink-0">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     {/* Bouton retour visible uniquement sur mobile */}
@@ -377,8 +377,8 @@ export default function MessagesPage() {
                 </div>
               </div>
               
-              {/* Zone des messages - Hauteur dynamique optimisée */}
-              <div className="flex-1 min-h-0 overflow-y-auto p-2 md:p-4 space-y-2 md:space-y-3 bg-gray-50">
+              {/* Zone des messages - Scrollable uniquement ici */}
+              <div className="flex-1 overflow-y-auto p-3 md:p-4 space-y-3 md:space-y-4 bg-gray-50">
                 {messages.map((message) => (
                   <div
                     key={message.id}
@@ -414,10 +414,10 @@ export default function MessagesPage() {
                 ))}
               </div>
               
-              {/* Zone de saisie - Compacte et fixe en bas */}
-              <div className="bg-white border-t border-gray-200 p-2 md:p-3 flex-shrink-0">
+              {/* Zone de saisie - Fixe en bas */}
+              <div className="bg-white border-t border-gray-200 p-3 md:p-4 flex-shrink-0">
                 <div className="flex items-center space-x-2">
-                  <button className="p-1.5 md:p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                  <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
                     <Paperclip className="w-4 h-4 md:w-5 md:h-5" />
                   </button>
                   <div className="flex-1">
@@ -427,15 +427,15 @@ export default function MessagesPage() {
                       onChange={(e) => setNewMessage(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                       placeholder="Tapez votre message..."
-                      className="w-full px-3 py-1.5 md:px-4 md:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm md:text-base"
+                      className="w-full px-3 py-2 md:px-4 md:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm md:text-base"
                     />
                   </div>
-                  <button className="p-1.5 md:p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors hidden md:block">
+                  <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors hidden md:block">
                     <Smile className="w-5 h-5" />
                   </button>
                   <button
                     onClick={handleSendMessage}
-                    className="p-1.5 md:p-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+                    className="p-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
                     aria-label="Envoyer le message"
                   >
                     <SendIcon className="w-4 h-4 md:w-5 md:h-5" />

@@ -218,7 +218,7 @@ const DocumentsPage: React.FC = () => {
               <span className="sm:hidden">Nouveau</span>
             </button>
           </div>
-          <div className="mt-4">
+          <div className="mt-4 hidden md:block">
             <p className="text-gray-700 font-medium text-lg">
               Archivage intelligent et conformité juridique assurée
             </p>
@@ -234,8 +234,62 @@ const DocumentsPage: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Barre de recherche et filtres */}
+        <div className="bg-white border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
+          <div className="space-y-4">
+            {/* Barre de recherche */}
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-orange-600" />
+              </div>
+              <input
+                type="text"
+                placeholder="Rechercher un document..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base"
+              />
+            </div>
+
+            {/* Filtres */}
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2">
+                <Filter className="w-4 h-4 text-gray-500" />
+                <select
+                  value={filterType}
+                  onChange={(e) => setFilterType(e.target.value as 'all' | DocumentTypeEnum)}
+                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                  aria-label="Filtrer par type de document"
+                >
+                  <option value="all">Tous les types</option>
+                  <option value={DocumentTypeEnum.PV}>Procès-verbaux</option>
+                  <option value={DocumentTypeEnum.FINANCIAL_REPORT}>Rapports financiers</option>
+                  <option value={DocumentTypeEnum.STATUTES}>Statuts</option>
+                  <option value={DocumentTypeEnum.OTHER}>Autres</option>
+                </select>
+              </div>
+              {(searchTerm || filterType !== 'all') && (
+                <div className="flex items-center space-x-2">
+                  <span className="text-xs text-gray-500">Filtres actifs:</span>
+                  {searchTerm && (
+                    <span className="inline-flex px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded-full">
+                      Recherche: "{searchTerm}"
+                    </span>
+                  )}
+                  {filterType !== 'all' && (
+                    <span className="inline-flex px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
+                      {getTypeLabel(filterType as DocumentTypeEnum)}
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
         {/* Statistiques - colonne mobile, ligne desktop */}
-        <div className="flex flex-col md:flex-row gap-4 mb-4">
+        <div className="flex flex-col md:flex-row gap-4 mb-4 px-4 sm:px-6 lg:px-8">
           <button 
             onClick={() => setFilterType('all')}
             className={`bg-white p-4 rounded-lg shadow flex items-center justify-between flex-1 transition-colors hover:bg-violet-50 cursor-pointer ${
@@ -283,35 +337,9 @@ const DocumentsPage: React.FC = () => {
             <Upload className="w-6 h-6 text-purple-600" />
           </div>
         </div>
-        {/* Barre de recherche et filtres - empilés mobile, ligne desktop */}
-        <div className="bg-white p-4 rounded-lg shadow mb-4 flex flex-col md:flex-row gap-3 md:items-center">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Rechercher un document..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent font-poppins"
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-gray-500" />
-            <select
-              value={filterType}
-              onChange={(e) => setFilterType(e.target.value as 'all' | DocumentTypeEnum)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent font-poppins"
-              aria-label="Filtrer par type de document"
-            >
-              <option value="all">Tous les types</option>
-              <option value={DocumentTypeEnum.PV}>Procès-verbaux</option>
-              <option value={DocumentTypeEnum.FINANCIAL_REPORT}>Rapports financiers</option>
-              <option value={DocumentTypeEnum.STATUTES}>Statuts</option>
-              <option value={DocumentTypeEnum.OTHER}>Autres</option>
-            </select>
-          </div>
-        </div>
+        
         {/* Liste des documents - cards mobile, table desktop */}
+        <div className="px-4 sm:px-6 lg:px-8">
         <div className="md:hidden flex flex-col gap-3">
           {filteredDocuments.length === 0 && (
             <div className="text-center py-12">
@@ -399,6 +427,7 @@ const DocumentsPage: React.FC = () => {
               </tbody>
             </table>
           </div>
+        </div>
         </div>
         {/* Modal de téléchargement - inchangé, déjà mobile-first */}
         {showUploadModal && (

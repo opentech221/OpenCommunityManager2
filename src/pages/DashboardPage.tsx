@@ -121,7 +121,7 @@ export const DashboardPage: React.FC = () => {
               Tableau de bord
             </h1>
           </div>
-          <div>
+          <div className="hidden md:block">
             <p className="text-gray-700 font-medium text-lg">
               Vue d'ensemble de votre association - Association des Jeunes Développeurs
             </p>

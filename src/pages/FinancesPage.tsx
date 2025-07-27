@@ -97,17 +97,29 @@ const FinancesPage: React.FC = () => {
       <div className="px-4 sm:px-6 lg:px-8">
         {/* En-tête décoré avec couleur orange */}
         <div className="mb-8 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
-          <div className="flex items-center space-x-3">
-            <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
-                <Wallet className="h-6 w-6 text-white" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="flex-shrink-0">
+                <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                  <Wallet className="h-6 w-6 text-white" />
+                </div>
               </div>
+              <h1 className="text-2xl md:text-3xl font-bold text-orange-500" data-testid="finances-title">
+                Gestion Financière
+              </h1>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-orange-500" data-testid="finances-title">
-              Gestion Financière
-            </h1>
+            <button 
+              onClick={() => setShowAddModal(true)} 
+              className="bg-orange-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-orange-700 transition-colors flex items-center space-x-2 text-sm sm:text-base" 
+              aria-label="Ajouter une transaction" 
+              data-testid="add-transaction-btn"
+            >
+              <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">Nouvelle transaction</span>
+              <span className="sm:hidden">Nouveau</span>
+            </button>
           </div>
-          <div className="mt-4">
+          <div className="mt-4 hidden md:block">
             <p className="text-gray-700 font-medium">
               Maximisez vos ressources et développez votre impact
             </p>
@@ -173,9 +185,6 @@ const FinancesPage: React.FC = () => {
               ))}
             </select>
           </div>
-          <button onClick={() => setShowAddModal(true)} className="bg-orange-500 text-white px-4 py-2 rounded flex items-center gap-2 font-poppins" aria-label="ajouter une transaction" data-testid="add-transaction-btn">
-            <Plus size={18} /> Ajouter une transaction
-          </button>
         </div>
         <div className="mb-8">
           <div className="md:hidden">

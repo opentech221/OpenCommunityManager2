@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
-import { Plus, Search, Filter, Edit, Trash2, Phone, Mail, Calendar } from 'lucide-react';
+import { Plus, Search, Filter, Edit, Trash2, Phone, Mail, Calendar, Users } from 'lucide-react';
 import type { MemberType, MemberRole as MemberRoleType, MemberStatus as MemberStatusType } from '../types';
 import { MemberRole, MemberStatus } from '../types';
 import { MEMBER_ROLES } from '../constants';
@@ -107,7 +107,7 @@ export default function MembersPage() {
           <div className="flex items-center space-x-3">
             <div className="flex-shrink-0">
               <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
-                <Plus className="h-6 w-6 text-white" />
+                <Users className="h-6 w-6 text-white" />
               </div>
             </div>
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
@@ -123,7 +123,7 @@ export default function MembersPage() {
             <span className="sm:hidden">Nouveau</span>
           </button>
         </div>
-        <div className="mt-4">
+        <div className="mt-4 hidden md:block">
           <p className="text-sm sm:text-base text-gray-700 font-medium">
             Gérez et développez votre communauté facilement
           </p>

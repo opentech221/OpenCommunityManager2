@@ -197,7 +197,7 @@ export default function EventsPage() {
             <span className="sm:hidden">Nouveau</span>
           </button>
         </div>
-        <div className="mt-4">
+        <div className="mt-4 hidden md:block">
           <p className="text-sm sm:text-base text-gray-700 font-medium">
             Créez des expériences mémorables pour votre communauté
           </p>
