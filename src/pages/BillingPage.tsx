@@ -157,7 +157,7 @@ const BillingPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Plan actuel */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="bg-orange-50 rounded-xl shadow-sm border border-gray-200 p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-semibold text-gray-900" data-testid="current-plan-title">Plan actuel</h2>
                 <div className="flex items-center space-x-2 bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
@@ -166,7 +166,7 @@ const BillingPage: React.FC = () => {
                 </div>
               </div>
               
-              <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-6 mb-6">
+              <div className="bg-gradient-to-r from-purple-100 to-purple-100 rounded-lg p-6 mb-6">
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h3 className="text-2xl font-bold text-gray-900" data-testid="current-plan-name">{currentPlan.name}</h3>
@@ -198,7 +198,7 @@ const BillingPage: React.FC = () => {
 
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <div className="flex space-x-4">
-                  <button className="flex-1 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors" onClick={handleChangePlan} data-testid="change-plan-btn">
+                  <button className="flex-1 bg-orange-400 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors" onClick={handleChangePlan} data-testid="change-plan-btn">
                     Modifier le plan
                   </button>
                   <button className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors" onClick={handleCancelSubscription} data-testid="cancel-subscription-btn">
@@ -211,7 +211,7 @@ const BillingPage: React.FC = () => {
 
           {/* Résumé des paiements */}
           <div className="space-y-6">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="bg-orange-50 rounded-xl shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4" data-testid="payment-summary-title">Résumé des paiements</h3>
               
               <div className="space-y-4">
@@ -230,10 +230,10 @@ const BillingPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="bg-orange-50 rounded-xl shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4" data-testid="payment-method-title">Méthode de paiement</h3>
               
-              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-center space-x-3 p-4 bg-purple-100 rounded-lg">
                 <CreditCard className="w-6 h-6 text-gray-400" />
                 <div>
                   <div className="font-medium text-gray-900" data-testid="card-number">•••• •••• •••• 4242</div>
@@ -250,35 +250,35 @@ const BillingPage: React.FC = () => {
 
         {/* Historique des factures */}
         <div className="mt-8">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="bg-orange-50 rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900" data-testid="invoice-history-title">Historique des factures</h2>
             </div>
             
             <div className="overflow-x-auto">
               <table className="w-full" data-testid="invoice-table">
-                <thead className="bg-gray-50">
+                <thead className="bg-purple-200">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                       Facture
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                       Date
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                       Montant
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                       Statut
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {invoices.map((invoice) => (
-                    <tr key={invoice.id} className="hover:bg-gray-50" data-testid={`invoice-row-${invoice.id}`}> 
+                    <tr key={invoice.id} className="hover:bg-orange-200" data-testid={`invoice-row-${invoice.id}`}> 
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="font-medium text-gray-900" data-testid={`invoice-id-${invoice.id}`}>{invoice.id}</div>
                         <div className="text-sm text-gray-500" data-testid={`invoice-plan-${invoice.id}`}>{invoice.plan}</div>

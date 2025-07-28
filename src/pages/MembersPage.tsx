@@ -94,6 +94,10 @@ export default function MembersPage() {
       setTimeout(() => setFeedbackMessage(''), 2000);
     }
   };
+  function handleAddNew(event: MouseEvent<HTMLButtonElement, MouseEvent>): void {
+    throw new Error('Function not implemented.');
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {feedbackMessage && (
@@ -141,20 +145,20 @@ export default function MembersPage() {
       </div>
 
       {/* Statistiques avec boutons fonctionnels */}
-      <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
+      <div className="bg-orange-50 px-4 py-4 sm:px-6 lg:px-8 mb-6">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           <button 
-            className={`bg-white rounded-lg p-3 shadow hover:bg-violet-50 transition-colors border ${
+            className={`bg-purple-100 rounded-lg p-3 shadow hover:bg-purple-200 transition-colors border ${
               statusFilter === 'ALL' ? 'ring-2 ring-violet-500' : ''
             }`}
             onClick={() => setStatusFilter('ALL')}
             aria-label="Afficher tous les membres"
           >
-            <div className="text-lg sm:text-xl font-bold text-gray-900">{total}</div>
+            <div className="text-lg sm:text-xl font-bold text-purple-700">{total}</div>
             <div className="text-xs sm:text-sm text-gray-500">Total</div>
           </button>
           <button 
-            className={`bg-green-50 rounded-lg p-3 shadow hover:bg-green-100 transition-colors ${
+            className={`bg-green-100 rounded-lg p-3 shadow hover:bg-green-200 transition-colors ${
               statusFilter === MemberStatus.ACTIVE ? 'ring-2 ring-green-500' : ''
             }`}
             onClick={() => setStatusFilter(statusFilter === MemberStatus.ACTIVE ? 'ALL' : MemberStatus.ACTIVE)}
@@ -164,7 +168,7 @@ export default function MembersPage() {
             <div className="text-xs sm:text-sm text-green-600">Actifs</div>
           </button>
           <button 
-            className={`bg-yellow-50 rounded-lg p-3 shadow hover:bg-yellow-100 transition-colors ${
+            className={`bg-yellow-100 rounded-lg p-3 shadow hover:bg-yellow-200 transition-colors ${
               statusFilter === MemberStatus.SUSPENDED ? 'ring-2 ring-yellow-500' : ''
             }`}
             onClick={() => setStatusFilter(statusFilter === MemberStatus.SUSPENDED ? 'ALL' : MemberStatus.SUSPENDED)}
@@ -174,7 +178,7 @@ export default function MembersPage() {
             <div className="text-xs sm:text-sm text-yellow-600">Suspendus</div>
           </button>
           <button 
-            className={`bg-red-50 rounded-lg p-3 shadow hover:bg-red-100 transition-colors ${
+            className={`bg-red-100 rounded-lg p-3 shadow hover:bg-red-200 transition-colors ${
               statusFilter === MemberStatus.INACTIVE ? 'ring-2 ring-red-500' : ''
             }`}
             onClick={() => setStatusFilter(statusFilter === MemberStatus.INACTIVE ? 'ALL' : MemberStatus.INACTIVE)}
@@ -186,28 +190,30 @@ export default function MembersPage() {
         </div>
       </div>
 
-      {/* Recherche et filtres mobiles */}
-      <div className="bg-white border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
+
+      {/* Resultats et filtres mobiles */}
+      <div className="bg-orange-50 border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
         <div className="space-y-4">
-          {/* Barre de recherche */}
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-violet-800" />
-            </div>
-            <input
-              type="text"
-              placeholder="Rechercher un membre..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base"
-            />
+          
+        {/* Barre de recherche */}
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search className="h-5 w-5 text-violet-800" />
           </div>
+          <input
+            type="text"
+            placeholder="Rechercher un membre..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="block w-full pl-10 pr-3 py-2 border border-gray-300 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base"
+          />
+        </div>
 
           {/* Bouton filtres mobile */}
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+              className="flex items-center space-x-2 px-3 py-2 border border-purple-500 rounded-lg bg-purple-200 hover:bg-purple-300 transition-colors text-sm"
             >
               <Filter className="w-4 h-4" />
               <span>Filtres</span>
@@ -231,13 +237,13 @@ export default function MembersPage() {
 
           {/* Panneau de filtres */}
           {showFilters && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 bg-gray-50 rounded-lg">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 bg-purple-100 rounded-lg">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
                 <select
                   value={selectedRole}
                   onChange={(e) => setSelectedRole(e.target.value)}
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                  className="block w-full px-3 py-2 border border-purple-500 bg-purple-200 hover:bg-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                 >
                   <option value="all">Tous les rôles</option>
                   <option value={MemberRole.PRESIDENT}>Président</option>
@@ -252,7 +258,7 @@ export default function MembersPage() {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value as keyof typeof MemberStatus | 'ALL')}
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                  className="block w-full px-3 py-2 border border-purple-500 bg-purple-200 hover:bg-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
                 >
                   <option value="ALL">Tous les statuts</option>
                   <option value={MemberStatus.ACTIVE}>Actif</option>
@@ -262,90 +268,90 @@ export default function MembersPage() {
               </div>
             </div>
           )}
-        </div>
-      </div>
-
-      {/* Liste des membres - Mobile First */}
-      <div className="px-4 py-4 sm:px-6 lg:px-8">
-        {filteredMembers.length === 0 ? (
-          <div className="text-center py-8">
-            <div className="text-gray-500 text-lg">Aucun membre trouvé</div>
-            <p className="text-gray-400 text-sm mt-2">Essayez de modifier vos critères de recherche</p>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {filteredMembers.map((member) => (
-              <div key={member.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-                <div className="p-4">
-                  <div className="flex items-start space-x-3">
-                    {/* Avatar */}
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-white font-semibold text-sm sm:text-base">
-                        {member.firstName.charAt(0)}{member.lastName.charAt(0)}
-                      </span>
-                    </div>
-                    
-                    {/* Informations principales */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
-                            {member.firstName} {member.lastName}
-                          </h3>
-                          <div className="flex items-center space-x-2 mt-1">
-                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getRoleColor(member.role)}`}>
-                              {getRoleLabel(member.role)}
-                            </span>
-                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(member.status)}`}>
-                              {getStatusLabel(member.status)}
-                            </span>
+          {/* Liste des membres - Mobile First */}
+          <div className="px-4 py-4 sm:px-6 lg:px-8">
+            {filteredMembers.length === 0 ? (
+              <div className="text-center py-8">
+                <div className="text-gray-500 text-lg">Aucun membre trouvé</div>
+                <p className="text-gray-400 text-sm mt-2">Essayez de modifier vos critères de recherche</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {filteredMembers.map((member) => (
+                  <div key={member.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                    <div className="p-4">
+                      <div className="flex items-start space-x-3">
+                        {/* Avatar */}
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                          <span className="text-white font-semibold text-sm sm:text-base">
+                            {member.firstName.charAt(0)}{member.lastName.charAt(0)}
+                          </span>
+                        </div>
+                        
+                        {/* Informations principales */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
+                                {member.firstName} {member.lastName}
+                              </h3>
+                              <div className="flex items-center space-x-2 mt-1">
+                                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getRoleColor(member.role)}`}>
+                                  {getRoleLabel(member.role)}
+                                </span>
+                                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(member.status)}`}>
+                                  {getStatusLabel(member.status)}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Informations de contact */}
+                          <div className="mt-3 space-y-2">
+                            <div className="flex items-center space-x-2 text-sm text-gray-600">
+                              <Mail className="w-4 h-4 flex-shrink-0" />
+                              <span className="truncate">{member.email}</span>
+                            </div>
+                            <div className="flex items-center space-x-2 text-sm text-gray-600">
+                              <Phone className="w-4 h-4 flex-shrink-0" />
+                              <span>{member.phone}</span>
+                            </div>
+                            <div className="flex items-center space-x-2 text-sm text-gray-500">
+                              <Calendar className="w-4 h-4 flex-shrink-0" />
+                              <span>Adhéré le {member.joinDate ? new Date(member.joinDate).toLocaleDateString('fr-FR') : ''}</span>
+                            </div>
                           </div>
                         </div>
                       </div>
                       
-                      {/* Informations de contact */}
-                      <div className="mt-3 space-y-2">
-                        <div className="flex items-center space-x-2 text-sm text-gray-600">
-                          <Mail className="w-4 h-4 flex-shrink-0" />
-                          <span className="truncate">{member.email}</span>
+                      {/* Actions */}
+                      <div className="mt-4 flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <button
+                            className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-600 bg-orange-50 rounded-md hover:bg-orange-100 transition-colors"
+                            onClick={() => { setEditMember(member); setShowForm(true); }}
+                          >
+                            <Edit className="w-4 h-4 mr-1" />
+                            Modifier
+                          </button>
                         </div>
-                        <div className="flex items-center space-x-2 text-sm text-gray-600">
-                          <Phone className="w-4 h-4 flex-shrink-0" />
-                          <span>{member.phone}</span>
-                        </div>
-                        <div className="flex items-center space-x-2 text-sm text-gray-500">
-                          <Calendar className="w-4 h-4 flex-shrink-0" />
-                          <span>Adhéré le {member.joinDate ? new Date(member.joinDate).toLocaleDateString('fr-FR') : ''}</span>
-                        </div>
+                        <button
+                          className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
+                          onClick={() => handleDeleteMember(member.id)}
+                        >
+                          <Trash2 className="w-4 h-4 mr-1" />
+                          Supprimer
+                        </button>
                       </div>
                     </div>
                   </div>
-                  
-                  {/* Actions */}
-                  <div className="mt-4 flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <button
-                        className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-600 bg-orange-50 rounded-md hover:bg-orange-100 transition-colors"
-                        onClick={() => { setEditMember(member); setShowForm(true); }}
-                      >
-                        <Edit className="w-4 h-4 mr-1" />
-                        Modifier
-                      </button>
-                    </div>
-                    <button
-                      className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
-                      onClick={() => handleDeleteMember(member.id)}
-                    >
-                      <Trash2 className="w-4 h-4 mr-1" />
-                      Supprimer
-                    </button>
-                  </div>
-                </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
-        )}
+        </div>
       </div>
+
 
       {/* Pagination mobile */}
       <div className="bg-white border-t border-gray-200 px-4 py-3 sm:px-6 lg:px-8">
@@ -373,6 +379,15 @@ export default function MembersPage() {
         onClose={() => { setShowForm(false); setEditMember(undefined); }}
         onSave={editMember ? handleEditMember : handleAddMember}
       />
+
+      {/* Bouton flottant d'ajout - Mobile First */}
+      <button
+        onClick={handleAddNew}
+        className="fixed bottom-6 right-6 bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors z-10"
+        aria-label="Ajouter une cotisation"
+      >
+        <Plus className="w-6 h-6" />
+      </button>
     </div>
   );
 };

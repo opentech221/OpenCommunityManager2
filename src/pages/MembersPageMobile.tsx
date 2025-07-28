@@ -82,6 +82,10 @@ const MemberCard: React.FC<MemberCardProps> = ({
     }
   };
 
+  function handleAddNew(event: MouseEvent<HTMLButtonElement, MouseEvent>): void {
+    throw new Error('Function not implemented.');
+  }
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-3 relative">
       {/* Header avec nom et statut */}
@@ -177,6 +181,15 @@ const MemberCard: React.FC<MemberCardProps> = ({
       <div className="absolute top-2 right-12 text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded-full">
         #{member.id}
       </div>
+
+      {/* Bouton flottant d'ajout - Mobile First */}
+      <button
+        onClick={handleAddNew}
+        className="fixed bottom-6 right-6 bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors z-10"
+        aria-label="Ajouter une cotisation"
+      >
+        <Plus className="w-6 h-6" />
+      </button>
     </div>
   );
 };

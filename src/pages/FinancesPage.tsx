@@ -87,6 +87,10 @@ const FinancesPage: React.FC = () => {
   const totalExpenses = localTransactions.filter(t => t.type === TransactionTypeEnum.EXPENSE).reduce((sum, t) => sum + t.amount, 0);
   const balance = totalIncome - totalExpenses;
 
+  function handleAddNew(event: MouseEvent<HTMLButtonElement, MouseEvent>): void {
+    throw new Error('Function not implemented.');
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 md:px-12">
       {feedbackMessage && (
@@ -135,20 +139,24 @@ const FinancesPage: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      </div>
+
+      
+        {/* Etat de la finance */}
+        <div className="grid grid-cols-1 md:grid-cols-3 bg-orange-50 gap-6 mb-8">
           <button 
-            className={`bg-white rounded-xl shadow-sm border p-6 flex flex-col items-center hover:bg-violet-50 transition-colors ${
-              filterType === 'all' ? 'ring-2 ring-violet-500' : ''
+            className={`bg-purple-100 rounded-xl shadow-sm border p-6 flex flex-col items-center hover:bg-purple-200 transition-colors ${
+              filterType === 'all' ? 'ring-2 ring-purple-500' : ''
             }`}
             onClick={() => setFilterType('all')}
             aria-label="Afficher toutes les transactions"
           >
-            <Wallet className="text-violet-700 mb-2" size={32} />
+            <Wallet className="text-purple-700 mb-2" size={32} />
             <span className="font-bold text-lg text-gray-900 font-montserrat">Solde</span>
-            <span className="font-bold text-2xl text-violet-700" data-testid="finances-balance">{balance} €</span>
+            <span className="font-bold text-2xl text-purple-700" data-testid="finances-balance">{balance} €</span>
           </button>
           <button 
-            className={`bg-white rounded-xl shadow-sm border p-6 flex flex-col items-center hover:bg-green-50 transition-colors ${
+            className={`bg-green-100 rounded-xl shadow-sm border p-6 flex flex-col items-center hover:bg-green-200 transition-colors ${
               filterType === TransactionTypeEnum.INCOME ? 'ring-2 ring-green-500' : ''
             }`}
             onClick={() => setFilterType(TransactionTypeEnum.INCOME)}
@@ -159,7 +167,7 @@ const FinancesPage: React.FC = () => {
             <span className="font-bold text-2xl text-green-600" data-testid="finances-income">{totalIncome} €</span>
           </button>
           <button 
-            className={`bg-white rounded-xl shadow-sm border p-6 flex flex-col items-center hover:bg-red-50 transition-colors ${
+            className={`bg-red-100 rounded-xl shadow-sm border p-6 flex flex-col items-center hover:bg-red-200 transition-colors ${
               filterType === TransactionTypeEnum.EXPENSE ? 'ring-2 ring-red-500' : ''
             }`}
             onClick={() => setFilterType(TransactionTypeEnum.EXPENSE)}
@@ -170,15 +178,18 @@ const FinancesPage: React.FC = () => {
             <span className="font-bold text-2xl text-red-500" data-testid="finances-expenses">{totalExpenses} €</span>
           </button>
         </div>
+
+      <div className="px-4 py-4 bg-orange-50 gap-6 mb-8">
+        {/* Systeme de filtre des transactions */}
         <div className="mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex gap-2 items-center">
-            <Filter className="text-gray-500" size={20} />
-            <select value={filterType} onChange={e => setFilterType(e.target.value as 'all' | TransactionTypeEnum)} className="border rounded px-2 py-1 text-sm">
+            <Filter className="text-purple-500" size={30} />
+            <select value={filterType} onChange={e => setFilterType(e.target.value as 'all' | TransactionTypeEnum)} className="border rounded px-2 py-1 text-sm bg-purple-200 border-purple-600 hover:bg-purple-300">
               <option value="all">Tous</option>
               <option value={TransactionTypeEnum.INCOME}>Entrées</option>
               <option value={TransactionTypeEnum.EXPENSE}>Sorties</option>
             </select>
-            <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)} className="border rounded px-2 py-1 text-sm">
+            <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)} className="border rounded px-2 py-1 text-sm bg-purple-200 border-purple-600 hover:bg-purple-300">
               <option value="all">Toutes catégories</option>
               {categories.map(cat => (
                 <option key={cat} value={cat}>{cat}</option>
@@ -186,6 +197,8 @@ const FinancesPage: React.FC = () => {
             </select>
           </div>
         </div>
+        
+        {/* Liste des transactions */}
         <div className="mb-8">
           <div className="md:hidden">
             {localTransactions.filter(t => (filterType === 'all' || t.type === filterType) && (filterCategory === 'all' || t.category === filterCategory)).map((tx) => (
@@ -245,6 +258,15 @@ const FinancesPage: React.FC = () => {
           />
         </div>
       </div>
+
+      {/* Bouton flottant d'ajout - Mobile First */}
+      <button
+        onClick={handleAddNew}
+        className="fixed bottom-6 right-6 bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors z-10"
+        aria-label="Ajouter une cotisation"
+      >
+        <Plus className="w-6 h-6" />
+      </button>
     </div>
   );
 };

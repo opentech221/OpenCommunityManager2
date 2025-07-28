@@ -306,7 +306,7 @@ export default function CotisationsPageMobile() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* En-tête décoré avec couleur orange */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 border-l-4 border-orange-500 shadow-sm p-6">
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 border-l-4 border-orange-500 shadow-sm p-6 h-22">
         <div className="flex items-center space-x-3 mb-4">
           <div className="flex-shrink-0">
             <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
@@ -317,71 +317,50 @@ export default function CotisationsPageMobile() {
             Gestion des Cotisations
           </h1>
         </div>
-        <div>
-          <p className="text-sm text-gray-700 font-medium">
-            Optimisez vos revenus associatifs avec un suivi professionnel
-          </p>
-          <div className="text-xs text-gray-600 space-y-1 mt-2">
-            <p className="flex items-center">
-              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-              <strong>Recouvrement automatisé :</strong> Relances et rappels intelligents
-            </p>
-            <p className="flex items-center">
-              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-              <strong>Revenus prévisibles :</strong> Planification budgétaire et croissance assurée
-            </p>
-          </div>
-        </div>
       </div>
 
-      <div className="px-4 py-4">
-        {/* Statistiques résumé */}
-        <div className="mb-4 p-3 bg-white rounded-lg shadow-sm">
-          <p className="text-gray-700 font-medium">
-            {total} cotisation{total > 1 ? 's' : ''} • {formatCurrency(paidAmount)} perçu
-          </p>
-        </div>
+      <div className="px-4 py-4 bg-purple-100">
         {/* Stats en grille compacte - Mobile First */}
         <div className="grid grid-cols-2 gap-3 mb-6">
           <button 
             onClick={() => setStatusFilter('ALL')}
-            className={`bg-white rounded-xl p-4 shadow-sm transition-all hover:bg-violet-50 ${
+            className={`bg-purple-100 rounded-xl p-4 shadow-sm transition-all hover:bg-purple-200 ${
               statusFilter === 'ALL' ? 'ring-2 ring-violet-500' : ''
             }`}
             aria-label="Afficher toutes les cotisations"
           >
-            <div className="text-xs text-gray-500 mb-1">Total</div>
-            <div className="text-xl font-bold text-gray-900">{total}</div>
+            <div className="text-xl font-bold text-purple-800">{total}</div>
+            <div className="text-xs text-purple-800 mb-1">Total</div>
           </button>
           
           <button 
             onClick={() => setStatusFilter(statusFilter === PaymentStatus.PAID ? 'ALL' : PaymentStatus.PAID)}
-            className={`bg-white rounded-xl p-4 shadow-sm transition-all ${
+            className={`bg-green-100 rounded-xl p-4 shadow-sm transition-all hover:bg-green-200 ${
               statusFilter === PaymentStatus.PAID ? 'ring-2 ring-green-500' : ''
             }`}
           >
-            <div className="text-xs text-green-600 mb-1">✅ Payées</div>
             <div className="text-xl font-bold text-green-700">{paid}</div>
+            <div className="text-xs text-green-600 mb-1">✅ Payées</div>
           </button>
           
           <button 
             onClick={() => setStatusFilter(statusFilter === PaymentStatus.PENDING ? 'ALL' : PaymentStatus.PENDING)}
-            className={`bg-white rounded-xl p-4 shadow-sm transition-all ${
+            className={`bg-yellow-100 rounded-xl p-4 shadow-sm transition-all hover:bg-yellow-200 ${
               statusFilter === PaymentStatus.PENDING ? 'ring-2 ring-yellow-500' : ''
             }`}
           >
-            <div className="text-xs text-orange-600 mb-1">⏳ En attente</div>
             <div className="text-xl font-bold text-orange-700">{pending}</div>
+            <div className="text-xs text-orange-600 mb-1">⏳ En attente</div>
           </button>
           
           <button 
             onClick={() => setStatusFilter(statusFilter === PaymentStatus.OVERDUE ? 'ALL' : PaymentStatus.OVERDUE)}
-            className={`bg-white rounded-xl p-4 shadow-sm transition-all ${
+            className={`bg-red-100 rounded-xl p-4 shadow-sm transition-all hover:bg-red-200 ${
               statusFilter === PaymentStatus.OVERDUE ? 'ring-2 ring-red-500' : ''
             }`}
           >
-            <div className="text-xs text-red-600 mb-1">⚠️ En retard</div>
             <div className="text-xl font-bold text-red-700">{overdue}</div>
+            <div className="text-xs text-red-600 mb-1">⚠️ En retard</div>
           </button>
         </div>
 
@@ -400,7 +379,7 @@ export default function CotisationsPageMobile() {
         {/* Barre de recherche mobile */}
         <div className="flex gap-3 mb-6">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-purple-600" />
             <input
               type="text"
               placeholder="Rechercher..."
@@ -412,7 +391,7 @@ export default function CotisationsPageMobile() {
           <button
             onClick={() => setShowFilters(!showFilters)}
             className={`px-4 py-3 rounded-xl transition-all ${
-              showFilters ? 'bg-orange-100 text-orange-700' : 'bg-white text-gray-600'
+              showFilters ? 'bg-orange-100 text-orange-700' : 'bg-purple-200 text-gray-600'
             } border border-gray-200`}
           >
             <Filter className="w-5 h-5" />
@@ -422,7 +401,7 @@ export default function CotisationsPageMobile() {
         {/* Liste des cotisations */}
         {cotisations.length === 0 ? (
           <div className="text-center py-12">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-purple-200 rounded-full flex items-center justify-center mx-auto mb-4">
               <CreditCard className="w-8 h-8 text-gray-400" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Aucune cotisation</h3>
@@ -436,7 +415,7 @@ export default function CotisationsPageMobile() {
           </div>
         ) : filteredCotisations.length === 0 ? (
           <div className="text-center py-12">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-purple-200 rounded-full flex items-center justify-center mx-auto mb-4">
               <Search className="w-8 h-8 text-gray-400" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Aucun résultat</h3>
@@ -445,7 +424,7 @@ export default function CotisationsPageMobile() {
             </p>
             <button 
               onClick={() => { setSearch(''); setStatusFilter('ALL'); }}
-              className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg"
+              className="bg-orange-500 text-gray-700 px-4 py-2 rounded-lg"
             >
               Réinitialiser
             </button>

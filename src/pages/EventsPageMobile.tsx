@@ -479,8 +479,8 @@ export default function EventsPageMobile() {
       {/* Bouton flottant d'ajout - Mobile First */}
       <button
         onClick={handleAddNew}
-        className="fixed bottom-6 right-6 bg-orange-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors z-10"
-        aria-label="Créer un événement"
+        className="fixed bottom-6 right-6 bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors z-10"
+        aria-label="Ajouter une cotisation"
       >
         <Plus className="w-6 h-6" />
       </button>

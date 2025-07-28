@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import {
   Upload,
@@ -12,6 +13,7 @@ import {
   FileText,
   FileSpreadsheet,
   FileImage,
+  Plus,
 } from 'lucide-react';
 import type { DocumentType } from '../types';
 import { DocumentTypeEnum } from '../types';
@@ -188,6 +190,10 @@ const DocumentsPage: React.FC = () => {
     setTimeout(() => setFeedbackMessage(''), 2500);
   }
 
+  function handleAddNew(event: MouseEvent<HTMLButtonElement, MouseEvent>): void {
+    throw new Error('Function not implemented.');
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 pb-24">
       {feedbackMessage && (
@@ -235,71 +241,18 @@ const DocumentsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Barre de recherche et filtres */}
-        <div className="bg-white border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
-          <div className="space-y-4">
-            {/* Barre de recherche */}
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-orange-600" />
-              </div>
-              <input
-                type="text"
-                placeholder="Rechercher un document..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base"
-              />
-            </div>
-
-            {/* Filtres */}
-            <div className="flex items-center space-x-2">
-              <div className="flex items-center space-x-2">
-                <Filter className="w-4 h-4 text-gray-500" />
-                <select
-                  value={filterType}
-                  onChange={(e) => setFilterType(e.target.value as 'all' | DocumentTypeEnum)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
-                  aria-label="Filtrer par type de document"
-                >
-                  <option value="all">Tous les types</option>
-                  <option value={DocumentTypeEnum.PV}>Procès-verbaux</option>
-                  <option value={DocumentTypeEnum.FINANCIAL_REPORT}>Rapports financiers</option>
-                  <option value={DocumentTypeEnum.STATUTES}>Statuts</option>
-                  <option value={DocumentTypeEnum.OTHER}>Autres</option>
-                </select>
-              </div>
-              {(searchTerm || filterType !== 'all') && (
-                <div className="flex items-center space-x-2">
-                  <span className="text-xs text-gray-500">Filtres actifs:</span>
-                  {searchTerm && (
-                    <span className="inline-flex px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded-full">
-                      Recherche: "{searchTerm}"
-                    </span>
-                  )}
-                  {filterType !== 'all' && (
-                    <span className="inline-flex px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
-                      {getTypeLabel(filterType as DocumentTypeEnum)}
-                    </span>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
         {/* Statistiques - colonne mobile, ligne desktop */}
         <div className="flex flex-col md:flex-row gap-4 mb-4 px-4 sm:px-6 lg:px-8">
           <button 
             onClick={() => setFilterType('all')}
-            className={`bg-white p-4 rounded-lg shadow flex items-center justify-between flex-1 transition-colors hover:bg-violet-50 cursor-pointer ${
+            className={`bg-purple-100 p-4 rounded-lg shadow flex items-center justify-between flex-1 transition-colors hover:bg-purple-200 cursor-pointer ${
               filterType === 'all' ? 'ring-2 ring-violet-500' : ''
             }`}
             aria-label="Afficher tous les documents"
           >
             <div>
               <p className="text-xs font-poppins text-gray-600">Total documents</p>
-              <p className="text-xl font-bold font-montserrat text-gray-900">{documents.length}</p>
+              <p className="text-xl font-bold font-montserrat text-purple-700">{documents.length}</p>
             </div>
             <File className="w-6 h-6 text-blue-600" />
           </button>
@@ -337,97 +290,156 @@ const DocumentsPage: React.FC = () => {
             <Upload className="w-6 h-6 text-purple-600" />
           </div>
         </div>
-        
+
+        {/* Barre de recherche et filtres */}
+        <div className="bg-orange-50 border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
+          <div className="space-y-4">
+            {/* Barre de recherche */}
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-orange-600" />
+              </div>
+              <input
+                type="text"
+                placeholder="Rechercher un document..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base"
+              />
+            </div>
+
+            {/* Filtres */}
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2">
+                <Filter className="w-4 h-4 text-gray-500" />
+                <select
+                  value={filterType}
+                  onChange={(e) => setFilterType(e.target.value as 'all' | DocumentTypeEnum)}
+                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                  aria-label="Filtrer par type de document"
+                >
+                  <option value="all">Tous les types</option>
+                  <option value={DocumentTypeEnum.PV}>Procès-verbaux</option>
+                  <option value={DocumentTypeEnum.FINANCIAL_REPORT}>Rapports financiers</option>
+                  <option value={DocumentTypeEnum.STATUTES}>Statuts</option>
+                  <option value={DocumentTypeEnum.OTHER}>Autres</option>
+                </select>
+              </div>
+              {(searchTerm || filterType !== 'all') && (
+                <div className="flex items-center space-x-2">
+                  <span className="text-xs text-gray-500">Filtres actifs:</span>
+                  {searchTerm && (
+                    <span className="inline-flex px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded-full">
+                      Recherche: "{searchTerm}"
+                    </span>
+                  )}
+                  {filterType !== 'all' && (
+                    <span className="inline-flex px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
+                      {getTypeLabel(filterType as DocumentTypeEnum)}
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+            
         {/* Liste des documents - cards mobile, table desktop */}
         <div className="px-4 sm:px-6 lg:px-8">
-        <div className="md:hidden flex flex-col gap-3">
-          {filteredDocuments.length === 0 && (
-            <div className="text-center py-12">
-              <File className="mx-auto h-12 w-12 text-gray-400" />
-              <h3 className="mt-2 text-sm font-medium text-gray-900">Aucun document</h3>
-              <p className="mt-1 text-sm text-gray-500">
-                {searchTerm ? 'Aucun document trouvé avec ce terme de recherche.' : 'Commencez par télécharger votre premier document.'}
-              </p>
+          <div className="md:hidden flex flex-col gap-3">
+            {filteredDocuments.length === 0 && (
+              <div className="text-center py-12">
+                <File className="mx-auto h-12 w-12 text-gray-400" />
+                <h3 className="mt-2 text-sm font-medium text-gray-900">Aucun document</h3>
+                <p className="mt-1 text-sm text-gray-500">
+                  {searchTerm ? 'Aucun document trouvé avec ce terme de recherche.' : 'Commencez par télécharger votre premier document.'}
+                </p>
+              </div>
+            )}
+            {filteredDocuments.map((document) => (
+              <div key={document.id} className="bg-white rounded-lg shadow p-4 flex flex-col gap-2 border-l-4 border-purple-500">
+                <div className="flex items-center gap-2">
+                  {getFileIcon(document.name)}
+                  <span className="font-bold text-base text-gray-900 font-montserrat">{document.name}</span>
+                  <span className={`ml-auto inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTypeBadgeColor(document.type)}`}>{getTypeLabel(document.type)}</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-500 font-poppins">
+                  <User className="w-4 h-4" /> {document.uploadedBy}
+                  <Calendar className="w-4 h-4 ml-2" /> {formatDate(document.uploadDate)}
+                  <span className="ml-auto text-xs text-gray-700">{formatFileSize(document.size)}</span>
+                </div>
+                <div className="flex items-center gap-3 pt-2">
+                  <button className="text-orange-600 hover:text-orange-800 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 rounded" title="Voir le document" aria-label="Voir le document"><Eye className="w-5 h-5" /></button>
+                  <button className="text-blue-600 hover:text-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded" title="Télécharger" aria-label="Télécharger le document"><Download className="w-5 h-5" /></button>
+                  <button className="text-red-600 hover:text-red-800 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 rounded" title="Supprimer" aria-label="Supprimer le document" onClick={() => handleDeleteDocument(document.id)}><Trash2 className="w-5 h-5" /></button>
+                </div>
+              </div>
+            ))}
+            <div className="p-6 border-t">
+              {/* Pagination component placeholder */}
+              {/* TODO: Replace with actual Pagination component */}
+              <div className="flex justify-center py-4">
+                <span className="text-xs text-gray-500">Pagination à implémenter</span>
+              </div>
             </div>
-          )}
-          {filteredDocuments.map((document) => (
-            <div key={document.id} className="bg-white rounded-lg shadow p-4 flex flex-col gap-2 border-l-4 border-purple-500">
-              <div className="flex items-center gap-2">
-                {getFileIcon(document.name)}
-                <span className="font-bold text-base text-gray-900 font-montserrat">{document.name}</span>
-                <span className={`ml-auto inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTypeBadgeColor(document.type)}`}>{getTypeLabel(document.type)}</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs text-gray-500 font-poppins">
-                <User className="w-4 h-4" /> {document.uploadedBy}
-                <Calendar className="w-4 h-4 ml-2" /> {formatDate(document.uploadDate)}
-                <span className="ml-auto text-xs text-gray-700">{formatFileSize(document.size)}</span>
-              </div>
-              <div className="flex items-center gap-3 pt-2">
-                <button className="text-orange-600 hover:text-orange-800 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 rounded" title="Voir le document" aria-label="Voir le document"><Eye className="w-5 h-5" /></button>
-                <button className="text-blue-600 hover:text-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded" title="Télécharger" aria-label="Télécharger le document"><Download className="w-5 h-5" /></button>
-                <button className="text-red-600 hover:text-red-800 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 rounded" title="Supprimer" aria-label="Supprimer le document" onClick={() => handleDeleteDocument(document.id)}><Trash2 className="w-5 h-5" /></button>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="hidden md:block bg-white rounded-xl shadow-sm border overflow-hidden">
-          <div className="p-6 border-b">
-            <h3 className="text-lg font-semibold text-gray-900">Documents ({filteredDocuments.length})</h3>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Document</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Taille</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Téléchargé par</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {filteredDocuments.map((document) => (
-                  <tr key={document.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center">
-                        {getFileIcon(document.name)}
-                        <div className="ml-3">
-                          <div className="text-sm font-medium text-gray-900">{document.name}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTypeBadgeColor(document.type)}`}>{getTypeLabel(document.type)}</span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{formatFileSize(document.size)}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <User className="w-4 h-4 text-gray-400 mr-2" />
-                        <span className="text-sm text-gray-900">{document.uploadedBy}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <Calendar className="w-4 h-4 text-gray-400 mr-2" />
-                        <span className="text-sm text-gray-900">{formatDate(document.uploadDate)}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-2">
-                        <button className="text-violet-600 hover:text-violet-800 transition-colors" title="Voir le document"><Eye className="w-4 h-4" /></button>
-                        <button className="text-blue-600 hover:text-blue-800 transition-colors" title="Télécharger"><Download className="w-4 h-4" /></button>
-                        <button className="text-red-600 hover:text-red-800 transition-colors" title="Supprimer" onClick={() => handleDeleteDocument(document.id)}><Trash2 className="w-4 h-4" /></button>
-                      </div>
-                    </td>
+          <div className="hidden md:block bg-white rounded-xl shadow-sm border overflow-hidden">
+            <div className="p-6 border-b">
+              <h3 className="text-lg font-semibold text-gray-900">Documents ({filteredDocuments.length})</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Document</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Taille</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Téléchargé par</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredDocuments.map((document) => (
+                    <tr key={document.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4">
+                        <div className="flex items-center">
+                          {getFileIcon(document.name)}
+                          <div className="ml-3">
+                            <div className="text-sm font-medium text-gray-900">{document.name}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTypeBadgeColor(document.type)}`}>{getTypeLabel(document.type)}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">{formatFileSize(document.size)}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <User className="w-4 h-4 text-gray-400 mr-2" />
+                          <span className="text-sm text-gray-900">{document.uploadedBy}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <Calendar className="w-4 h-4 text-gray-400 mr-2" />
+                          <span className="text-sm text-gray-900">{formatDate(document.uploadDate)}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <button className="text-violet-600 hover:text-violet-800 transition-colors" title="Voir le document"><Eye className="w-4 h-4" /></button>
+                          <button className="text-blue-600 hover:text-blue-800 transition-colors" title="Télécharger"><Download className="w-4 h-4" /></button>
+                          <button className="text-red-600 hover:text-red-800 transition-colors" title="Supprimer" onClick={() => handleDeleteDocument(document.id)}><Trash2 className="w-4 h-4" /></button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
         </div>
         {/* Modal de téléchargement - inchangé, déjà mobile-first */}
         {showUploadModal && (
@@ -528,8 +540,18 @@ const DocumentsPage: React.FC = () => {
             </div>
           </div>
         )}
-      </div>
+        </div>
+
+      {/* Bouton flottant d'ajout - Mobile First */}
+      <button
+        onClick={handleAddNew}
+        className="fixed bottom-6 right-6 bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors z-10"
+        aria-label="Ajouter une cotisation"
+      >
+        <Plus className="w-6 h-6" />
+      </button>
     </div>
+  </div>
   );
 };
 

@@ -7,6 +7,7 @@ import {
   DollarSign,
   Activity,
   ArrowRight,
+  Plus,
 } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
@@ -105,6 +106,10 @@ export const DashboardPage: React.FC = () => {
       participants: 12,
     },
   ];
+
+  function handleAddNew(event: MouseEvent<HTMLButtonElement, MouseEvent>): void {
+    throw new Error('Function not implemented.');
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -258,6 +263,15 @@ export const DashboardPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Bouton flottant d'ajout - Mobile First */}
+      <button
+        onClick={handleAddNew}
+        className="fixed bottom-6 right-6 bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors z-10"
+        aria-label="Ajouter une cotisation"
+      >
+        <Plus className="w-6 h-6" />
+      </button>
     </div>
   );
 };
