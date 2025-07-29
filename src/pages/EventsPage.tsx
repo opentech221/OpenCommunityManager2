@@ -114,9 +114,11 @@ export default function EventsPage() {
   };
   const getEventStatus = (eventDate: Date) => {
     const today = new Date();
-    if (eventDate > today) {
+    const eventDateObj = typeof eventDate === 'string' ? new Date(eventDate) : eventDate;
+    
+    if (eventDateObj > today) {
       return { status: 'upcoming', label: 'À venir', className: 'bg-blue-100 text-blue-800' };
-    } else if (eventDate.toDateString() === today.toDateString()) {
+    } else if (eventDateObj.toDateString() === today.toDateString()) {
       return { status: 'today', label: 'Aujourd\'hui', className: 'bg-green-100 text-green-800' };
     } else {
       return { status: 'past', label: 'Passé', className: 'bg-gray-100 text-gray-800' };
@@ -165,9 +167,10 @@ export default function EventsPage() {
     );
   }
 
-  function handleAddNew(event: MouseEvent<HTMLButtonElement, MouseEvent>): void {
-    throw new Error('Function not implemented.');
-  }
+  // Fonction pour le bouton flottant d'ajout
+  const handleAddNew = () => {
+    openAddModal();
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -311,8 +314,9 @@ export default function EventsPage() {
             </div>
           )}
         </div>
-        {/* Liste des événements - Mobile First */}
-        <div className="px-4 py-4 sm:px-6 lg:px-8">
+
+      {/* Liste des événements - Mobile First */}
+      <div className="px-4 py-4 sm:px-6 lg:px-8">
           {filteredEvents.length === 0 ? (
             <div className="text-center py-8">
               <Calendar className="mx-auto h-12 w-12 text-gray-400" />
@@ -426,7 +430,6 @@ export default function EventsPage() {
           )}
         </div>
       </div>
-
 
       {/* Modal ajout/modification événement */}
       {showModal && (
