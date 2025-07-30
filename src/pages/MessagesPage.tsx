@@ -231,9 +231,9 @@ export default function MessagesPage() {
     setTimeout(() => setFeedback(''), 2000);
   };
 
-  function handleAddNew(event: MouseEvent<HTMLButtonElement, MouseEvent>): void {
-    throw new Error('Function not implemented.');
-  }
+  const handleAddNew = () => {
+    setShowNewDiscussionModal(true);
+  };
 
   return (
     <div className="min-h-screen max-h-screen bg-gray-50 flex flex-col">
@@ -247,11 +247,12 @@ export default function MessagesPage() {
                   <Send className="h-4 w-4 md:h-6 md:w-6 text-white" />
                 </div>
               </div>
-              <h1 className="text-lg md:text-2xl lg:text-3xl font-bold text-orange-500">
+              <h1 data-testid="messages-title" className="text-lg md:text-2xl lg:text-3xl font-bold text-orange-500">
                 Messages
               </h1>
             </div>
             <button
+              data-testid="add-message-btn"
               className="bg-orange-600 text-white px-2 py-1 md:px-4 md:py-2 rounded-lg hover:bg-orange-700 transition-colors flex items-center space-x-1 md:space-x-2 text-xs md:text-sm"
               onClick={() => setShowNewDiscussionModal(true)}
             >
@@ -569,7 +570,7 @@ export default function MessagesPage() {
       <button
         onClick={handleAddNew}
         className="fixed bottom-6 right-6 bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors z-10"
-        aria-label="Ajouter une cotisation"
+        aria-label="Nouvelle discussion"
       >
         <Plus className="w-6 h-6" />
       </button>

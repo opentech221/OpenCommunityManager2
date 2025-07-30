@@ -7,8 +7,9 @@ import {
   DollarSign,
   Activity,
   ArrowRight,
-  Plus,
+  Plus
 } from 'lucide-react';
+import DashboardGuidanceWidget from '../components/DashboardGuidanceWidget';
 
 export const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -107,9 +108,9 @@ export const DashboardPage: React.FC = () => {
     },
   ];
 
-  function handleAddNew(event: MouseEvent<HTMLButtonElement, MouseEvent>): void {
-    throw new Error('Function not implemented.');
-  }
+  const handleAddNew = () => {
+    console.log('Fonction à implémenter');
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -184,6 +185,11 @@ export const DashboardPage: React.FC = () => {
             </button>
           </div>
         ))}
+      </div>
+
+      {/* Widget Guide Organisationnel */}
+      <div className="mb-8">
+        <DashboardGuidanceWidget />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">

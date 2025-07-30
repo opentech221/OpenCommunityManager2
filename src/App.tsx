@@ -5,6 +5,12 @@ import { LandingPage } from './pages/LandingPage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { DashboardPage } from './pages/DashboardPage';
+import GuidancePage from './pages/GuidancePage';
+import DiagnosticPage from './pages/DiagnosticPage';
+import RecommendationsPage from './pages/RecommendationsPage';
+import CompliancePage from './pages/CompliancePage';
+import ActionPlanPage from './pages/ActionPlanPage';
+import AnalyticsPage from './pages/AnalyticsPage';
 import MembersPage from './pages/MembersPage';
 import CotisationsPageResponsive from './pages/CotisationsPageResponsive';
 import EventsPage from './pages/EventsPage';
@@ -114,6 +120,66 @@ function App() {
               onCloseSidebar={closeSidebar}
             >
               <DashboardPage />
+            </AppLayout>
+          } />
+
+          <Route path="/guidance" element={
+            <AppLayout
+              sidebarOpen={sidebarOpen}
+              onToggleSidebar={toggleSidebar}
+              onCloseSidebar={closeSidebar}
+            >
+              <GuidancePage />
+            </AppLayout>
+          } />
+
+          <Route path="/guidance/diagnostic" element={
+            <AppLayout
+              sidebarOpen={sidebarOpen}
+              onToggleSidebar={toggleSidebar}
+              onCloseSidebar={closeSidebar}
+            >
+              <DiagnosticPage />
+            </AppLayout>
+          } />
+
+          <Route path="/guidance/recommendations" element={
+            <AppLayout
+              sidebarOpen={sidebarOpen}
+              onToggleSidebar={toggleSidebar}
+              onCloseSidebar={closeSidebar}
+            >
+              <RecommendationsPage />
+            </AppLayout>
+          } />
+
+          <Route path="/guidance/compliance" element={
+            <AppLayout
+              sidebarOpen={sidebarOpen}
+              onToggleSidebar={toggleSidebar}
+              onCloseSidebar={closeSidebar}
+            >
+              <CompliancePage />
+            </AppLayout>
+          } />
+
+          <Route path="/guidance/action-plan" element={
+            <AppLayout
+              sidebarOpen={sidebarOpen}
+              onToggleSidebar={toggleSidebar}
+              onCloseSidebar={closeSidebar}
+            >
+              <ActionPlanPage />
+            </AppLayout>
+          } />
+
+          <Route path="/guidance/analytics" element={
+            <AppLayout
+              sidebarOpen={sidebarOpen}
+              onToggleSidebar={toggleSidebar}
+              onCloseSidebar={closeSidebar}
+            >
+              <AnalyticsPage />
             </AppLayout>
           } />
 

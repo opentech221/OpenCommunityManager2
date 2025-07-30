@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, DollarSign, FileText, Tag, Calendar, AlertCircle } from 'lucide-react';
-import { TransactionTypeEnum, type TransactionType } from '../types';
+import { TransactionType, type Transaction } from '../types';
 
 interface TransactionFormModalProps {
   isOpen: boolean;
   onClose: () => void;
-  transaction?: TransactionType | null;
-  onSave: (transaction: Partial<TransactionType>) => void;
+  transaction?: Transaction | null;
+  onSave: (transaction: Partial<Transaction>) => void;
   isLoading?: boolean;
 }
 
@@ -21,7 +21,7 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
   const [formData, setFormData] = useState({
     description: '',
     amount: '',
-    type: TransactionTypeEnum.EXPENSE as TransactionTypeEnum,
+    type: TransactionType.EXPENSE as TransactionType,
     category: '',
     date: new Date().toISOString().split('T')[0]
   });
@@ -43,7 +43,7 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
       setFormData({
         description: '',
         amount: '',
-        type: TransactionTypeEnum.EXPENSE,
+        type: TransactionType.EXPENSE,
         category: '',
         date: new Date().toISOString().split('T')[0]
       });
@@ -81,7 +81,7 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
     
     if (!validateForm() || isLoading) return;
 
-    const transactionData: Partial<TransactionType> = {
+    const transactionData: Partial<Transaction> = {
       description: formData.description.trim(),
       amount: parseFloat(formData.amount),
       type: formData.type,
@@ -181,9 +181,9 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
-                  onClick={() => setFormData({ ...formData, type: TransactionTypeEnum.INCOME })}
+                  onClick={() => setFormData({ ...formData, type: TransactionType.INCOME })}
                   className={`p-3 border rounded-xl transition-all ${
-                    formData.type === TransactionTypeEnum.INCOME
+                    formData.type === TransactionType.INCOME
                       ? 'border-green-500 bg-green-50 text-green-700'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
@@ -193,9 +193,9 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setFormData({ ...formData, type: TransactionTypeEnum.EXPENSE })}
+                  onClick={() => setFormData({ ...formData, type: TransactionType.EXPENSE })}
                   className={`p-3 border rounded-xl transition-all ${
-                    formData.type === TransactionTypeEnum.EXPENSE
+                    formData.type === TransactionType.EXPENSE
                       ? 'border-red-500 bg-red-50 text-red-700'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}

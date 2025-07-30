@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Plus, Search, Filter, Edit, Trash2, Phone, Mail, Calendar, Users } from 'lucide-react';
 import type { MemberType, MemberRole as MemberRoleType, MemberStatus as MemberStatusType } from '../types';
 import { MemberRole, MemberStatus } from '../types';
-import { MEMBER_ROLES } from '../constants';
 import { useMembers } from '../hooks/useMembers';
 import { MemberForm } from '../components/MemberForm';
 
@@ -14,8 +12,8 @@ export default function MembersPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editMember, setEditMember] = useState<MemberType | undefined>(undefined);
-  const [feedbackMessage, setFeedbackMessage] = useState<string>('');
-  const { members, isLoading, addMember, updateMember, deleteMember, filterMembers } = useMembers();
+  const [feedback, setFeedback] = useState<string>('');
+  const { members, addMember, updateMember, deleteMember } = useMembers();
 
   const filteredMembers = members.filter(member => {
     const matchesSearch = member.firstName.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -75,8 +73,8 @@ export default function MembersPage() {
   // Actions CRUD
   const handleAddMember = async (member: Omit<MemberType, 'id'>) => {
     await addMember(member);
-    setFeedbackMessage('Membre ajouté avec succès');
-    setTimeout(() => setFeedbackMessage(''), 2000);
+    setFeedback('Membre ajouté avec succès');
+    setTimeout(() => setFeedback(''), 2000);
   };
 
   const handleEditMember = async (member: Omit<MemberType, 'id'>) => {
@@ -90,19 +88,20 @@ export default function MembersPage() {
   const handleDeleteMember = async (id: string) => {
     if (window.confirm('Voulez-vous vraiment supprimer ce membre ?')) {
       await deleteMember(id);
-      setFeedbackMessage('Membre supprimé avec succès');
-      setTimeout(() => setFeedbackMessage(''), 2000);
+      setFeedback('Membre supprimé avec succès');
+      setTimeout(() => setFeedback(''), 2000);
     }
   };
-  function handleAddNew(event: MouseEvent<HTMLButtonElement, MouseEvent>): void {
-    throw new Error('Function not implemented.');
-  }
+  const handleAddNew = () => {
+    setShowForm(true);
+    setEditMember(undefined);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {feedbackMessage && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50">
-          {feedbackMessage}
+      {feedback && (
+        <div data-testid="members-feedback" className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50">
+          {feedback}
         </div>
       )}
       {/* En-tête Mobile-First */}
@@ -114,11 +113,12 @@ export default function MembersPage() {
                 <Users className="h-6 w-6 text-white" />
               </div>
             </div>
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
+            <h1 data-testid="members-title" className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
               Gestion des Membres
             </h1>
           </div>
           <button
+            data-testid="add-member-btn"
             className="bg-orange-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-orange-500 transition-colors flex items-center space-x-2 text-sm sm:text-base"
             onClick={() => { setShowForm(true); setEditMember(undefined); }}
           >
@@ -276,9 +276,9 @@ export default function MembersPage() {
                 <p className="text-gray-400 text-sm mt-2">Essayez de modifier vos critères de recherche</p>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div data-testid="members-list" className="space-y-3">
                 {filteredMembers.map((member) => (
-                  <div key={member.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                  <div key={member.id} data-testid={`member-card-${member.id}`} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
                     <div className="p-4">
                       <div className="flex items-start space-x-3">
                         {/* Avatar */}
@@ -328,6 +328,7 @@ export default function MembersPage() {
                       <div className="mt-4 flex items-center justify-between">
                         <div className="flex items-center space-x-2">
                           <button
+                            data-testid={`edit-member-btn-${member.id}`}
                             className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-600 bg-orange-50 rounded-md hover:bg-orange-100 transition-colors"
                             onClick={() => { setEditMember(member); setShowForm(true); }}
                           >
@@ -336,6 +337,7 @@ export default function MembersPage() {
                           </button>
                         </div>
                         <button
+                          data-testid={`delete-member-btn-${member.id}`}
                           className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
                           onClick={() => handleDeleteMember(member.id)}
                         >
@@ -382,9 +384,10 @@ export default function MembersPage() {
 
       {/* Bouton flottant d'ajout - Mobile First */}
       <button
+        data-testid="add-member-floating-btn"
         onClick={handleAddNew}
         className="fixed bottom-6 right-6 bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors z-10"
-        aria-label="Ajouter une cotisation"
+        aria-label="Ajouter un membre"
       >
         <Plus className="w-6 h-6" />
       </button>

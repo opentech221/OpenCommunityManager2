@@ -2,6 +2,7 @@ export { LandingPage } from './LandingPage';
 export { LoginPage } from './LoginPage';
 export { RegisterPage } from './RegisterPage';
 export { DashboardPage } from './DashboardPage';
+export { default as GuidancePage } from './GuidancePage';
 export { default as MembersPage } from './MembersPage';
 export { default as CotisationsPage } from './CotisationsPage';
 export { default as CotisationsPageMobile } from './CotisationsPageMobile';

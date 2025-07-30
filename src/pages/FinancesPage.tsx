@@ -1,95 +1,58 @@
 
 import React, { useState } from 'react';
 import { Plus, TrendingUp, TrendingDown, Wallet, Filter } from 'lucide-react';
-import type { TransactionType } from '../types';
-import { TransactionTypeEnum } from '../types';
+import type { Transaction } from '../types';
+import { TransactionType } from '../types';
 import { TransactionFormModal } from '../components';
-
-const transactionsData: TransactionType[] = [
-  {
-    id: '1',
-    type: TransactionTypeEnum.INCOME,
-    amount: 5000,
-    description: 'Cotisations annuelles',
-    date: new Date('2024-01-15'),
-    category: 'Cotisations',
-    associationId: 'assoc1',
-    receipt: 'receipt_001.pdf'
-  },
-  {
-    id: '2',
-    type: TransactionTypeEnum.EXPENSE,
-    amount: 1200,
-    description: 'Location salle événement',
-    date: new Date('2024-01-20'),
-    category: 'Événements',
-    associationId: 'assoc1'
-  },
-  {
-    id: '3',
-    type: TransactionTypeEnum.INCOME,
-    amount: 800,
-    description: 'Subvention municipale',
-    date: new Date('2024-02-01'),
-    category: 'Subventions',
-    associationId: 'assoc1'
-  },
-  {
-    id: '4',
-    type: TransactionTypeEnum.EXPENSE,
-    amount: 450,
-    description: 'Matériel bureau',
-    date: new Date('2024-02-10'),
-    category: 'Fournitures',
-    associationId: 'assoc1'
-  },
-  {
-    id: '5',
-    type: TransactionTypeEnum.EXPENSE,
-    amount: 300,
-    description: 'Assurance annuelle',
-    date: new Date('2024-02-15'),
-    category: 'Administration',
-    associationId: 'assoc1'
-  }
-];
+import { useFinances } from '../hooks/useFinances';
 
 const categories = ['Cotisations', 'Subventions', 'Événements', 'Fournitures', 'Administration'];
 
 const FinancesPage: React.FC = () => {
-  const [filterType, setFilterType] = useState<'all' | TransactionTypeEnum>('all');
+  const { 
+    transactions, 
+    isLoading, 
+    addTransaction, 
+    deleteTransaction
+  } = useFinances();
+  
+  const [filterType, setFilterType] = useState<'all' | TransactionType>('all');
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [showAddModal, setShowAddModal] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState<string>('');
-  const [localTransactions, setLocalTransactions] = useState<TransactionType[]>(transactionsData);
 
-  const handleAddTransaction = (transactionData: Partial<TransactionType>) => {
-    const transaction: TransactionType = {
-      id: Date.now().toString(),
-      ...transactionData,
-      associationId: 'assoc1',
-      receipt: ''
-    } as TransactionType;
-    
-    setLocalTransactions(prev => [...prev, transaction]);
-    setFeedbackMessage('Transaction ajoutée avec succès');
-    setShowAddModal(false);
-    setTimeout(() => setFeedbackMessage(''), 2000);
+  const handleAddTransaction = async (transactionData: Partial<Transaction>) => {
+    try {
+      await addTransaction(transactionData);
+      setFeedbackMessage('Transaction ajoutée avec succès');
+      setShowAddModal(false);
+      setTimeout(() => setFeedbackMessage(''), 2000);
+    } catch (error) {
+      console.error('Erreur lors de l\'ajout:', error);
+      setFeedbackMessage('Erreur lors de l\'ajout de la transaction');
+      setTimeout(() => setFeedbackMessage(''), 2000);
+    }
   };
 
-  const handleDeleteTransaction = (id: string) => {
-    setLocalTransactions(prev => prev.filter(t => t.id !== id));
-    setFeedbackMessage('Transaction supprimée avec succès');
-    setTimeout(() => setFeedbackMessage(''), 2000);
+  const handleDeleteTransaction = async (id: string) => {
+    try {
+      await deleteTransaction(id);
+      setFeedbackMessage('Transaction supprimée avec succès');
+      setTimeout(() => setFeedbackMessage(''), 2000);
+    } catch (error) {
+      console.error('Erreur lors de la suppression:', error);
+      setFeedbackMessage('Erreur lors de la suppression de la transaction');
+      setTimeout(() => setFeedbackMessage(''), 2000);
+    }
   };
 
-  const totalIncome = localTransactions.filter(t => t.type === TransactionTypeEnum.INCOME).reduce((sum, t) => sum + t.amount, 0);
-  const totalExpenses = localTransactions.filter(t => t.type === TransactionTypeEnum.EXPENSE).reduce((sum, t) => sum + t.amount, 0);
+  const totalIncome = transactions.filter((t: Transaction) => t.type === TransactionType.INCOME).reduce((sum: number, t: Transaction) => sum + t.amount, 0);
+  const totalExpenses = transactions.filter((t: Transaction) => t.type === TransactionType.EXPENSE).reduce((sum: number, t: Transaction) => sum + t.amount, 0);
   const balance = totalIncome - totalExpenses;
 
-  function handleAddNew(event: MouseEvent<HTMLButtonElement, MouseEvent>): void {
-    throw new Error('Function not implemented.');
-  }
+  const handleAddNew = () => {
+    setShowAddModal(true);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 md:px-12">
@@ -98,6 +61,13 @@ const FinancesPage: React.FC = () => {
           {feedbackMessage}
         </div>
       )}
+      
+      {isLoading && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-blue-100 text-blue-800 px-4 py-2 rounded shadow z-50">
+          Chargement des transactions...
+        </div>
+      )}
+      
       <div className="px-4 sm:px-6 lg:px-8">
         {/* En-tête décoré avec couleur orange */}
         <div className="mb-8 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
@@ -157,9 +127,9 @@ const FinancesPage: React.FC = () => {
           </button>
           <button 
             className={`bg-green-100 rounded-xl shadow-sm border p-6 flex flex-col items-center hover:bg-green-200 transition-colors ${
-              filterType === TransactionTypeEnum.INCOME ? 'ring-2 ring-green-500' : ''
+              filterType === TransactionType.INCOME ? 'ring-2 ring-green-500' : ''
             }`}
-            onClick={() => setFilterType(TransactionTypeEnum.INCOME)}
+            onClick={() => setFilterType(TransactionType.INCOME)}
             aria-label="Filtrer les entrées"
           >
             <TrendingUp className="text-green-600 mb-2" size={32} />
@@ -168,9 +138,9 @@ const FinancesPage: React.FC = () => {
           </button>
           <button 
             className={`bg-red-100 rounded-xl shadow-sm border p-6 flex flex-col items-center hover:bg-red-200 transition-colors ${
-              filterType === TransactionTypeEnum.EXPENSE ? 'ring-2 ring-red-500' : ''
+              filterType === TransactionType.EXPENSE ? 'ring-2 ring-red-500' : ''
             }`}
-            onClick={() => setFilterType(TransactionTypeEnum.EXPENSE)}
+            onClick={() => setFilterType(TransactionType.EXPENSE)}
             aria-label="Filtrer les sorties"
           >
             <TrendingDown className="text-red-500 mb-2" size={32} />
@@ -184,10 +154,10 @@ const FinancesPage: React.FC = () => {
         <div className="mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex gap-2 items-center">
             <Filter className="text-purple-500" size={30} />
-            <select value={filterType} onChange={e => setFilterType(e.target.value as 'all' | TransactionTypeEnum)} className="border rounded px-2 py-1 text-sm bg-purple-200 border-purple-600 hover:bg-purple-300">
+            <select value={filterType} onChange={e => setFilterType(e.target.value as 'all' | TransactionType)} className="border rounded px-2 py-1 text-sm bg-purple-200 border-purple-600 hover:bg-purple-300">
               <option value="all">Tous</option>
-              <option value={TransactionTypeEnum.INCOME}>Entrées</option>
-              <option value={TransactionTypeEnum.EXPENSE}>Sorties</option>
+              <option value={TransactionType.INCOME}>Entrées</option>
+              <option value={TransactionType.EXPENSE}>Sorties</option>
             </select>
             <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)} className="border rounded px-2 py-1 text-sm bg-purple-200 border-purple-600 hover:bg-purple-300">
               <option value="all">Toutes catégories</option>
@@ -201,10 +171,10 @@ const FinancesPage: React.FC = () => {
         {/* Liste des transactions */}
         <div className="mb-8">
           <div className="md:hidden">
-            {localTransactions.filter(t => (filterType === 'all' || t.type === filterType) && (filterCategory === 'all' || t.category === filterCategory)).map((tx) => (
+            {transactions.filter((t: Transaction) => (filterType === 'all' || t.type === filterType) && (filterCategory === 'all' || t.category === filterCategory)).map((tx: Transaction) => (
               <div key={tx.id} className="bg-white rounded-xl shadow-sm border p-4 mb-4" data-testid={`transaction-mobile-${tx.id}`}> 
                 <span className="font-bold text-lg text-gray-900 font-montserrat">{tx.description}</span>
-                <span className={`font-bold text-sm ${tx.type === TransactionTypeEnum.INCOME ? 'text-green-600' : 'text-red-500'}`} data-testid={`transaction-amount-mobile-${tx.id}`}>{tx.type === TransactionTypeEnum.INCOME ? '+' : '-'}{tx.amount} €</span>
+                <span className={`font-bold text-sm ${tx.type === TransactionType.INCOME ? 'text-green-600' : 'text-red-500'}`} data-testid={`transaction-amount-mobile-${tx.id}`}>{tx.type === TransactionType.INCOME ? '+' : '-'}{tx.amount} €</span>
                 <div className="flex items-center justify-between text-xs text-gray-500 font-poppins">
                   <span>{tx.category}</span>
                   <span>{tx.date.toLocaleDateString()}</span>
@@ -234,11 +204,11 @@ const FinancesPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {localTransactions.filter(t => (filterType === 'all' || t.type === filterType) && (filterCategory === 'all' || t.category === filterCategory)).map((tx) => (
+                  {transactions.filter((t: Transaction) => (filterType === 'all' || t.type === filterType) && (filterCategory === 'all' || t.category === filterCategory)).map((tx: Transaction) => (
                     <tr key={tx.id} className="hover:bg-gray-50" data-testid={`transaction-row-${tx.id}`}> 
                       <td className="px-6 py-4" data-testid={`transaction-desc-${tx.id}`}>{tx.description}</td>
-                      <td className="px-6 py-4" data-testid={`transaction-type-${tx.id}`}>{tx.type === TransactionTypeEnum.INCOME ? 'Entrée' : 'Sortie'}</td>
-                      <td className={`px-6 py-4 font-bold ${tx.type === TransactionTypeEnum.INCOME ? 'text-green-600' : 'text-red-500'}`} data-testid={`transaction-amount-${tx.id}`}>{tx.type === TransactionTypeEnum.INCOME ? '+' : '-'}{tx.amount} €</td>
+                      <td className="px-6 py-4" data-testid={`transaction-type-${tx.id}`}>{tx.type === TransactionType.INCOME ? 'Entrée' : 'Sortie'}</td>
+                      <td className={`px-6 py-4 font-bold ${tx.type === TransactionType.INCOME ? 'text-green-600' : 'text-red-500'}`} data-testid={`transaction-amount-${tx.id}`}>{tx.type === TransactionType.INCOME ? '+' : '-'}{tx.amount} €</td>
                       <td className="px-6 py-4" data-testid={`transaction-category-${tx.id}`}>{tx.category}</td>
                       <td className="px-6 py-4" data-testid={`transaction-date-${tx.id}`}>{tx.date.toLocaleDateString()}</td>
                       <td className="px-6 py-4" data-testid={`transaction-receipt-${tx.id}`}>{tx.receipt ? (<a href={tx.receipt} className="text-blue-500 underline text-xs" target="_blank" rel="noopener noreferrer">Reçu</a>) : '-'}</td>

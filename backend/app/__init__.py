@@ -62,20 +62,24 @@ def create_app():
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     
     # Importation des modèles
-    from app.models import association, member, event, cotisation
+    from app.models import association, member, event, cotisation, transaction, guidance
     
     # Enregistrement des blueprints
     from app.routes.auth import auth_bp
     from app.routes.members import members_bp
     from app.routes.events import events_bp
     from app.routes.cotisations import cotisations_bp
+    from app.routes.finances import finances_bp
     from app.routes.main import main_bp
+    from app.routes.guidance import guidance_bp
     
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(members_bp, url_prefix='/api/members')
     app.register_blueprint(events_bp, url_prefix='/api/events')
     app.register_blueprint(cotisations_bp, url_prefix='/api/cotisations')
+    app.register_blueprint(finances_bp, url_prefix='/api/finances')
     app.register_blueprint(main_bp, url_prefix='/api')
+    app.register_blueprint(guidance_bp, url_prefix='/api/guidance')
     
     # Route racine : message d'accueil API contextualisé
     @app.route('/')

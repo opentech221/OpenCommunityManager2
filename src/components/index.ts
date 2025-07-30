@@ -10,3 +10,4 @@ export { CotisationFormModal } from './CotisationFormModal';
 export { DeleteConfirmationModal } from './DeleteConfirmationModal';
 export { TransactionFormModal } from './TransactionFormModal';
 export { DocumentFormModal } from './DocumentFormModal';
+export { default as OrganizationalGuidanceDashboard } from './OrganizationalGuidanceDashboard';

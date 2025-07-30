@@ -1,3 +1,6 @@
+// Types guidance
+export * from './guidance';
+
 export interface AssociationType {
   id: string;
   name: string;
@@ -105,22 +108,23 @@ export interface EventParticipant {
   attended: boolean;
 }
 
-export interface TransactionType {
+export interface Transaction {
   id: string;
-  type: TransactionTypeEnum;
+  type: TransactionType;
   amount: number;
   description: string;
   date: Date;
   category: string;
   associationId: string;
   receipt?: string;
+  notes?: string;
 }
 
-export const TransactionTypeEnum = {
+export const TransactionType = {
   INCOME: 'INCOME',
   EXPENSE: 'EXPENSE'
 } as const;
-export type TransactionTypeEnum = typeof TransactionTypeEnum[keyof typeof TransactionTypeEnum];
+export type TransactionType = typeof TransactionType[keyof typeof TransactionType];
 
 export interface DocumentType {
   id: string;

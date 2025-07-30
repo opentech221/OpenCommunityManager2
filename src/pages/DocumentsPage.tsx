@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import {
   Upload,
@@ -80,7 +79,7 @@ const DocumentsPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<'all' | DocumentTypeEnum>('all');
   const [showUploadModal, setShowUploadModal] = useState(false);
-  const [feedbackMessage, setFeedbackMessage] = useState<string>('');
+  const [feedback, setFeedback] = useState<string>('');
 
   // États locaux pour l’upload
   const [uploadFile, setUploadFile] = useState<File | null>(null);
@@ -156,15 +155,15 @@ const DocumentsPage: React.FC = () => {
 
   function handleDeleteDocument(id: string): void {
     setLocalDocuments(prevDocs => prevDocs.filter(doc => doc.id !== id));
-    setFeedbackMessage('Document supprimé avec succès.');
-    setTimeout(() => setFeedbackMessage(''), 2500);
+    setFeedback('Document supprimé avec succès.');
+    setTimeout(() => setFeedback(''), 2000);
   }
 
   function handleAddDocument(event: React.FormEvent<HTMLFormElement>): void {
     event.preventDefault();
     if (!uploadFile) {
-      setFeedbackMessage("Veuillez sélectionner un fichier.");
-      setTimeout(() => setFeedbackMessage(''), 2500);
+      setFeedback("Veuillez sélectionner un fichier.");
+      setTimeout(() => setFeedback(''), 2000);
       return;
     }
 
@@ -186,19 +185,19 @@ const DocumentsPage: React.FC = () => {
     setUploadFile(null);
     setUploadType(DocumentTypeEnum.PV);
     setUploadDescription('');
-    setFeedbackMessage('Document ajouté avec succès.');
-    setTimeout(() => setFeedbackMessage(''), 2500);
+    setFeedback('Document ajouté avec succès.');
+    setTimeout(() => setFeedback(''), 2000);
   }
 
-  function handleAddNew(event: MouseEvent<HTMLButtonElement, MouseEvent>): void {
-    throw new Error('Function not implemented.');
-  }
+  const handleAddNew = () => {
+    setShowUploadModal(true);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-24">
-      {feedbackMessage && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50">
-          {feedbackMessage}
+      {feedback && (
+        <div data-testid="documents-feedback" className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50">
+          {feedback}
         </div>
       )}
       <div className="px-4 py-6 sm:px-6 lg:px-8">
@@ -211,11 +210,12 @@ const DocumentsPage: React.FC = () => {
                   <FileText className="h-6 w-6 text-white" />
                 </div>
               </div>
-              <h1 className="text-2xl md:text-3xl font-bold text-orange-500">
+              <h1 data-testid="documents-title" className="text-2xl md:text-3xl font-bold text-orange-500">
                 Gestion Documentaire
               </h1>
             </div>
             <button 
+              data-testid="add-document-btn"
               onClick={() => setShowUploadModal(true)}
               className="bg-orange-600 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-orange-700 transition-colors flex items-center space-x-2 text-sm sm:text-base"
             >
@@ -345,7 +345,7 @@ const DocumentsPage: React.FC = () => {
             
         {/* Liste des documents - cards mobile, table desktop */}
         <div className="px-4 sm:px-6 lg:px-8">
-          <div className="md:hidden flex flex-col gap-3">
+          <div data-testid="documents-list-mobile" className="md:hidden flex flex-col gap-3">
             {filteredDocuments.length === 0 && (
               <div className="text-center py-12">
                 <File className="mx-auto h-12 w-12 text-gray-400" />
@@ -356,7 +356,7 @@ const DocumentsPage: React.FC = () => {
               </div>
             )}
             {filteredDocuments.map((document) => (
-              <div key={document.id} className="bg-white rounded-lg shadow p-4 flex flex-col gap-2 border-l-4 border-purple-500">
+              <div key={document.id} data-testid={`document-card-${document.id}`} className="bg-white rounded-lg shadow p-4 flex flex-col gap-2 border-l-4 border-purple-500">
                 <div className="flex items-center gap-2">
                   {getFileIcon(document.name)}
                   <span className="font-bold text-base text-gray-900 font-montserrat">{document.name}</span>
@@ -368,9 +368,9 @@ const DocumentsPage: React.FC = () => {
                   <span className="ml-auto text-xs text-gray-700">{formatFileSize(document.size)}</span>
                 </div>
                 <div className="flex items-center gap-3 pt-2">
-                  <button className="text-orange-600 hover:text-orange-800 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 rounded" title="Voir le document" aria-label="Voir le document"><Eye className="w-5 h-5" /></button>
-                  <button className="text-blue-600 hover:text-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded" title="Télécharger" aria-label="Télécharger le document"><Download className="w-5 h-5" /></button>
-                  <button className="text-red-600 hover:text-red-800 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 rounded" title="Supprimer" aria-label="Supprimer le document" onClick={() => handleDeleteDocument(document.id)}><Trash2 className="w-5 h-5" /></button>
+                  <button data-testid={`view-document-btn-${document.id}`} className="text-orange-600 hover:text-orange-800 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 rounded" title="Voir le document" aria-label="Voir le document"><Eye className="w-5 h-5" /></button>
+                  <button data-testid={`download-document-btn-${document.id}`} className="text-blue-600 hover:text-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded" title="Télécharger" aria-label="Télécharger le document"><Download className="w-5 h-5" /></button>
+                  <button data-testid={`delete-document-btn-${document.id}`} className="text-red-600 hover:text-red-800 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 rounded" title="Supprimer" aria-label="Supprimer le document" onClick={() => handleDeleteDocument(document.id)}><Trash2 className="w-5 h-5" /></button>
                 </div>
               </div>
             ))}
@@ -544,9 +544,10 @@ const DocumentsPage: React.FC = () => {
 
       {/* Bouton flottant d'ajout - Mobile First */}
       <button
+        data-testid="add-document-floating-btn"
         onClick={handleAddNew}
         className="fixed bottom-6 right-6 bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors z-10"
-        aria-label="Ajouter une cotisation"
+        aria-label="Télécharger un document"
       >
         <Plus className="w-6 h-6" />
       </button>
