@@ -1,33 +1,35 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, Suspense, lazy } from 'react';
 import { AuthProvider } from './contexts/AuthContext';
 import { LandingPage } from './pages/LandingPage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { DashboardPage } from './pages/DashboardPage';
-import GuidancePage from './pages/GuidancePage';
-import DiagnosticPage from './pages/DiagnosticPage';
-import RecommendationsPage from './pages/RecommendationsPage';
-import CompliancePage from './pages/CompliancePage';
-import ActionPlanPage from './pages/ActionPlanPage';
-import AnalyticsPage from './pages/AnalyticsPage';
-import MembersPage from './pages/MembersPage';
-import CotisationsPageResponsive from './pages/CotisationsPageResponsive';
-import EventsPage from './pages/EventsPage';
-import FinancesPage from './pages/FinancesPage';
-import DocumentsPage from './pages/DocumentsPage';
-import MessagesPage from './pages/MessagesPage';
-import PublicProfilePage from './pages/PublicProfilePage';
-import SettingsPage from './pages/SettingsPage';
-import NotificationsPage from './pages/NotificationsPage';
-import BillingPage from './pages/BillingPage';
-import SecurityPage from './pages/SecurityPage';
-import HistoryPage from './pages/HistoryPage';
-import { LegalPage } from './pages/LegalPage';
-import { PrivacyPage } from './pages/PrivacyPage';
-import { TermsPage } from './pages/TermsPage';
-import { HelpPage } from './pages/HelpPage';
-import { DocumentationPage } from './pages/DocumentationPage';
+
+// Lazy loading pour l'optimisation du bundle
+const GuidancePage = lazy(() => import('./pages/GuidancePage'));
+const DiagnosticPage = lazy(() => import('./pages/DiagnosticPage'));
+const RecommendationsPage = lazy(() => import('./pages/RecommendationsPage'));
+const CompliancePage = lazy(() => import('./pages/CompliancePage'));
+const ActionPlanPage = lazy(() => import('./pages/ActionPlanPage'));
+const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
+const MembersPage = lazy(() => import('./pages/MembersPage'));
+const CotisationsPageResponsive = lazy(() => import('./pages/CotisationsPageResponsive'));
+const EventsPage = lazy(() => import('./pages/EventsPage'));
+const FinancesPage = lazy(() => import('./pages/FinancesPage'));
+const DocumentsPage = lazy(() => import('./pages/DocumentsPage'));
+const MessagesPage = lazy(() => import('./pages/MessagesPage'));
+const PublicProfilePage = lazy(() => import('./pages/PublicProfilePage'));
+const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const NotificationsPage = lazy(() => import('./pages/NotificationsPage'));
+const BillingPage = lazy(() => import('./pages/BillingPage'));
+const SecurityPage = lazy(() => import('./pages/SecurityPage'));
+const HistoryPage = lazy(() => import('./pages/HistoryPage'));
+const LegalPage = lazy(() => import('./pages/LegalPage').then(module => ({ default: module.LegalPage })));
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage').then(module => ({ default: module.PrivacyPage })));
+const TermsPage = lazy(() => import('./pages/TermsPage').then(module => ({ default: module.TermsPage })));
+const HelpPage = lazy(() => import('./pages/HelpPage').then(module => ({ default: module.HelpPage })));
+const DocumentationPage = lazy(() => import('./pages/DocumentationPage').then(module => ({ default: module.DocumentationPage })));
 import { ContactPage } from './pages/ContactPage';
 import { TrainingPage } from './pages/TrainingPage';
 import { DemoPage } from './pages/DemoPage';
@@ -43,7 +45,15 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <Routes>
+        <Suspense fallback={
+          <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">Chargement...</p>
+            </div>
+          </div>
+        }>
+          <Routes>
           {/* Pages publiques avec PublicLayout */}
           <Route path="/" element={
             <PublicLayout>
@@ -305,7 +315,8 @@ function App() {
 
           {/* Redirection par défaut */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
+          </Routes>
+        </Suspense>
       </Router>
     </AuthProvider>
   );
