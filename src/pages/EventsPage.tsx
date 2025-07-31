@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import EventForm from '../components/EventForm';
 import { Plus, Search, Calendar, MapPin, Users, Eye, Edit, Trash2, Clock, Filter } from 'lucide-react';
 import type { EventType } from '../types';
@@ -115,6 +115,11 @@ export default function EventsPage() {
   const getEventStatus = (eventDate: Date) => {
     const today = new Date();
     const eventDateObj = typeof eventDate === 'string' ? new Date(eventDate) : eventDate;
+    
+    // Vérifier que la date est valide
+    if (!eventDateObj || isNaN(eventDateObj.getTime())) {
+      return { status: 'unknown', label: 'Date invalide', className: 'bg-gray-100 text-gray-800' };
+    }
     
     if (eventDateObj > today) {
       return { status: 'upcoming', label: 'À venir', className: 'bg-blue-100 text-blue-800' };

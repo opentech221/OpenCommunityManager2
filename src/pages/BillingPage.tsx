@@ -135,8 +135,8 @@ const BillingPage: React.FC = () => {
               </h1>
             </div>
             <div>
-              <p className="text-gray-700 font-medium text-lg">
-                Gestion transparente et contrôle total de vos paiements
+              <p className="text-gray-700 font-medium text-lg" data-testid="billing-desc">
+                Gérez votre abonnement et consultez vos factures
               </p>
               <div className="text-sm text-gray-600 space-y-1">
                 <div className="text-sm text-gray-600 space-y-1">

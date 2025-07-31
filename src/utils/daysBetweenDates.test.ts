@@ -1,4 +1,4 @@
-import { daysBetweenDates } from './index';
+import { daysBetweenDates } from './daysBetweenDates';
 
 describe('daysBetweenDates', () => {
   it('retourne 0 si les deux dates sont identiques', () => {

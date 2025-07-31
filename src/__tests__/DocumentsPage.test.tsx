@@ -27,7 +27,7 @@ describe('DocumentsPage feedback UX', () => {
   it('affiche le feedback après ajout (simulation handler)', async () => {
     render(<DocumentsPage />);
     // Ouvre le modal
-    fireEvent.click(screen.getByText('Télécharger un document'));
+    fireEvent.click(screen.getByText('Nouveau document'));
     // Remplit les champs
     fireEvent.change(screen.getByLabelText('Nom du document'), { target: { value: 'PV réunion' } });
     fireEvent.change(screen.getByLabelText('Type de document'), { target: { value: 'PV' } });

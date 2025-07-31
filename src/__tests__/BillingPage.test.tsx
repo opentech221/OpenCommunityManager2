@@ -5,7 +5,7 @@ import BillingPage from '../pages/BillingPage';
 describe('BillingPage', () => {
   it('affiche le titre et la description', () => {
     render(<BillingPage />);
-    expect(screen.getByTestId('billing-title')).toHaveTextContent('Facturation');
+    expect(screen.getByTestId('billing-title')).toHaveTextContent('Facturation & Abonnements');
     expect(screen.getByTestId('billing-desc')).toHaveTextContent('Gérez votre abonnement et consultez vos factures');
   });
 

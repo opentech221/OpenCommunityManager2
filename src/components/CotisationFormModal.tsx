@@ -296,11 +296,12 @@ export const CotisationFormModal: React.FC<CotisationFormModalProps> = ({
 
             {/* Notes */}
             <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="cotisation-notes" className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                 <FileText className="w-4 h-4" />
                 Notes (optionnel)
               </label>
               <textarea
+                id="cotisation-notes"
                 value={formData.notes}
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                 placeholder="Ajouter des notes sur cette cotisation..."
@@ -335,7 +336,7 @@ export const CotisationFormModal: React.FC<CotisationFormModalProps> = ({
             ) : (
               <>
                 <Save className="w-4 h-4" />
-                {isEditing ? 'Modifier' : 'Créer'}
+                Enregistrer
               </>
             )}
           </button>

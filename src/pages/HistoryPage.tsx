@@ -180,7 +180,7 @@ const HistoryPage: React.FC = () => {
           }`}
         >
           <div className="text-sm text-gray-500">Total activités</div>
-          <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+          <div className="text-2xl font-bold text-gray-900" data-testid="total-activities-count">{stats.total}</div>
         </button>
         
         <button

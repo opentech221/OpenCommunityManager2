@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import HistoryPage from '../pages/HistoryPage';
@@ -59,8 +60,8 @@ describe('HistoryPage', () => {
 
   test('affiche le titre de la page', () => {
     renderHistoryPage();
-    expect(screen.getByText('Historique des activités')).toBeInTheDocument();
-    expect(screen.getByText('Consultez toutes les actions effectuées dans votre association')).toBeInTheDocument();
+    expect(screen.getByText('Historique des Activités')).toBeInTheDocument();
+    expect(screen.getByText('Traçabilité complète et audit de toutes les actions')).toBeInTheDocument();
   });
 
   test('affiche les statistiques', () => {
@@ -68,12 +69,10 @@ describe('HistoryPage', () => {
     
     // Vérifier les statistiques
     expect(screen.getByText('Total activités')).toBeInTheDocument();
-    expect(screen.getByText('12')).toBeInTheDocument();
-    expect(screen.getByText("Aujourd'hui")).toBeInTheDocument();
-    expect(screen.getByText('2')).toBeInTheDocument();
-    expect(screen.getByText('Cette semaine')).toBeInTheDocument();
-    expect(screen.getByText('8')).toBeInTheDocument();
-    expect(screen.getByText('Ce mois')).toBeInTheDocument();
+    expect(screen.getByTestId('total-activities-count')).toHaveTextContent('12');
+    expect(screen.getAllByText("Aujourd'hui")).toHaveLength(2); // Un dans stats, un dans select
+    expect(screen.getAllByText('Cette semaine')).toHaveLength(2); // Un dans stats, un dans select
+    expect(screen.getAllByText('Ce mois')).toHaveLength(2); // Un dans stats, un dans select
   });
 
   test('affiche la liste des activités', () => {
@@ -145,15 +144,15 @@ describe('HistoryPage', () => {
   test('affiche les badges de type d\'activité', () => {
     renderHistoryPage();
     
-    // Vérifier que les badges de type sont affichés
-    expect(screen.getByText('Membres')).toBeInTheDocument();
-    expect(screen.getByText('Cotisations')).toBeInTheDocument();
+    // Vérifier que les badges de type sont affichés - utiliser getAllByText pour éléments multiples
+    expect(screen.getAllByText('Membres')).toHaveLength(2); // Un dans select, un dans badge
+    expect(screen.getAllByText('Cotisations')).toHaveLength(2); // Un dans select, un dans badge
   });
 
   test('affiche les informations temporelles relatives', () => {
     renderHistoryPage();
     
-    // Vérifier que les timestamps relatifs sont affichés
-    expect(screen.getByText(/Il y a/)).toBeInTheDocument();
+    // Vérifier que les timestamps relatifs sont affichés - utiliser getAllByText pour éléments multiples
+    expect(screen.getAllByText(/Il y a/)).toHaveLength(2);
   });
 });

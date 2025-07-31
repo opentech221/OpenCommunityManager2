@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import type { Transaction, TransactionType } from '../types';
+import { apiUrl } from '../utils';
 
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000/api';
+const API_BASE_URL = apiUrl('/finances');
 
 // Debug de la configuration
 console.log('🔧 [useFinances] Configuration API:', {
-  VITE_BACKEND_URL: import.meta.env.VITE_BACKEND_URL,
   API_BASE_URL,
-  mode: import.meta.env.MODE
+  mode: 'development'
 });
 
 interface FinanceStats {

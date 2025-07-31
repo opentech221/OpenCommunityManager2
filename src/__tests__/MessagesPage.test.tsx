@@ -7,7 +7,7 @@ jest.useFakeTimers();
 describe('MessagesPage', () => {
   it('affiche la liste des conversations', () => {
     render(<MessagesPage />);
-    expect(screen.getByText('Messagerie')).toBeInTheDocument();
+    expect(screen.getByText('Messages')).toBeInTheDocument();
     expect(screen.getByText('Mamadou Diallo')).toBeInTheDocument();
     expect(screen.getByText('Fatou Camara')).toBeInTheDocument();
     expect(screen.getByText('Ibrahima Bah')).toBeInTheDocument();

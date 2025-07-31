@@ -1,7 +1,8 @@
-// ...existing code...
-// ...autres exports utilitaires...
-// Génère l'URL complète de l'API selon l'environnement
-export { apiUrl } from './apiUrl.vite';
+// Utilitaires et fonctions helpers pour l'application
+import { apiUrl } from './apiUrl.vite';
+
+// Export de la fonction apiUrl depuis l'implémentation réelle
+export { apiUrl };
 /**
  * Formate une date en français
  */
