@@ -178,7 +178,7 @@ export default function EventsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900 p-4">
       {/* Feedback */}
       {feedback && (
         <div className="bg-green-100 border border-green-300 text-green-800 px-4 py-2 rounded-lg mx-4 mt-4 mb-2 text-center font-medium">
@@ -227,7 +227,7 @@ export default function EventsPage() {
       </div>
 
       {/* Statistiques avec boutons fonctionnels */}
-      <div className="bg-orange-50 px-4 py-4 sm:px-6 lg:px-8 mb-6 mx-4">
+      <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6 mx-4">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           <button 
             className={`bg-purple-100 rounded-lg p-3 shadow hover:bg-purple-200 transition-colors border ${
@@ -273,7 +273,7 @@ export default function EventsPage() {
       </div>
 
       {/* Recherche et filtres mobiles */}
-      <div className="bg-orange-50 border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
+      <div className="bg-white border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
         <div className="space-y-4">
           {/* Barre de recherche */}
           <div className="relative">
@@ -405,12 +405,12 @@ export default function EventsPage() {
                       {/* Actions */}
                       <div className="mt-4 flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                          <button className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-600 bg-orange-50 rounded-md hover:bg-orange-100 transition-colors">
+                          <button className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-600 white rounded-md hover:bg-orange-100 transition-colors">
                             <Eye className="w-4 h-4 mr-1" />
                             Voir
                           </button>
                           <button
-                            className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-600 bg-orange-50 rounded-md hover:bg-orange-100 transition-colors"
+                            className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-600 white rounded-md hover:bg-orange-100 transition-colors"
                             onClick={() => openEditModal(event)}
                             aria-label="modifier l'événement"
                           >

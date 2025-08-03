@@ -113,7 +113,7 @@ const BillingPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900">
       {/* Feedback */}
       {feedback && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50" data-testid="billing-feedback">
@@ -157,7 +157,7 @@ const BillingPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Plan actuel */}
           <div className="lg:col-span-2">
-            <div className="bg-orange-50 rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-semibold text-gray-900" data-testid="current-plan-title">Plan actuel</h2>
                 <div className="flex items-center space-x-2 bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
@@ -211,7 +211,7 @@ const BillingPage: React.FC = () => {
 
           {/* Résumé des paiements */}
           <div className="space-y-6">
-            <div className="bg-orange-50 rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4" data-testid="payment-summary-title">Résumé des paiements</h3>
               
               <div className="space-y-4">
@@ -230,7 +230,7 @@ const BillingPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-orange-50 rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4" data-testid="payment-method-title">Méthode de paiement</h3>
               
               <div className="flex items-center space-x-3 p-4 bg-purple-100 rounded-lg">
@@ -250,7 +250,7 @@ const BillingPage: React.FC = () => {
 
         {/* Historique des factures */}
         <div className="mt-8">
-          <div className="bg-orange-50 rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900" data-testid="invoice-history-title">Historique des factures</h2>
             </div>

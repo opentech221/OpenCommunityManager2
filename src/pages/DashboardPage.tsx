@@ -113,7 +113,8 @@ export const DashboardPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900 p-6">
+      <div>
       {/* En-tête de la page */}
       <div className="mb-8 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500">
         <div className="space-y-4">
@@ -152,7 +153,7 @@ export const DashboardPage: React.FC = () => {
       {/* Statistiques */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {stats.map((stat) => (
-          <div key={stat.name} className="bg-purple-100 rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+          <div key={stat.name} className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <p className="text-sm font-medium text-gray-600">{stat.name}</p>
@@ -194,7 +195,7 @@ export const DashboardPage: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         {/* Activités récentes */}
-        <div className="bg-orange-50 rounded-lg shadow-sm p-6">
+        <div className="bg-white rounded-lg shadow-sm p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-gray-900">
               Activités récentes
@@ -227,7 +228,7 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {/* Événements à venir */}
-        <div className="bg-orange-50 rounded-lg shadow-sm p-6">
+        <div className="bg-white rounded-lg shadow-sm p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-gray-900">
               Événements à venir
@@ -255,14 +256,14 @@ export const DashboardPage: React.FC = () => {
 
       {/* Graphiques et analyses */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-orange-50 rounded-lg shadow-sm p-6">
+        <div className="bg-white rounded-lg shadow-sm p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-6">Évolution des cotisations</h2>
           <div className="h-64 bg-purple-100 rounded-lg flex items-center justify-center">
             <p className="text-gray-500">Graphique des cotisations</p>
           </div>
         </div>
         
-        <div className="bg-orange-50 rounded-lg shadow-sm p-6">
+        <div className="bg-white rounded-lg shadow-sm p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-6">Répartition des membres</h2>
           <div className="h-64 bg-purple-100 rounded-lg flex items-center justify-center">
             <p className="text-gray-500">Graphique des membres</p>
@@ -278,6 +279,7 @@ export const DashboardPage: React.FC = () => {
       >
         <Plus className="w-6 h-6" />
       </button>
+      </div>
     </div>
   );
 };

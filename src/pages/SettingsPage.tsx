@@ -27,7 +27,7 @@ export default function SettingsPage() {
 
   // Mobile-first : carrousel horizontal pour onglets, layout vertical, boutons larges, accessibilité
   return (
-    <div className="min-h-screen bg-gray-50 pb-24">
+    <div className="min-h-screen bg-gray-900 pb-4">
       <div className="px-4 py-6 sm:px-6 lg:px-8">
         {/* En-tête décoré avec couleur orange */}
         <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">

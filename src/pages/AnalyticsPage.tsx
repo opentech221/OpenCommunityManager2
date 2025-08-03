@@ -189,7 +189,7 @@ const AnalyticsPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="px-4 py-6 sm:px-6 lg:px-8">
@@ -388,7 +388,7 @@ const AnalyticsPage: React.FC = () => {
 
           <div className="space-y-4">
             {analyticsData.recentActivities.map((activity) => (
-              <div key={activity.id} className="flex items-center gap-4 p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors">
+              <div key={activity.id} className="flex items-center gap-4 p-4 border border-gray-500 rounded-lg hover:bg-gray-50 transition-colors">
                 <div className="flex-shrink-0">
                   {getActivityIcon(activity.type)}
                 </div>

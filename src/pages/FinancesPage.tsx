@@ -55,7 +55,7 @@ const FinancesPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 md:px-12">
+    <div className="min-h-screen bg-gray-900 p-4">
       {feedbackMessage && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50" data-testid="finances-feedback">
           {feedbackMessage}
@@ -113,7 +113,7 @@ const FinancesPage: React.FC = () => {
 
       
         {/* Etat de la finance */}
-        <div className="grid grid-cols-1 md:grid-cols-3 bg-orange-50 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <button 
             className={`bg-purple-100 rounded-xl shadow-sm border p-6 flex flex-col items-center hover:bg-purple-200 transition-colors ${
               filterType === 'all' ? 'ring-2 ring-purple-500' : ''
@@ -149,7 +149,7 @@ const FinancesPage: React.FC = () => {
           </button>
         </div>
 
-      <div className="px-4 py-4 bg-orange-50 gap-6 mb-8">
+      <div className="px-4 py-4 bg-white gap-6 mb-8">
         {/* Systeme de filtre des transactions */}
         <div className="mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex gap-2 items-center">

@@ -106,7 +106,7 @@ const HistoryPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-gray-900 p-4">
       {/* État de chargement */}
       {isLoading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -120,17 +120,6 @@ const HistoryPage: React.FC = () => {
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <button
-          onClick={() => navigate('/dashboard')}
-          className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
-          aria-label="Retour au dashboard"
-        >
-          <ArrowLeft className="h-5 w-5 mr-2" />
-          Retour
-        </button>
-      </div>
-
       {/* En-tête décoré avec couleur orange */}
       <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
         <div className="space-y-4">
@@ -288,7 +277,7 @@ const HistoryPage: React.FC = () => {
 
         {/* Filtres actifs */}
         {(typeFilter !== 'ALL' || actionFilter !== 'ALL' || dateFilter !== 'ALL' || searchTerm) && (
-          <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
+          <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-500">
             <div className="flex flex-wrap gap-2">
               {typeFilter !== 'ALL' && (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">

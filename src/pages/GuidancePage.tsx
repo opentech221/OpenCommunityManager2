@@ -6,7 +6,7 @@ export default function GuidancePage() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 mb-6">
         <div className="px-4 py-6 sm:px-6 lg:px-8">

@@ -109,7 +109,7 @@ export default function CotisationsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-gray-900 p-4">
       {/* Header décoré avec couleur orange */}
       <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
         <div className="flex items-center justify-between">
@@ -181,7 +181,7 @@ export default function CotisationsPage() {
       )}
 
       {/* Statistiques */}
-      <div className="bg-orange-50 rounded-lg p-4 shadow mb-6">
+      <div className="bg-white rounded-lg p-4 shadow mb-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
           <button 
             className={`bg-purple-100 rounded-lg p-4 shadow hover:bg-purple-200 transition-colors border ${
@@ -218,7 +218,7 @@ export default function CotisationsPage() {
       </div>
 
       {/* Liste des cotisations */}
-      <div className="bg-orange-50 rounded-lg shadow p-4">
+      <div className="bg-white rounded-lg shadow p-4">
         {/* Barre de recherche et bouton ajout */}
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -328,7 +328,7 @@ export default function CotisationsPage() {
                     <td className="p-3">
                       <div className="flex space-x-1">
                         <button 
-                          className="inline-flex items-center justify-center w-8 h-8 text-orange-500 hover:text-orange-700 hover:bg-orange-50 rounded-full transition-colors" 
+                          className="inline-flex items-center justify-center w-8 h-8 text-orange-500 hover:text-orange-700 hover:bg-white rounded-full transition-colors" 
                           onClick={() => openEditModal(c)} 
                           aria-label="Modifier"
                           title="Modifier cette cotisation"

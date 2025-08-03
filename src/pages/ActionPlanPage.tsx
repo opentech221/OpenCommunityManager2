@@ -194,9 +194,9 @@ const ActionPlanPage: React.FC = () => {
   const progressPercentage = Math.round((completedActions / totalActions) * 100);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white border-b border-gray-500">
         <div className="px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4">
             <button
@@ -222,7 +222,7 @@ const ActionPlanPage: React.FC = () => {
 
       <div className="px-4 sm:px-6 lg:px-8 py-6">
         {/* Vue d'ensemble du plan */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200 mb-6">
+        <div className="bg-white rounded-xl p-6 border border-gray-500 mb-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Progression */}
             <div className="text-center">
@@ -296,13 +296,13 @@ const ActionPlanPage: React.FC = () => {
         {/* Description et prérequis */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           {/* Description */}
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-white rounded-xl p-6 border border-gray-500">
             <h3 className="text-xl font-montserrat font-semibold mb-3">Description</h3>
             <p className="text-gray-600">{actionPlan.description}</p>
           </div>
 
           {/* Prérequis */}
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-white rounded-xl p-6 border border-gray-500">
             <h3 className="text-xl font-montserrat font-semibold mb-3">Prérequis</h3>
             <div className="space-y-2">
               {actionPlan.prerequisites.map((prerequisite, index) => (
@@ -316,7 +316,7 @@ const ActionPlanPage: React.FC = () => {
         </div>
 
         {/* Actions à réaliser */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200">
+        <div className="bg-white rounded-xl p-6 border border-gray-500">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xl font-montserrat font-semibold">Actions à Réaliser</h3>
             <div className="text-sm text-gray-500">
@@ -329,7 +329,7 @@ const ActionPlanPage: React.FC = () => {
               <div key={action.id} className={`border rounded-lg p-4 transition-colors ${
                 action.completed 
                   ? 'bg-green-50 border-green-200' 
-                  : 'bg-white border-gray-200 hover:border-violet-300'
+                  : 'bg-white border-gray-500 hover:border-violet-300'
               }`}>
                 <div className="flex items-start gap-4">
                   <div className="flex items-center mt-1">

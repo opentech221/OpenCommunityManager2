@@ -194,7 +194,7 @@ const DocumentsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-24">
+    <div className="min-h-screen bg-gray-900 p-4">
       {feedback && (
         <div data-testid="documents-feedback" className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50">
           {feedback}
@@ -292,7 +292,7 @@ const DocumentsPage: React.FC = () => {
         </div>
 
         {/* Barre de recherche et filtres */}
-        <div className="bg-orange-50 border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
+        <div className="bg-white border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
           <div className="space-y-4">
             {/* Barre de recherche */}
             <div className="relative">

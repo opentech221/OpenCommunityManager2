@@ -98,7 +98,7 @@ export default function MembersPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900 p-6">
       {feedback && (
         <div data-testid="members-feedback" className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50">
           {feedback}
@@ -145,7 +145,7 @@ export default function MembersPage() {
       </div>
 
       {/* Statistiques avec boutons fonctionnels */}
-      <div className="bg-orange-50 px-4 py-4 sm:px-6 lg:px-8 mb-6">
+      <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           <button 
             className={`bg-purple-100 rounded-lg p-3 shadow hover:bg-purple-200 transition-colors border ${
@@ -192,7 +192,7 @@ export default function MembersPage() {
 
 
       {/* Resultats et filtres mobiles */}
-      <div className="bg-orange-50 border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
+      <div className="bg-white border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
         <div className="space-y-4">
           
         {/* Barre de recherche */}
@@ -329,7 +329,7 @@ export default function MembersPage() {
                         <div className="flex items-center space-x-2">
                           <button
                             data-testid={`edit-member-btn-${member.id}`}
-                            className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-600 bg-orange-50 rounded-md hover:bg-orange-100 transition-colors"
+                            className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-600 bg-white rounded-md hover:bg-orange-100 transition-colors"
                             onClick={() => { setEditMember(member); setShowForm(true); }}
                           >
                             <Edit className="w-4 h-4 mr-1" />
