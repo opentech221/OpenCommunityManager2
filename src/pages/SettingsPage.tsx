@@ -27,10 +27,10 @@ export default function SettingsPage() {
 
   // Mobile-first : carrousel horizontal pour onglets, layout vertical, boutons larges, accessibilité
   return (
-    <div className="min-h-screen bg-gray-900 pb-0">
-      <div className="px-4 py-6 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 pb-0">
+      <div className="px-3 py-4 sm:px-4 sm:py-6 lg:px-8">
         {/* En-tête décoré avec couleur orange */}
-        <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
+        <div className="mb-4 sm:mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-4 sm:p-6 border-l-4 border-orange-500 shadow-sm">
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               <div className="flex-shrink-0">
@@ -63,22 +63,22 @@ export default function SettingsPage() {
         </div>
 
         {/* Statistiques du compte - Mobile First avec 4 tickets-boutons de navigation */}
-        <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6 rounded-lg shadow-sm">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="bg-white px-3 py-3 sm:px-4 sm:py-4 lg:px-6 lg:py-4 mb-4 sm:mb-6 rounded-lg shadow-sm">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
             <button
               onClick={() => setActiveTab('profile')}
-              className={`bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg p-2 sm:p-3 lg:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
                 activeTab === 'profile'
                   ? 'ring-2 ring-blue-500 ring-offset-2'
                   : 'hover:scale-105'
               }`}
             >
               <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-blue-200">
-                  <User className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+                <div className="p-1.5 sm:p-2 rounded-lg bg-blue-200">
+                  <User className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-blue-600" />
                 </div>
                 <div className="text-center">
-                  <div className="text-lg sm:text-xl font-bold text-blue-700">98%</div>
+                  <div className="text-base sm:text-lg lg:text-xl font-bold text-blue-700">98%</div>
                   <div className="text-xs sm:text-sm text-blue-600 font-medium">Profil</div>
                 </div>
               </div>
@@ -86,18 +86,18 @@ export default function SettingsPage() {
 
             <button
               onClick={() => setActiveTab('security')}
-              className={`bg-gradient-to-br from-green-100 to-green-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-green-100 to-green-50 rounded-lg p-2 sm:p-3 lg:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
                 activeTab === 'security'
                   ? 'ring-2 ring-green-500 ring-offset-2'
                   : 'hover:scale-105'
               }`}
             >
               <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-green-200">
-                  <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+                <div className="p-1.5 sm:p-2 rounded-lg bg-green-200">
+                  <Shield className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-green-600" />
                 </div>
                 <div className="text-center">
-                  <div className="text-lg sm:text-xl font-bold text-green-700">Forte</div>
+                  <div className="text-base sm:text-lg lg:text-xl font-bold text-green-700">Forte</div>
                   <div className="text-xs sm:text-sm text-green-600 font-medium">Sécurité</div>
                 </div>
               </div>
@@ -105,18 +105,18 @@ export default function SettingsPage() {
 
             <button
               onClick={() => setActiveTab('notifications')}
-              className={`bg-gradient-to-br from-orange-100 to-orange-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-orange-100 to-orange-50 rounded-lg p-2 sm:p-3 lg:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
                 activeTab === 'notifications'
                   ? 'ring-2 ring-orange-500 ring-offset-2'
                   : 'hover:scale-105'
               }`}
             >
               <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-orange-200">
-                  <Bell className="h-5 w-5 sm:h-6 sm:w-6 text-orange-600" />
+                <div className="p-1.5 sm:p-2 rounded-lg bg-orange-200">
+                  <Bell className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-orange-600" />
                 </div>
                 <div className="text-center">
-                  <div className="text-lg sm:text-xl font-bold text-orange-700">5</div>
+                  <div className="text-base sm:text-lg lg:text-xl font-bold text-orange-700">5</div>
                   <div className="text-xs sm:text-sm text-orange-600 font-medium">Notifs</div>
                 </div>
               </div>
@@ -124,18 +124,18 @@ export default function SettingsPage() {
 
             <button
               onClick={() => setActiveTab('public')}
-              className={`bg-gradient-to-br from-purple-100 to-purple-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-purple-100 to-purple-50 rounded-lg p-2 sm:p-3 lg:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
                 activeTab === 'public'
                   ? 'ring-2 ring-purple-500 ring-offset-2'
                   : 'hover:scale-105'
               }`}
             >
               <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-purple-200">
-                  <Globe className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
+                <div className="p-1.5 sm:p-2 rounded-lg bg-purple-200">
+                  <Globe className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-purple-600" />
                 </div>
                 <div className="text-center">
-                  <div className="text-lg sm:text-xl font-bold text-purple-700">Public</div>
+                  <div className="text-base sm:text-lg lg:text-xl font-bold text-purple-700">Public</div>
                   <div className="text-xs sm:text-sm text-purple-600 font-medium">Visibilité</div>
                 </div>
               </div>
@@ -166,7 +166,7 @@ export default function SettingsPage() {
             ))}
           </nav>
           {/* Contenu des onglets - layout vertical mobile, carte à droite desktop */}
-          <div className="p-4 md:p-8 md:col-span-4">
+          <div className="p-3 sm:p-4 md:p-6 lg:p-8 md:col-span-4">
             {activeTab === 'profile' && (
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold text-gray-900">Profil utilisateur</h2>
