@@ -188,86 +188,139 @@ const RecommendationsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 p-0 sm:p-0 md:p-0 lg:p-0">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="px-4 py-6 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate('/guidance')}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center">
+      {/* En-tête Mobile-First */}
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => navigate('/guidance')}
+            className="p-2 hover:bg-orange-200 rounded-lg transition-colors mr-2"
+            aria-label="Retour au guide"
+          >
+            <ChevronLeft className="h-5 w-5 text-orange-600" />
+          </button>
+          <div className="flex-shrink-0">
+            <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
               <Lightbulb className="h-6 w-6 text-white" />
             </div>
-            <div className="flex-1">
-              <h1 className="text-2xl font-montserrat font-bold text-gray-900">
-                Recommandations
-              </h1>
-              <p className="text-gray-600 mt-1">
-                Actions prioritaires pour améliorer votre organisation
-              </p>
-            </div>
+          </div>
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
+            Recommandations
+          </h1>
+        </div>
+        <div className="mt-4 hidden md:block">
+          <p className="text-sm sm:text-base text-gray-700 font-medium">
+            Actions prioritaires pour améliorer votre organisation
+          </p>
+          <div className="text-xs text-gray-600 space-y-1 mt-2">
+            <p className="flex items-center">
+              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+              <strong>Actions ciblées :</strong> Recommandations personnalisées basées sur votre diagnostic
+            </p>
+            <p className="flex items-center">
+              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+              <strong>Suivi du progrès :</strong> Avancement et priorités clairement définis
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="px-4 sm:px-6 lg:px-8 py-6">
-        {/* Statistiques */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white p-4 rounded-lg border border-gray-200">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Lightbulb className="h-5 w-5 text-blue-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900">{recommendations.length}</div>
-                <div className="text-sm text-gray-500">Total</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white p-4 rounded-lg border border-gray-200">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                <AlertTriangle className="h-5 w-5 text-red-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900">
-                  {recommendations.filter(r => r.priority === 'high').length}
+      <div className="px-4 sm:px-6 lg:px-8">
+        {/* Statistiques - Mobile First avec 4 tickets-boutons de filtre */}
+        <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <button
+              onClick={() => {
+                setSelectedPriority('all');
+                setSelectedStatus('all');
+              }}
+              className={`bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+                selectedPriority === 'all' && selectedStatus === 'all' 
+                  ? 'ring-2 ring-blue-500 ring-offset-2' 
+                  : 'hover:scale-105'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className="p-2 rounded-lg bg-blue-200">
+                  <Lightbulb className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                 </div>
-                <div className="text-sm text-gray-500">Haute priorité</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white p-4 rounded-lg border border-gray-200">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                <TrendingUp className="h-5 w-5 text-blue-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900">
-                  {recommendations.filter(r => r.status === 'in_progress').length}
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl font-bold text-blue-700">{recommendations.length}</div>
+                  <div className="text-xs sm:text-sm text-blue-600 font-medium">Total</div>
                 </div>
-                <div className="text-sm text-gray-500">En cours</div>
               </div>
-            </div>
-          </div>
+            </button>
 
-          <div className="bg-white p-4 rounded-lg border border-gray-200">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                <CheckCircle className="h-5 w-5 text-green-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900">
-                  {recommendations.filter(r => r.status === 'completed').length}
+            <button
+              onClick={() => {
+                setSelectedPriority('high');
+                setSelectedStatus('all');
+              }}
+              className={`bg-gradient-to-br from-red-100 to-red-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+                selectedPriority === 'high' && selectedStatus === 'all'
+                  ? 'ring-2 ring-red-500 ring-offset-2'
+                  : 'hover:scale-105'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className="p-2 rounded-lg bg-red-200">
+                  <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
                 </div>
-                <div className="text-sm text-gray-500">Terminées</div>
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl font-bold text-red-700">
+                    {recommendations.filter(r => r.priority === 'high').length}
+                  </div>
+                  <div className="text-xs sm:text-sm text-red-600 font-medium">Urgentes</div>
+                </div>
               </div>
-            </div>
+            </button>
+
+            <button
+              onClick={() => {
+                setSelectedPriority('all');
+                setSelectedStatus('in_progress');
+              }}
+              className={`bg-gradient-to-br from-green-100 to-green-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+                selectedPriority === 'all' && selectedStatus === 'in_progress'
+                  ? 'ring-2 ring-green-500 ring-offset-2'
+                  : 'hover:scale-105'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className="p-2 rounded-lg bg-green-200">
+                  <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+                </div>
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl font-bold text-green-700">
+                    {recommendations.filter(r => r.status === 'in_progress').length}
+                  </div>
+                  <div className="text-xs sm:text-sm text-green-600 font-medium">En cours</div>
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                setSelectedPriority('all');
+                setSelectedStatus('completed');
+              }}
+              className={`bg-gradient-to-br from-purple-100 to-purple-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+                selectedPriority === 'all' && selectedStatus === 'completed'
+                  ? 'ring-2 ring-purple-500 ring-offset-2'
+                  : 'hover:scale-105'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className="p-2 rounded-lg bg-purple-200">
+                  <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
+                </div>
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl font-bold text-purple-700">
+                    {recommendations.filter(r => r.status === 'completed').length}
+                  </div>
+                  <div className="text-xs sm:text-sm text-purple-600 font-medium">Terminées</div>
+                </div>
+              </div>
+            </button>
           </div>
         </div>
 

@@ -150,42 +150,33 @@ export const DashboardPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Statistiques */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {stats.map((stat) => (
-          <div key={stat.name} className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <p className="text-sm font-medium text-gray-600">{stat.name}</p>
-                <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-              </div>
-              <div className="flex flex-col items-end">
-                <div className={`p-2 rounded-lg ${
-                  stat.changeType === 'increase' ? 'bg-green-100' : 'bg-red-100'
-                }`}>
-                  <stat.icon className={`h-6 w-6 ${
-                    stat.changeType === 'increase' ? 'text-green-600' : 'text-red-600'
-                  }`} />
-                </div>
-                <span className={`text-sm font-medium mt-2 ${
-                  stat.changeType === 'increase' ? 'text-green-600' : 'text-red-600'
-                }`}>
-                  {stat.change}
-                </span>
-              </div>
-            </div>
-            
-            {/* Bouton Détails */}
+      {/* Statistiques - Mobile First avec 4 tickets */}
+      <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          {stats.map((stat) => (
             <button
+              key={stat.name}
               onClick={() => navigate(stat.route)}
-              className="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+              className="bg-gradient-to-br from-purple-100 to-purple-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 hover:from-purple-200 hover:to-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 group"
               aria-label={stat.description}
             >
-              <span className="font-medium">Détails</span>
-              <ArrowRight className="h-4 w-4 ml-2" />
+              <div className="flex flex-col items-center space-y-2">
+                <div className="p-2 rounded-lg bg-purple-200 group-hover:bg-purple-300 transition-colors">
+                  <stat.icon className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
+                </div>
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl font-bold text-purple-700">{stat.value}</div>
+                  <div className="text-xs sm:text-sm text-purple-600 font-medium">{stat.name}</div>
+                  <div className={`text-xs font-medium mt-1 ${
+                    stat.changeType === 'increase' ? 'text-green-600' : 'text-red-600'
+                  }`}>
+                    {stat.change}
+                  </div>
+                </div>
+              </div>
             </button>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* Widget Guide Organisationnel */}

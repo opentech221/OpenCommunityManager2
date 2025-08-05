@@ -37,6 +37,7 @@ const ActionPlanPage: React.FC = () => {
   const navigate = useNavigate();
   const [actionPlan, setActionPlan] = useState<ActionPlan | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedFilter, setSelectedFilter] = useState<string>('all');
 
   useEffect(() => {
     loadActionPlan();
@@ -195,32 +196,124 @@ const ActionPlanPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 p-0">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-500">
-        <div className="px-4 py-6 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate('/guidance')}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <div className="w-12 h-12 bg-gradient-to-r from-violet-600 to-orange-500 rounded-xl flex items-center justify-center">
+      {/* En-tête Mobile-First */}
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => navigate('/guidance')}
+            className="p-2 hover:bg-orange-200 rounded-lg transition-colors mr-2"
+            aria-label="Retour au guide"
+          >
+            <ChevronLeft className="h-5 w-5 text-orange-600" />
+          </button>
+          <div className="flex-shrink-0">
+            <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
               <Target className="h-6 w-6 text-white" />
             </div>
-            <div className="flex-1">
-              <h1 className="text-2xl font-montserrat font-bold text-gray-900">
-                Plan d'Action Personnalisé
-              </h1>
-              <p className="text-gray-600 mt-1">
-                Votre feuille de route vers l'excellence organisationnelle
-              </p>
-            </div>
+          </div>
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
+            Plan d'Action
+          </h1>
+        </div>
+        <div className="mt-4 hidden md:block">
+          <p className="text-sm sm:text-base text-gray-700 font-medium">
+            Votre feuille de route vers l'excellence organisationnelle
+          </p>
+          <div className="text-xs text-gray-600 space-y-1 mt-2">
+            <p className="flex items-center">
+              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+              <strong>Étapes prioritaires :</strong> Actions concrètes pour atteindre vos objectifs
+            </p>
+            <p className="flex items-center">
+              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+              <strong>Suivi du progrès :</strong> Avancement mesurable et deadlines définies
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="px-4 sm:px-6 lg:px-8 py-6">
+      <div className="px-4 sm:px-6 lg:px-8">
+        {/* Statistiques - Mobile First avec 4 tickets-boutons de filtre */}
+        <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <button
+              onClick={() => setSelectedFilter('progress')}
+              className={`bg-gradient-to-br from-purple-100 to-purple-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+                selectedFilter === 'progress'
+                  ? 'ring-2 ring-purple-500 ring-offset-2'
+                  : 'hover:scale-105'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className="p-2 rounded-lg bg-purple-200">
+                  <Target className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
+                </div>
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl font-bold text-purple-700">{progressPercentage}%</div>
+                  <div className="text-xs sm:text-sm text-purple-600 font-medium">Avancement</div>
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setSelectedFilter('completed')}
+              className={`bg-gradient-to-br from-green-100 to-green-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+                selectedFilter === 'completed'
+                  ? 'ring-2 ring-green-500 ring-offset-2'
+                  : 'hover:scale-105'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className="p-2 rounded-lg bg-green-200">
+                  <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+                </div>
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl font-bold text-green-700">{completedActions}</div>
+                  <div className="text-xs sm:text-sm text-green-600 font-medium">Terminées</div>
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setSelectedFilter('remaining')}
+              className={`bg-gradient-to-br from-orange-100 to-orange-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+                selectedFilter === 'remaining'
+                  ? 'ring-2 ring-orange-500 ring-offset-2'
+                  : 'hover:scale-105'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className="p-2 rounded-lg bg-orange-200">
+                  <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-orange-600" />
+                </div>
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl font-bold text-orange-700">{totalActions - completedActions}</div>
+                  <div className="text-xs sm:text-sm text-orange-600 font-medium">Restantes</div>
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setSelectedFilter('all')}
+              className={`bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+                selectedFilter === 'all'
+                  ? 'ring-2 ring-blue-500 ring-offset-2'
+                  : 'hover:scale-105'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className="p-2 rounded-lg bg-blue-200">
+                  <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+                </div>
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl font-bold text-blue-700">{actionPlan.targetLevel}</div>
+                  <div className="text-xs sm:text-sm text-blue-600 font-medium">Objectif</div>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+
         {/* Vue d'ensemble du plan */}
         <div className="bg-white rounded-xl p-6 border border-gray-500 mb-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

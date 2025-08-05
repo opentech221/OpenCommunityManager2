@@ -306,17 +306,10 @@ const CompliancePage: React.FC = () => {
       </div>
 
       <div className="px-4 sm:px-6 lg:px-8">
-        {/* Statistiques - Mobile First avec 4 tickets-boutons de filtre */}
+        {/* Statistiques - Mobile First avec 4 tickets */}
         <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <button
-              onClick={() => setSelectedCategory('all')}
-              className={`bg-gradient-to-br from-green-100 to-green-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
-                selectedCategory === 'all'
-                  ? 'ring-2 ring-green-500 ring-offset-2'
-                  : 'hover:scale-105'
-              }`}
-            >
+            <div className="bg-gradient-to-br from-green-100 to-green-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200">
               <div className="flex flex-col items-center space-y-2">
                 <div className="p-2 rounded-lg bg-green-200">
                   <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
@@ -326,12 +319,9 @@ const CompliancePage: React.FC = () => {
                   <div className="text-xs sm:text-sm text-green-600 font-medium">Conformes</div>
                 </div>
               </div>
-            </button>
+            </div>
 
-            <button
-              onClick={() => setSelectedCategory('all')}
-              className={`bg-gradient-to-br from-orange-100 to-orange-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left hover:scale-105`}
-            >
+            <div className="bg-gradient-to-br from-orange-100 to-orange-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200">
               <div className="flex flex-col items-center space-y-2">
                 <div className="p-2 rounded-lg bg-orange-200">
                   <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-orange-600" />
@@ -341,12 +331,9 @@ const CompliancePage: React.FC = () => {
                   <div className="text-xs sm:text-sm text-orange-600 font-medium">Attention</div>
                 </div>
               </div>
-            </button>
+            </div>
 
-            <button
-              onClick={() => setSelectedCategory('all')}
-              className={`bg-gradient-to-br from-red-100 to-red-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left hover:scale-105`}
-            >
+            <div className="bg-gradient-to-br from-red-100 to-red-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200">
               <div className="flex flex-col items-center space-y-2">
                 <div className="p-2 rounded-lg bg-red-200">
                   <XCircle className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
@@ -356,16 +343,9 @@ const CompliancePage: React.FC = () => {
                   <div className="text-xs sm:text-sm text-red-600 font-medium">Non conformes</div>
                 </div>
               </div>
-            </button>
+            </div>
 
-            <button
-              onClick={() => setSelectedCategory('all')}
-              className={`bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
-                selectedCategory === 'all'
-                  ? 'ring-2 ring-blue-500 ring-offset-2'
-                  : 'hover:scale-105'
-              }`}
-            >
+            <div className="bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200">
               <div className="flex flex-col items-center space-y-2">
                 <div className="p-2 rounded-lg bg-blue-200">
                   <Scale className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
@@ -375,7 +355,7 @@ const CompliancePage: React.FC = () => {
                   <div className="text-xs sm:text-sm text-blue-600 font-medium">Score global</div>
                 </div>
               </div>
-            </button>
+            </div>
           </div>
         </div>
 

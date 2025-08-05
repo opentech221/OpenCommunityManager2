@@ -153,39 +153,57 @@ const DiagnosticPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 p-0">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="px-4 py-6 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4">
+      {/* En-tête Mobile-First */}
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
             <button
               onClick={() => navigate('/guidance')}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-orange-200 rounded-lg transition-colors mr-2"
+              aria-label="Retour au guide"
             >
-              <ChevronLeft className="h-5 w-5" />
+              <ChevronLeft className="h-5 w-5 text-orange-600" />
             </button>
-            <div className="w-12 h-12 bg-gradient-to-r from-violet-600 to-orange-500 rounded-xl flex items-center justify-center">
-              <Target className="h-6 w-6 text-white" />
+            <div className="flex-shrink-0">
+              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                <Target className="h-6 w-6 text-white" />
+              </div>
             </div>
-            <div className="flex-1">
-              <h1 className="text-2xl font-montserrat font-bold text-gray-900">
-                Diagnostic Organisationnel
-              </h1>
-              <p className="text-gray-600 mt-1">
-                Évaluez votre niveau de maturité organisationnelle
-              </p>
-            </div>
-            <button
-              onClick={runNewDiagnostic}
-              disabled={isRunningDiagnostic}
-              className="bg-violet-600 text-white px-4 py-2 rounded-lg hover:bg-violet-700 transition-colors flex items-center gap-2 disabled:opacity-50"
-            >
-              {isRunningDiagnostic ? (
-                <RefreshCw className="h-4 w-4 animate-spin" />
-              ) : (
-                <Target className="h-4 w-4" />
-              )}
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
+              Diagnostic
+            </h1>
+          </div>
+          <button
+            onClick={runNewDiagnostic}
+            disabled={isRunningDiagnostic}
+            className="bg-orange-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center space-x-2 text-sm sm:text-base disabled:opacity-50"
+          >
+            {isRunningDiagnostic ? (
+              <RefreshCw className="h-4 w-4 animate-spin" />
+            ) : (
+              <Target className="h-4 w-4" />
+            )}
+            <span className="hidden sm:inline">
               {isRunningDiagnostic ? 'Analyse en cours...' : 'Nouveau diagnostic'}
-            </button>
+            </span>
+            <span className="sm:hidden">
+              {isRunningDiagnostic ? 'Analyse...' : 'Nouveau'}
+            </span>
+          </button>
+        </div>
+        <div className="mt-4 hidden md:block">
+          <p className="text-sm sm:text-base text-gray-700 font-medium">
+            Évaluez votre niveau de maturité organisationnelle
+          </p>
+          <div className="text-xs text-gray-600 space-y-1 mt-2">
+            <p className="flex items-center">
+              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+              <strong>Analyse complète :</strong> Évaluation des 6 domaines clés de votre organisation
+            </p>
+            <p className="flex items-center">
+              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+              <strong>Score détaillé :</strong> Points forts et axes d'amélioration identifiés
+            </p>
           </div>
         </div>
       </div>

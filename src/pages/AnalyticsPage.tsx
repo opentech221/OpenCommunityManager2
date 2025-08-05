@@ -46,6 +46,7 @@ const AnalyticsPage: React.FC = () => {
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPeriod, setSelectedPeriod] = useState('6m');
+  const [selectedMetric, setSelectedMetric] = useState<string>('all');
 
   useEffect(() => {
     loadAnalytics();
@@ -190,132 +191,152 @@ const AnalyticsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 p-0">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="px-4 py-6 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4">
+      {/* En-tête Mobile-First */}
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
             <button
               onClick={() => navigate('/guidance')}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-orange-200 rounded-lg transition-colors mr-2"
+              aria-label="Retour au guide"
             >
-              <ChevronLeft className="h-5 w-5" />
+              <ChevronLeft className="h-5 w-5 text-orange-600" />
             </button>
-            <div className="w-12 h-12 bg-gradient-to-r from-violet-600 to-blue-500 rounded-xl flex items-center justify-center">
-              <BarChart3 className="h-6 w-6 text-white" />
+            <div className="flex-shrink-0">
+              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                <BarChart3 className="h-6 w-6 text-white" />
+              </div>
             </div>
-            <div className="flex-1">
-              <h1 className="text-2xl font-montserrat font-bold text-gray-900">
-                Tableaux de Bord Analytiques
-              </h1>
-              <p className="text-gray-600 mt-1">
-                Analysez l'évolution de votre organisation
-              </p>
-            </div>
-            <div className="flex gap-2">
-              <select
-                value={selectedPeriod}
-                onChange={(e) => setSelectedPeriod(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
-              >
-                <option value="1m">1 mois</option>
-                <option value="3m">3 mois</option>
-                <option value="6m">6 mois</option>
-                <option value="1y">1 an</option>
-              </select>
-              <button
-                onClick={exportData}
-                className="px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors flex items-center gap-2"
-              >
-                <Download className="h-4 w-4" />
-                Exporter
-              </button>
-            </div>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
+              Analytics
+            </h1>
+          </div>
+          <div className="flex gap-2">
+            <select
+              value={selectedPeriod}
+              onChange={(e) => setSelectedPeriod(e.target.value)}
+              className="px-2 py-1 sm:px-3 sm:py-2 border border-orange-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm sm:text-base"
+            >
+              <option value="1m">1 mois</option>
+              <option value="3m">3 mois</option>
+              <option value="6m">6 mois</option>
+              <option value="1y">1 an</option>
+            </select>
+            <button
+              onClick={exportData}
+              className="bg-orange-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center space-x-2 text-sm sm:text-base"
+            >
+              <Download className="h-4 w-4" />
+              <span className="hidden sm:inline">Exporter</span>
+            </button>
+          </div>
+        </div>
+        <div className="mt-4 hidden md:block">
+          <p className="text-sm sm:text-base text-gray-700 font-medium">
+            Tableaux de bord et métriques de performance
+          </p>
+          <div className="text-xs text-gray-600 space-y-1 mt-2">
+            <p className="flex items-center">
+              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+              <strong>Données temps réel :</strong> Suivi de l'évolution de maturité organisationnelle
+            </p>
+            <p className="flex items-center">
+              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+              <strong>Rapports détaillés :</strong> Export et analyse de performance par catégorie
+            </p>
           </div>
         </div>
       </div>
 
       <div className="px-4 sm:px-6 lg:px-8 py-6">
-        {/* Vue d'ensemble */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          {/* Total diagnostics */}
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Diagnostics Réalisés</p>
-                <p className="text-2xl font-bold text-gray-900">{analyticsData.overview.totalDiagnostics}</p>
+        {/* Statistiques - Mobile First avec 4 tickets-boutons de filtre */}
+        <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <button
+              onClick={() => setSelectedMetric('diagnostics')}
+              className={`bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+                selectedMetric === 'diagnostics'
+                  ? 'ring-2 ring-blue-500 ring-offset-2'
+                  : 'hover:scale-105'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className="p-2 rounded-lg bg-blue-200">
+                  <Activity className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+                </div>
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl font-bold text-blue-700">{analyticsData.overview.totalDiagnostics}</div>
+                  <div className="text-xs sm:text-sm text-blue-600 font-medium">Diagnostics</div>
+                </div>
               </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Activity className="h-6 w-6 text-blue-600" />
-              </div>
-            </div>
-            <div className="mt-4 flex items-center">
-              <TrendingUp className={`h-4 w-4 ${analyticsData.overview.trend === 'up' ? 'text-green-600' : 'text-red-600'}`} />
-              <span className={`text-sm ml-1 ${analyticsData.overview.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
-                +{analyticsData.overview.trendPercentage}% ce mois
-              </span>
-            </div>
-          </div>
+            </button>
 
-          {/* Niveau de maturité moyen */}
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Niveau Moyen</p>
-                <p className="text-2xl font-bold text-gray-900">{analyticsData.overview.avgMaturityLevel.toFixed(1)}</p>
+            <button
+              onClick={() => setSelectedMetric('maturity')}
+              className={`bg-gradient-to-br from-orange-100 to-orange-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+                selectedMetric === 'maturity'
+                  ? 'ring-2 ring-orange-500 ring-offset-2'
+                  : 'hover:scale-105'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className="p-2 rounded-lg bg-orange-200">
+                  <Target className="h-5 w-5 sm:h-6 sm:w-6 text-orange-600" />
+                </div>
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl font-bold text-orange-700">{analyticsData.overview.avgMaturityLevel.toFixed(1)}</div>
+                  <div className="text-xs sm:text-sm text-orange-600 font-medium">Maturité</div>
+                </div>
               </div>
-              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                <Target className="h-6 w-6 text-orange-600" />
-              </div>
-            </div>
-            <div className="mt-4">
-              <div className="flex justify-between text-sm text-gray-600 mb-1">
-                <span>Progression</span>
-                <span>{Math.round(analyticsData.overview.avgMaturityLevel * 20)}%</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-gradient-to-r from-orange-500 to-orange-600 h-2 rounded-full transition-all duration-500"
-                  style={{ width: `${analyticsData.overview.avgMaturityLevel * 20}%` }}
-                ></div>
-              </div>
-            </div>
-          </div>
+            </button>
 
-          {/* Recommandations terminées */}
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Actions Terminées</p>
-                <p className="text-2xl font-bold text-gray-900">{analyticsData.overview.completedRecommendations}</p>
+            <button
+              onClick={() => setSelectedMetric('actions')}
+              className={`bg-gradient-to-br from-green-100 to-green-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+                selectedMetric === 'actions'
+                  ? 'ring-2 ring-green-500 ring-offset-2'
+                  : 'hover:scale-105'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className="p-2 rounded-lg bg-green-200">
+                  <Users className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+                </div>
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl font-bold text-green-700">{analyticsData.overview.completedRecommendations}</div>
+                  <div className="text-xs sm:text-sm text-green-600 font-medium">Actions</div>
+                </div>
               </div>
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <Users className="h-6 w-6 text-green-600" />
-              </div>
-            </div>
-            <div className="mt-4 text-sm text-gray-600">
-              <span>Sur les 6 derniers mois</span>
-            </div>
-          </div>
+            </button>
 
-          {/* Score de conformité */}
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Conformité</p>
-                <p className="text-2xl font-bold text-gray-900">{analyticsData.overview.complianceScore}%</p>
+            <button
+              onClick={() => setSelectedMetric('all')}
+              className={`bg-gradient-to-br from-violet-100 to-violet-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+                selectedMetric === 'all'
+                  ? 'ring-2 ring-violet-500 ring-offset-2'
+                  : 'hover:scale-105'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className="p-2 rounded-lg bg-violet-200">
+                  <BarChart3 className="h-5 w-5 sm:h-6 sm:w-6 text-violet-600" />
+                </div>
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl font-bold text-violet-700">{analyticsData.overview.complianceScore}%</div>
+                  <div className="text-xs sm:text-sm text-violet-600 font-medium">Conformité</div>
+                </div>
               </div>
-              <div className="w-12 h-12 bg-violet-100 rounded-lg flex items-center justify-center">
-                <BarChart3 className="h-6 w-6 text-violet-600" />
-              </div>
-            </div>
-            <div className="mt-4">
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-gradient-to-r from-violet-500 to-violet-600 h-2 rounded-full transition-all duration-500"
-                  style={{ width: `${analyticsData.overview.complianceScore}%` }}
-                ></div>
-              </div>
-            </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Indicateur de tendance */}
+        <div className="bg-white rounded-lg p-4 mb-6 border border-gray-200">
+          <div className="flex items-center justify-center">
+            <TrendingUp className={`h-4 w-4 ${analyticsData.overview.trend === 'up' ? 'text-green-600' : 'text-red-600'}`} />
+            <span className={`text-sm ml-1 ${analyticsData.overview.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+              +{analyticsData.overview.trendPercentage}% ce mois
+            </span>
           </div>
         </div>
 
