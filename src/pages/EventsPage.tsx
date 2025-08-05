@@ -178,7 +178,7 @@ export default function EventsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 p-4">
+    <div className="min-h-screen bg-gray-900 p-0">
       {/* Feedback */}
       {feedback && (
         <div className="bg-green-100 border border-green-300 text-green-800 px-4 py-2 rounded-lg mx-4 mt-4 mb-2 text-center font-medium">
@@ -273,7 +273,7 @@ export default function EventsPage() {
       </div>
 
       {/* Recherche et filtres mobiles */}
-      <div className="bg-white border-b border-gray-200 px-4 py-4 sm:px-6 lg:px-8">
+      <div className="bg-white border-b border-gray-200 px-10 py-4 sm:px-6 lg:px-8">
         <div className="space-y-4">
           {/* Barre de recherche */}
           <div className="relative">

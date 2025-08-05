@@ -19,7 +19,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
   showFooter = true
 }) => {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-gray-900 flex flex-col p-0">
       <div className="flex flex-1">
         <Sidebar isOpen={sidebarOpen} closeSidebar={onCloseSidebar} />
         <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">

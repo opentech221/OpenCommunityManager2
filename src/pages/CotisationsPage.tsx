@@ -109,7 +109,7 @@ export default function CotisationsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 p-4">
+    <div className="min-h-screen bg-gray-900 p-0">
       {/* Header décoré avec couleur orange */}
       <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
         <div className="flex items-center justify-between">

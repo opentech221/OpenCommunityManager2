@@ -65,7 +65,7 @@ const SecurityPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 overflow-x-hidden">
+    <div className="min-h-screen bg-gray-900 p-0 overflow-x-hidden">
       <div className="w-full max-w-full mx-auto px-2 py-2 sm:px-6 sm:py-8">
         {/* En-tête décoré avec couleur orange */}
         <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">

@@ -304,7 +304,7 @@ export default function CotisationsPageMobile() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gray-900 p-0">
       {/* En-tête décoré avec couleur orange */}
       <div className="bg-gradient-to-r from-orange-50 to-orange-100 border-l-4 border-orange-500 shadow-sm p-6 h-22">
         <div className="flex items-center space-x-3 mb-4">
@@ -319,7 +319,7 @@ export default function CotisationsPageMobile() {
         </div>
       </div>
 
-      <div className="px-4 py-4 bg-purple-100">
+      <div className="px-4 py-4 bg-white">
         {/* Stats en grille compacte - Mobile First */}
         <div className="grid grid-cols-2 gap-3 mb-6">
           <button 

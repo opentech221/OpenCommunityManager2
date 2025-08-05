@@ -106,7 +106,7 @@ const HistoryPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 p-4">
+    <div className="min-h-screen bg-gray-900 p-0 sm:p-0 md:p-0 lg:p-0">
       {/* État de chargement */}
       {isLoading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

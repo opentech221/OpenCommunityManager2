@@ -50,7 +50,7 @@ export default function PublicProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-700">
+    <div className="min-h-screen bg-gray-700 p-0 sm:p-0 md:p-0 lg:p-0">
 
       {/* En-tête avec photo de couverture */}
       <div className="relative h-64 bg-gradient-to-r from-purple-500 to-purple-700">
