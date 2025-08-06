@@ -224,7 +224,7 @@ const DocumentsPage: React.FC = () => {
             <div className="flex items-center space-x-3">
               <div className="flex-shrink-0">
                 <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
-                  <FileText className="h-6 w-6 text-white" />
+                  <FileText className="h-6 w-6 text-white"/>
                 </div>
               </div>
               <h1 data-testid="documents-title" className="text-xl md:text-2xl font-bold text-orange-500">
@@ -388,7 +388,7 @@ const DocumentsPage: React.FC = () => {
         </div>
 
           {/* Liste des documents - cards mobile, table desktop */}
-          <div data-testid="documents-list-mobile" className="md:hidden flex flex-col gap-2 flex-1 overflow-y-auto min-h-0">
+          <div data-testid="documents-list-mobile" className="md:hidden flex flex-col gap-2 flex-1 overflow-hidden min-h-0">
             {filteredDocuments.length === 0 && (
               <div className="text-center py-8">
                 <File className="mx-auto h-8 w-8 text-gray-400" />
@@ -425,58 +425,58 @@ const DocumentsPage: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="hidden md:flex bg-gray-50 rounded-xl border overflow-hidden flex-1 flex-col min-h-0">
-            <div className="p-4 border-b bg-white">
+          <div className="hidden md:flex bg-gray-50 rounded-xl border overflow-hidden flex-1 flex-col min-h-0 max-h-full">
+            <div className="p-4 border-b bg-white flex-shrink-0">
               <h3 className="text-lg font-semibold text-gray-900">Documents ({filteredDocuments.length})</h3>
             </div>
-            <div className="overflow-x-auto overflow-y-auto flex-1 min-h-0">
-              <table className="w-full min-w-max">
-                <thead className="bg-gray-50 sticky top-0">
+            <div className="overflow-hidden flex-1 min-h-0">
+              <table className="w-full">
+                <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[200px]">Document</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[120px]">Type</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[80px]">Taille</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[140px]">Téléchargé par</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">Date</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-[100px]">Actions</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Document</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Taille</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Par</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredDocuments.map((document) => (
                     <tr key={document.id} className="hover:bg-gray-50">
                       <td className="px-4 py-2">
-                        <div className="flex items-center min-w-0">
+                        <div className="flex items-center">
                           {getFileIcon(document.name)}
-                          <div className="ml-2 min-w-0 flex-1">
+                          <div className="ml-2 flex-1">
                             <div className="text-sm font-medium text-gray-900 truncate" title={document.name}>
                               {document.name}
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-4 py-2 whitespace-nowrap">
+                      <td className="px-4 py-2">
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getTypeBadgeColor(document.type)}`}>
                           {getTypeLabel(document.type)}
                         </span>
                       </td>
-                      <td className="px-4 py-2 whitespace-nowrap">
+                      <td className="px-4 py-2">
                         <div className="text-sm text-gray-900">{formatFileSize(document.size)}</div>
                       </td>
-                      <td className="px-4 py-2 whitespace-nowrap">
-                        <div className="flex items-center min-w-0">
+                      <td className="px-4 py-2">
+                        <div className="flex items-center">
                           <User className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
                           <span className="text-sm text-gray-900 truncate" title={document.uploadedBy}>
                             {document.uploadedBy}
                           </span>
                         </div>
                       </td>
-                      <td className="px-4 py-2 whitespace-nowrap">
+                      <td className="px-4 py-2">
                         <div className="flex items-center">
                           <Calendar className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
                           <span className="text-sm text-gray-900">{formatDate(document.uploadDate)}</span>
                         </div>
                       </td>
-                      <td className="px-4 py-2 whitespace-nowrap">
+                      <td className="px-4 py-2">
                         <div className="flex items-center gap-2">
                           <button className="text-violet-600 hover:text-violet-800 transition-colors" title="Voir le document">
                             <Eye className="w-3 h-3" />
@@ -501,11 +501,11 @@ const DocumentsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Modal de téléchargement - inchangé, déjà mobile-first */}
+        {/* Modal de téléchargement - sans scroll */}
         {showUploadModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-screen overflow-y-auto">
-              <div className="p-6">
+            <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-screen overflow-hidden">
+              <div className="p-6 h-full flex flex-col">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Télécharger un document</h3>
                 <form className="space-y-4" onSubmit={handleAddDocument}>
                   <div>
