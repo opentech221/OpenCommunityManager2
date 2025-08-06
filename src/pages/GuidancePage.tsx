@@ -1,15 +1,42 @@
-import { Lightbulb, Brain, Target, TrendingUp, CheckSquare } from 'lucide-react';
+import { Lightbulb, Brain, Target, TrendingUp, CheckSquare, ChevronLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import OrganizationalGuidanceDashboard from '../components/OrganizationalGuidanceDashboard';
 
 export default function GuidancePage() {
   const navigate = useNavigate();
+  const [isFloatingMenuOpen, setIsFloatingMenuOpen] = useState(false);
+
+  // Fermer le menu flottant quand on clique ailleurs
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const floatingMenu = target.closest('.floating-menu-container');
+      
+      if (!floatingMenu && isFloatingMenuOpen) {
+        setIsFloatingMenuOpen(false);
+      }
+    };
+
+    if (isFloatingMenuOpen) {
+      document.addEventListener('click', handleClickOutside);
+    }
+    
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isFloatingMenuOpen]);
 
   return (
     <div className="min-h-screen bg-purple-900 p-0 sm:p-0 md:p-0 lg:p-0">
       {/* En-tête Mobile-First */}
       <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
         <div className="flex items-center space-x-3">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex-shrink-0 p-2 hover:bg-orange-200 rounded-lg transition-colors sm:p-2"
+            aria-label="Retour"
+          >
+            <ChevronLeft className="h-5 w-5 text-orange-600" />
+          </button>
           <div className="flex-shrink-0">
             <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
               <Brain className="h-6 w-6 text-white" />
@@ -108,6 +135,80 @@ export default function GuidancePage() {
       {/* Contenu principal */}
       <div className="px-4 sm:px-6 lg:px-8">
         <OrganizationalGuidanceDashboard />
+      </div>
+
+      {/* Bouton flottant avec menu contextuel - Mobile First */}
+      <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
+        {/* Menu contextuel */}
+        {isFloatingMenuOpen && (
+          <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] animate-fadeIn">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate('/guidance/diagnostic');
+                setIsFloatingMenuOpen(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Target className="w-4 h-4 text-orange-600" />
+              <span>Diagnostic</span>
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate('/guidance/best-practices');
+                setIsFloatingMenuOpen(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Lightbulb className="w-4 h-4 text-green-600" />
+              <span>Bonnes pratiques</span>
+            </button>
+            
+            <div className="border-t border-gray-100 my-1"></div>
+            
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate('/guidance/compliance');
+                setIsFloatingMenuOpen(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <TrendingUp className="w-4 h-4 text-blue-600" />
+              <span>Conformité</span>
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate('/guidance/action-plan');
+                setIsFloatingMenuOpen(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <CheckSquare className="w-4 h-4 text-purple-600" />
+              <span>Plan d'action</span>
+            </button>
+          </div>
+        )}
+
+        {/* Bouton principal flottant */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsFloatingMenuOpen(!isFloatingMenuOpen);
+          }}
+          className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
+            isFloatingMenuOpen 
+              ? 'bg-gray-600 hover:bg-gray-700 transform rotate-45' 
+              : 'bg-orange-500 hover:bg-orange-600 hover:scale-110'
+          }`}
+          aria-label="Menu d'actions guidance"
+        >
+          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+        </button>
       </div>
     </div>
   );

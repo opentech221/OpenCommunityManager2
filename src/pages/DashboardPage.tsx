@@ -5,14 +5,13 @@ import {
   CreditCard,
   Calendar,
   DollarSign,
-  Activity,
-  ArrowRight,
-  Plus
+  Activity
 } from 'lucide-react';
 import DashboardGuidanceWidget from '../components/DashboardGuidanceWidget';
 
 export const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
+  const [isFloatingMenuOpen, setIsFloatingMenuOpen] = React.useState(false);
 
   const stats = [
     {
@@ -108,9 +107,23 @@ export const DashboardPage: React.FC = () => {
     },
   ];
 
-  const handleAddNew = () => {
-    console.log('Fonction à implémenter');
-  };
+  // Fermer le menu flottant quand on clique ailleurs
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const floatingMenu = target.closest('.floating-menu-container');
+      
+      if (!floatingMenu && isFloatingMenuOpen) {
+        setIsFloatingMenuOpen(false);
+      }
+    };
+
+    if (isFloatingMenuOpen) {
+      document.addEventListener('click', handleClickOutside);
+    }
+    
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isFloatingMenuOpen]);
 
   return (
     <div className="min-h-screen bg-purple-900 p-0">
@@ -262,14 +275,79 @@ export const DashboardPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Bouton flottant d'ajout - Mobile First */}
-      <button
-        onClick={handleAddNew}
-        className="fixed bottom-6 right-6 bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors z-10"
-        aria-label="Ajouter une cotisation"
-      >
-        <Plus className="w-6 h-6" />
-      </button>
+      {/* Bouton flottant avec menu contextuel - Mobile First */}
+      <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
+        {/* Menu contextuel */}
+        {isFloatingMenuOpen && (
+          <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] animate-fadeIn">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate('/members');
+                setIsFloatingMenuOpen(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Users className="w-4 h-4 text-orange-600" />
+              <span>Ajouter membre</span>
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate('/cotisations');
+                setIsFloatingMenuOpen(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <CreditCard className="w-4 h-4 text-green-600" />
+              <span>Nouvelle cotisation</span>
+            </button>
+            
+            <div className="border-t border-gray-100 my-1"></div>
+            
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate('/events');
+                setIsFloatingMenuOpen(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Calendar className="w-4 h-4 text-blue-600" />
+              <span>Créer événement</span>
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate('/finances');
+                setIsFloatingMenuOpen(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <DollarSign className="w-4 h-4 text-purple-600" />
+              <span>Transaction</span>
+            </button>
+          </div>
+        )}
+
+        {/* Bouton principal flottant */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsFloatingMenuOpen(!isFloatingMenuOpen);
+          }}
+          className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
+            isFloatingMenuOpen 
+              ? 'bg-gray-600 hover:bg-gray-700 transform rotate-45' 
+              : 'bg-orange-500 hover:bg-orange-600 hover:scale-110'
+          }`}
+          aria-label="Menu d'actions rapides"
+        >
+          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+        </button>
+      </div>
       </div>
     </div>
   );
