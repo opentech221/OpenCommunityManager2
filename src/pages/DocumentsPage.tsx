@@ -388,7 +388,7 @@ const DocumentsPage: React.FC = () => {
         </div>
 
           {/* Liste des documents - cards mobile, table desktop */}
-          <div data-testid="documents-list-mobile" className="md:hidden flex flex-col gap-2 flex-1 overflow-hidden min-h-0">
+          <div data-testid="documents-list-mobile" className="md:hidden grid grid-cols-1 gap-1 flex-1 overflow-y-auto">
             {filteredDocuments.length === 0 && (
               <div className="text-center py-8">
                 <File className="mx-auto h-8 w-8 text-gray-400" />
@@ -417,67 +417,60 @@ const DocumentsPage: React.FC = () => {
                 </div>
               </div>
             ))}
-            <div className="p-3 border-t">
-              {/* Pagination component placeholder */}
-              {/* TODO: Replace with actual Pagination component */}
-              <div className="flex justify-center py-2">
-                <span className="text-xs text-gray-500">Pagination à implémenter</span>
-              </div>
-            </div>
           </div>
-          <div className="hidden md:flex bg-gray-50 rounded-xl border overflow-hidden flex-1 flex-col min-h-0 max-h-full">
-            <div className="p-4 border-b bg-white flex-shrink-0">
+          <div className="hidden md:block bg-gray-50 rounded-xl border overflow-hidden flex-1">
+            <div className="p-3 border-b bg-white">
               <h3 className="text-lg font-semibold text-gray-900">Documents ({filteredDocuments.length})</h3>
             </div>
-            <div className="overflow-hidden flex-1 min-h-0">
+            <div className="overflow-hidden">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Document</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Taille</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Par</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th className="px-3 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Document</th>
+                    <th className="px-3 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                    <th className="px-3 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Taille</th>
+                    <th className="px-3 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Par</th>
+                    <th className="px-3 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th className="px-3 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white">
                   {filteredDocuments.map((document) => (
-                    <tr key={document.id} className="hover:bg-gray-50">
-                      <td className="px-4 py-2">
+                    <tr key={document.id} className="hover:bg-gray-50 border-b border-gray-100">
+                      <td className="px-3 py-1">
                         <div className="flex items-center">
                           {getFileIcon(document.name)}
                           <div className="ml-2 flex-1">
-                            <div className="text-sm font-medium text-gray-900 truncate" title={document.name}>
+                            <div className="text-xs font-medium text-gray-900 truncate" title={document.name}>
                               {document.name}
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-4 py-2">
+                      <td className="px-3 py-1">
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getTypeBadgeColor(document.type)}`}>
                           {getTypeLabel(document.type)}
                         </span>
                       </td>
-                      <td className="px-4 py-2">
-                        <div className="text-sm text-gray-900">{formatFileSize(document.size)}</div>
+                      <td className="px-3 py-1">
+                        <div className="text-xs text-gray-900">{formatFileSize(document.size)}</div>
                       </td>
-                      <td className="px-4 py-2">
+                      <td className="px-3 py-1">
                         <div className="flex items-center">
                           <User className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
-                          <span className="text-sm text-gray-900 truncate" title={document.uploadedBy}>
+                          <span className="text-xs text-gray-900 truncate" title={document.uploadedBy}>
                             {document.uploadedBy}
                           </span>
                         </div>
                       </td>
-                      <td className="px-4 py-2">
+                      <td className="px-3 py-1">
                         <div className="flex items-center">
                           <Calendar className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
-                          <span className="text-sm text-gray-900">{formatDate(document.uploadDate)}</span>
+                          <span className="text-xs text-gray-900">{formatDate(document.uploadDate)}</span>
                         </div>
                       </td>
-                      <td className="px-4 py-2">
-                        <div className="flex items-center gap-2">
+                      <td className="px-3 py-1">
+                        <div className="flex items-center gap-1">
                           <button className="text-violet-600 hover:text-violet-800 transition-colors" title="Voir le document">
                             <Eye className="w-3 h-3" />
                           </button>
