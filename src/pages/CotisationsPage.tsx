@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
-import { Plus, Trash2, Edit, Search } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Plus, Trash2, Edit, Search, Users, Download, FileText } from 'lucide-react';
 import { PaymentStatus, PaymentMethod, type CotisationType } from '../types';
 import { formatCurrency, formatDate } from '../utils';
 import { useCotisations } from '../hooks/useCotisations';
@@ -26,6 +26,25 @@ export default function CotisationsPage() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editCotisation, setEditCotisation] = useState<CotisationType | null>(null);
+  const [showFloatingMenu, setShowFloatingMenu] = useState(false);
+
+  // Gestion du clic extérieur pour fermer le menu flottant
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.floating-menu-container')) {
+        setShowFloatingMenu(false);
+      }
+    };
+
+    if (showFloatingMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFloatingMenu]);
 
   // Stats
   const total = cotisations.length;
@@ -109,7 +128,7 @@ export default function CotisationsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 p-0">
+    <div className="min-h-screen bg-purple-900 p-0">
       {/* Header décoré avec couleur orange */}
       <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
         <div className="flex items-center justify-between">
@@ -182,30 +201,50 @@ export default function CotisationsPage() {
 
       {/* Statistiques */}
       <div className="bg-white rounded-lg p-4 shadow mb-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4">
           <button 
-            className={`bg-purple-100 rounded-lg p-4 shadow hover:bg-purple-200 transition-colors border ${
-              statusFilter === 'ALL' ? 'ring-2 ring-violet-500' : ''
+            className={`bg-purple-100 rounded-lg p-3 shadow hover:bg-purple-200 transition-colors border ${
+              statusFilter === 'ALL' ? 'ring-2 ring-violet-500 ring-offset-2' : ''
             }`} 
             onClick={() => setStatusFilter('ALL')} 
             aria-label="Afficher toutes les cotisations" 
             data-testid="stat-total"
           >
-            
-            <div className="text-xl text-purple-600 font-bold" data-testid="stat-total-value">{total}</div>
-            <div className="text-sm text-purple-600" data-testid="stat-total-label">Total</div>
+            <div className="text-lg sm:text-xl text-purple-600 font-bold" data-testid="stat-total-value">{total}</div>
+            <div className="text-xs sm:text-sm text-purple-600" data-testid="stat-total-label">Total</div>
           </button>
-          <button className={`bg-green-100 rounded-lg p-4 shadow hover:bg-green-200 transition-colors ${statusFilter === PaymentStatus.PAID ? 'ring-2 ring-green-500' : ''}`} onClick={() => setStatusFilter(PaymentStatus.PAID)} aria-label="Filtrer payées" data-testid="stat-paid">
-            <div className="text-xl  text-green-700 font-bold" data-testid="stat-paid-value">{paid}</div>
-            <div className="text-sm text-green-700" data-testid="stat-paid-label">Payées</div>
+          <button 
+            className={`bg-green-100 rounded-lg p-3 shadow hover:bg-green-200 transition-colors border ${
+              statusFilter === PaymentStatus.PAID ? 'ring-2 ring-green-500 ring-offset-2' : ''
+            }`} 
+            onClick={() => setStatusFilter(statusFilter === PaymentStatus.PAID ? 'ALL' : PaymentStatus.PAID)} 
+            aria-label="Filtrer payées" 
+            data-testid="stat-paid"
+          >
+            <div className="text-lg sm:text-xl text-green-700 font-bold" data-testid="stat-paid-value">{paid}</div>
+            <div className="text-xs sm:text-sm text-green-700" data-testid="stat-paid-label">Payées</div>
           </button>
-          <button className={`bg-yellow-100 rounded-lg p-4 shadow hover:bg-yellow-200 transition-colors ${statusFilter === PaymentStatus.PENDING ? 'ring-2 ring-yellow-500' : ''}`} onClick={() => setStatusFilter(PaymentStatus.PENDING)} aria-label="Filtrer en attente" data-testid="stat-pending">
-            <div className="text-xl text-yellow-700 font-bold" data-testid="stat-pending-value">{pending}</div>
-            <div className="text-sm text-yellow-700" data-testid="stat-pending-label">En attente</div>
+          <button 
+            className={`bg-yellow-100 rounded-lg p-3 shadow hover:bg-yellow-200 transition-colors border ${
+              statusFilter === PaymentStatus.PENDING ? 'ring-2 ring-yellow-500 ring-offset-2' : ''
+            }`} 
+            onClick={() => setStatusFilter(statusFilter === PaymentStatus.PENDING ? 'ALL' : PaymentStatus.PENDING)} 
+            aria-label="Filtrer en attente" 
+            data-testid="stat-pending"
+          >
+            <div className="text-lg sm:text-xl text-yellow-700 font-bold" data-testid="stat-pending-value">{pending}</div>
+            <div className="text-xs sm:text-sm text-yellow-700" data-testid="stat-pending-label">En attente</div>
           </button>
-          <button className={`bg-red-100 rounded-lg p-4 shadow hover:bg-red-200 transition-colors ${statusFilter === PaymentStatus.OVERDUE ? 'ring-2 ring-red-500' : ''}`} onClick={() => setStatusFilter(PaymentStatus.OVERDUE)} aria-label="Filtrer en retard" data-testid="stat-overdue">
-            <div className="text-xl text-red-700 font-bold" data-testid="stat-overdue-value">{overdue}</div>
-            <div className="text-sm text-red-700" data-testid="stat-overdue-label">En retard</div>
+          <button 
+            className={`bg-red-100 rounded-lg p-3 shadow hover:bg-red-200 transition-colors border ${
+              statusFilter === PaymentStatus.OVERDUE ? 'ring-2 ring-red-500 ring-offset-2' : ''
+            }`} 
+            onClick={() => setStatusFilter(statusFilter === PaymentStatus.OVERDUE ? 'ALL' : PaymentStatus.OVERDUE)} 
+            aria-label="Filtrer en retard" 
+            data-testid="stat-overdue"
+          >
+            <div className="text-lg sm:text-xl text-red-700 font-bold" data-testid="stat-overdue-value">{overdue}</div>
+            <div className="text-xs sm:text-sm text-red-700" data-testid="stat-overdue-label">En retard</div>
           </button>
         </div>
         <div className="bg-purple-100 rounded-lg p-4" data-testid="stat-total-amount">
@@ -378,6 +417,75 @@ export default function CotisationsPage() {
         cotisation={editCotisation}
         onSave={showAddModal ? handleAdd : handleEdit}
       />
+
+      {/* Bouton flottant avec menu d'actions */}
+      <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
+        {/* Menu d'actions (visible quand showFloatingMenu est true) */}
+        {showFloatingMenu && (
+          <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] animate-fadeIn">
+            <button
+              onClick={() => {
+                setShowAddModal(true);
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Plus className="h-4 w-4 text-orange-600" />
+              <span>Nouvelle Cotisation</span>
+            </button>
+            
+            <button
+              onClick={() => {
+                // Navigation vers membres pour voir les cotisations
+                window.location.href = '/members';
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Users className="h-4 w-4 text-blue-600" />
+              <span>Voir Membres</span>
+            </button>
+            
+            <div className="border-t border-gray-100 my-1"></div>
+            
+            <button
+              onClick={() => {
+                // Fonction d'export à implémenter
+                console.log('Export des cotisations');
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Download className="h-4 w-4 text-green-600" />
+              <span>Exporter Liste</span>
+            </button>
+            
+            <button
+              onClick={() => {
+                // Fonction de rapport à implémenter
+                console.log('Générer rapport financier');
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <FileText className="h-4 w-4 text-purple-600" />
+              <span>Rapport Financier</span>
+            </button>
+          </div>
+        )}
+
+        {/* Bouton principal flottant */}
+        <button
+          onClick={() => setShowFloatingMenu(!showFloatingMenu)}
+          className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
+            showFloatingMenu 
+              ? 'bg-gray-600 hover:bg-gray-700 transform rotate-45' 
+              : 'bg-orange-500 hover:bg-orange-600 hover:scale-110'
+          }`}
+        >
+          <Plus className="h-6 w-6 text-white" />
+        </button>
+      </div>
     </div>
   );
 }

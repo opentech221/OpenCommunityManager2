@@ -11,7 +11,10 @@ import {
   Users,
   DollarSign,
   Cog,
-  AlertCircle
+  AlertCircle,
+  Plus,
+  Target,
+  TrendingUp
 } from 'lucide-react';
 import { guidanceAPI } from '../services/guidanceAPI';
 import type { ComplianceCheckAPI } from '../services/guidanceAPI';
@@ -22,10 +25,26 @@ const CompliancePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isRunningCheck, setIsRunningCheck] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [showFloatingMenu, setShowFloatingMenu] = useState(false);
 
   useEffect(() => {
     loadComplianceChecks();
   }, []);
+
+  // Fermer le menu flottant quand on clique à l'extérieur
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (showFloatingMenu && !target.closest('.floating-menu-container')) {
+        setShowFloatingMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFloatingMenu]);
 
   const loadComplianceChecks = async () => {
     try {
@@ -249,7 +268,7 @@ const CompliancePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 p-0">
+    <div className="min-h-screen bg-purple-900 p-0">
       {/* En-tête Mobile-First */}
       <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
         <div className="flex items-center justify-between">
@@ -492,6 +511,72 @@ const CompliancePage: React.FC = () => {
             </p>
           </div>
         )}
+
+        {/* Bouton flottant avec menu d'actions */}
+        <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
+          {/* Menu d'actions (visible quand showFloatingMenu est true) */}
+          {showFloatingMenu && (
+            <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] animate-fadeIn">
+              <button
+                onClick={() => {
+                  navigate('/guidance/diagnostic');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <TrendingUp className="h-4 w-4 text-blue-600" />
+                <span>Nouveau Diagnostic</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  navigate('/guidance/recommendations');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <AlertTriangle className="h-4 w-4 text-violet-600" />
+                <span>Voir Recommandations</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  navigate('/guidance/action-plan');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <Target className="h-4 w-4 text-orange-600" />
+                <span>Plan d'Action</span>
+              </button>
+              
+              <div className="border-t border-gray-100 my-1"></div>
+              
+              <button
+                onClick={() => {
+                  runComplianceCheck();
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <RefreshCw className="h-4 w-4 text-green-600" />
+                <span>Nouvelle Vérification</span>
+              </button>
+            </div>
+          )}
+
+          {/* Bouton principal flottant */}
+          <button
+            onClick={() => setShowFloatingMenu(!showFloatingMenu)}
+            className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
+              showFloatingMenu 
+                ? 'bg-gray-600 hover:bg-gray-700 transform rotate-45' 
+                : 'bg-orange-500 hover:bg-orange-600 hover:scale-110'
+            }`}
+          >
+            <Plus className="h-6 w-6 text-white" />
+          </button>
+        </div>
       </div>
     </div>
   );

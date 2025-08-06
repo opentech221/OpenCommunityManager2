@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Plus, Search, Filter, Edit, Trash2, Phone, Mail, Calendar, Users } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Plus, Search, Filter, Edit, Trash2, Phone, Mail, Calendar, Users, Download, FileText, DollarSign } from 'lucide-react';
 import type { MemberType, MemberRole as MemberRoleType, MemberStatus as MemberStatusType } from '../types';
 import { MemberRole, MemberStatus } from '../types';
 import { useMembers } from '../hooks/useMembers';
@@ -13,7 +13,26 @@ export default function MembersPage() {
   const [showForm, setShowForm] = useState(false);
   const [editMember, setEditMember] = useState<MemberType | undefined>(undefined);
   const [feedback, setFeedback] = useState<string>('');
+  const [showFloatingMenu, setShowFloatingMenu] = useState(false);
   const { members, addMember, updateMember, deleteMember } = useMembers();
+
+  // Gestion du clic extérieur pour fermer le menu flottant
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.floating-menu-container')) {
+        setShowFloatingMenu(false);
+      }
+    };
+
+    if (showFloatingMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFloatingMenu]);
 
   const filteredMembers = members.filter(member => {
     const matchesSearch = member.firstName.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -92,13 +111,9 @@ export default function MembersPage() {
       setTimeout(() => setFeedback(''), 2000);
     }
   };
-  const handleAddNew = () => {
-    setShowForm(true);
-    setEditMember(undefined);
-  };
 
   return (
-    <div className="min-h-screen bg-gray-900 p-0 sm:p-0 md:p-0 lg:p-0">
+    <div className="min-h-screen bg-purple-900 p-0 sm:p-0 md:p-0 lg:p-0">
       {feedback && (
         <div data-testid="members-feedback" className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50">
           {feedback}
@@ -382,15 +397,75 @@ export default function MembersPage() {
         onSave={editMember ? handleEditMember : handleAddMember}
       />
 
-      {/* Bouton flottant d'ajout - Mobile First */}
-      <button
-        data-testid="add-member-floating-btn"
-        onClick={handleAddNew}
-        className="fixed bottom-6 right-6 bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors z-10"
-        aria-label="Ajouter un membre"
-      >
-        <Plus className="w-6 h-6" />
-      </button>
+      {/* Bouton flottant avec menu d'actions */}
+      <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
+        {/* Menu d'actions (visible quand showFloatingMenu est true) */}
+        {showFloatingMenu && (
+          <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] animate-fadeIn">
+            <button
+              onClick={() => {
+                setShowForm(true);
+                setEditMember(undefined);
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Plus className="h-4 w-4 text-orange-600" />
+              <span>Nouveau Membre</span>
+            </button>
+            
+            <button
+              onClick={() => {
+                // Navigation vers cotisations
+                window.location.href = '/cotisations';
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <DollarSign className="h-4 w-4 text-green-600" />
+              <span>Voir Cotisations</span>
+            </button>
+            
+            <div className="border-t border-gray-100 my-1"></div>
+            
+            <button
+              onClick={() => {
+                // Fonction d'export à implémenter
+                console.log('Export des membres');
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Download className="h-4 w-4 text-blue-600" />
+              <span>Exporter Liste</span>
+            </button>
+            
+            <button
+              onClick={() => {
+                // Fonction de rapport à implémenter
+                console.log('Générer rapport membres');
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <FileText className="h-4 w-4 text-purple-600" />
+              <span>Rapport Adhésions</span>
+            </button>
+          </div>
+        )}
+
+        {/* Bouton principal flottant */}
+        <button
+          onClick={() => setShowFloatingMenu(!showFloatingMenu)}
+          className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
+            showFloatingMenu 
+              ? 'bg-gray-600 hover:bg-gray-700 transform rotate-45' 
+              : 'bg-orange-500 hover:bg-orange-600 hover:scale-110'
+          }`}
+        >
+          <Plus className="h-6 w-6 text-white" />
+        </button>
+      </div>
     </div>
   );
 };

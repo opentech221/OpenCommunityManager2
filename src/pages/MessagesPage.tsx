@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Send, 
   Search,
@@ -10,7 +10,10 @@ import {
   Send as SendIcon,
   Plus,
   X,
-  Check
+  Check,
+  MessageSquare,
+  Users,
+  Download
 } from 'lucide-react';
 
 interface Message {
@@ -75,6 +78,25 @@ export default function MessagesPage() {
     }
   ]);
   const [feedback, setFeedback] = useState<string>('');
+  const [showFloatingMenu, setShowFloatingMenu] = useState(false);
+
+  // Gestion du clic extérieur pour fermer le menu flottant
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.floating-menu-container')) {
+        setShowFloatingMenu(false);
+      }
+    };
+
+    if (showFloatingMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFloatingMenu]);
 
   // Données des membres disponibles pour les discussions
   const members: Member[] = [
@@ -231,12 +253,8 @@ export default function MessagesPage() {
     setTimeout(() => setFeedback(''), 2000);
   };
 
-  const handleAddNew = () => {
-    setShowNewDiscussionModal(true);
-  };
-
   return (
-    <div className="min-h-screen max-h-screen bg-gray-900 flex flex-col p-0">
+    <div className="min-h-screen max-h-screen bg-purple-900 flex flex-col p-0">
       {/* En-tête décoré avec couleur orange - Compact et flexible */}
       <div className="bg-gradient-to-r from-orange-50 to-orange-100 border-l-4 border-orange-500 shadow-sm p-2 md:p-4 flex-shrink-0">
         <div className="max-w-7xl mx-auto">
@@ -276,6 +294,71 @@ export default function MessagesPage() {
               </p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Statistiques avec boutons fonctionnels */}
+      <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-4 flex-shrink-0">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          <button 
+            className="bg-purple-100 rounded-lg p-3 shadow hover:bg-purple-200 transition-colors border"
+            onClick={() => {
+              // Voir toutes les conversations
+              setSelectedConversation(null);
+            }}
+            aria-label="Voir toutes les conversations"
+          >
+            <div className="flex flex-col items-center space-y-1">
+              <MessageSquare className="h-6 w-6 text-purple-600" />
+              <div className="text-lg sm:text-xl font-bold text-purple-700">{conversations.length}</div>
+              <div className="text-xs sm:text-sm text-purple-600">Conversations</div>
+            </div>
+          </button>
+          <button 
+            className="bg-green-100 rounded-lg p-3 shadow hover:bg-green-200 transition-colors border"
+            onClick={() => {
+              // Voir les membres connectés
+              console.log('Membres en ligne');
+            }}
+            aria-label="Voir membres en ligne"
+          >
+            <div className="flex flex-col items-center space-y-1">
+              <Users className="h-6 w-6 text-green-600" />
+              <div className="text-lg sm:text-xl font-bold text-green-700">
+                {members.filter(m => m.isOnline).length}
+              </div>
+              <div className="text-xs sm:text-sm text-green-600">En ligne</div>
+            </div>
+          </button>
+          <button 
+            className="bg-orange-100 rounded-lg p-3 shadow hover:bg-orange-200 transition-colors border"
+            onClick={() => {
+              // Voir les messages non lus
+              console.log('Messages non lus');
+            }}
+            aria-label="Voir messages non lus"
+          >
+            <div className="flex flex-col items-center space-y-1">
+              <Send className="h-6 w-6 text-orange-600" />
+              <div className="text-lg sm:text-xl font-bold text-orange-700">
+                {conversations.reduce((total, conv) => total + conv.unreadCount, 0)}
+              </div>
+              <div className="text-xs sm:text-sm text-orange-600">Non lus</div>
+            </div>
+          </button>
+          <button 
+            className="bg-blue-100 rounded-lg p-3 shadow hover:bg-blue-200 transition-colors border"
+            onClick={() => {
+              setShowNewDiscussionModal(true);
+            }}
+            aria-label="Nouvelle discussion"
+          >
+            <div className="flex flex-col items-center space-y-1">
+              <Plus className="h-6 w-6 text-blue-600" />
+              <div className="text-lg sm:text-xl font-bold text-blue-700">{members.length}</div>
+              <div className="text-xs sm:text-sm text-blue-600">Membres</div>
+            </div>
+          </button>
         </div>
       </div>
 
@@ -566,14 +649,62 @@ export default function MessagesPage() {
         </div>
       )}
 
-      {/* Bouton flottant d'ajout - Mobile First */}
-      <button
-        onClick={handleAddNew}
-        className="fixed bottom-6 right-6 bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors z-10"
-        aria-label="Nouvelle discussion"
-      >
-        <Plus className="w-6 h-6" />
-      </button>
+      {/* Bouton flottant avec menu d'actions */}
+      <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
+        {/* Menu d'actions (visible quand showFloatingMenu est true) */}
+        {showFloatingMenu && (
+          <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] animate-fadeIn">
+            <button
+              onClick={() => {
+                setShowNewDiscussionModal(true);
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Plus className="h-4 w-4 text-orange-600" />
+              <span>Nouvelle Discussion</span>
+            </button>
+            
+            <button
+              onClick={() => {
+                // Navigation vers membres
+                window.location.href = '/members';
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Users className="h-4 w-4 text-blue-600" />
+              <span>Voir Membres</span>
+            </button>
+            
+            <div className="border-t border-gray-100 my-1"></div>
+            
+            <button
+              onClick={() => {
+                // Fonction d'export à implémenter
+                console.log('Export des messages');
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Download className="h-4 w-4 text-green-600" />
+              <span>Exporter Historique</span>
+            </button>
+          </div>
+        )}
+
+        {/* Bouton principal flottant */}
+        <button
+          onClick={() => setShowFloatingMenu(!showFloatingMenu)}
+          className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
+            showFloatingMenu 
+              ? 'bg-gray-600 hover:bg-gray-700 transform rotate-45' 
+              : 'bg-orange-500 hover:bg-orange-600 hover:scale-110'
+          }`}
+        >
+          <Plus className="h-6 w-6 text-white" />
+        </button>
+      </div>
     </div>
   );
 }

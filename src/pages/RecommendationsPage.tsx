@@ -8,7 +8,10 @@ import {
   Filter,
   AlertTriangle,
   TrendingUp,
-  User
+  User,
+  Plus,
+  Target,
+  Download
 } from 'lucide-react';
 import { guidanceAPI } from '../services/guidanceAPI';
 import type { RecommendationAPI } from '../services/guidanceAPI';
@@ -20,6 +23,7 @@ const RecommendationsPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPriority, setSelectedPriority] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [showFloatingMenu, setShowFloatingMenu] = useState(false);
 
   useEffect(() => {
     loadRecommendations();
@@ -28,6 +32,21 @@ const RecommendationsPage: React.FC = () => {
   useEffect(() => {
     filterRecommendations();
   }, [recommendations, selectedPriority, selectedStatus]);
+
+  // Fermer le menu flottant quand on clique à l'extérieur
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (showFloatingMenu && !target.closest('.floating-menu-container')) {
+        setShowFloatingMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFloatingMenu]);
 
   const loadRecommendations = async () => {
     try {
@@ -187,7 +206,7 @@ const RecommendationsPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 p-0 sm:p-0 md:p-0 lg:p-0">
+    <div className="min-h-screen bg-purple-900 p-0 sm:p-0 md:p-0 lg:p-0">
       {/* En-tête Mobile-First */}
       <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
         <div className="flex items-center space-x-3">
@@ -447,6 +466,73 @@ const RecommendationsPage: React.FC = () => {
             </p>
           </div>
         )}
+
+        {/* Bouton flottant avec menu d'actions */}
+        <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
+          {/* Menu d'actions (visible quand showFloatingMenu est true) */}
+          {showFloatingMenu && (
+            <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] animate-fadeIn">
+              <button
+                onClick={() => {
+                  navigate('/guidance/diagnostic');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <TrendingUp className="h-4 w-4 text-blue-600" />
+                <span>Nouveau Diagnostic</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  navigate('/guidance/action-plan');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <Target className="h-4 w-4 text-orange-600" />
+                <span>Plan d'Action</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  navigate('/guidance/compliance');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <CheckCircle className="h-4 w-4 text-green-600" />
+                <span>État Conformité</span>
+              </button>
+              
+              <div className="border-t border-gray-100 my-1"></div>
+              
+              <button
+                onClick={() => {
+                  // Fonction d'export à implémenter
+                  console.log('Export des recommandations');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <Download className="h-4 w-4 text-purple-600" />
+                <span>Exporter PDF</span>
+              </button>
+            </div>
+          )}
+
+          {/* Bouton principal flottant */}
+          <button
+            onClick={() => setShowFloatingMenu(!showFloatingMenu)}
+            className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
+              showFloatingMenu 
+                ? 'bg-gray-600 hover:bg-gray-700 transform rotate-45' 
+                : 'bg-orange-500 hover:bg-orange-600 hover:scale-110'
+            }`}
+          >
+            <Plus className="h-6 w-6 text-white" />
+          </button>
+        </div>
       </div>
     </div>
   );

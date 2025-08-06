@@ -113,7 +113,7 @@ export const DashboardPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 p-0">
+    <div className="min-h-screen bg-purple-900 p-0">
       <div>
       {/* En-tête de la page */}
       <div className="mb-8 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500">

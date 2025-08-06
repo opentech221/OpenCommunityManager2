@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { Plus, TrendingUp, TrendingDown, Wallet, Filter } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Plus, TrendingUp, TrendingDown, Wallet, Filter, Download, FileText, BarChart3 } from 'lucide-react';
 import type { Transaction } from '../types';
 import { TransactionType } from '../types';
 import { TransactionFormModal } from '../components';
@@ -20,6 +20,25 @@ const FinancesPage: React.FC = () => {
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [showAddModal, setShowAddModal] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState<string>('');
+  const [showFloatingMenu, setShowFloatingMenu] = useState(false);
+
+  // Gestion du clic extérieur pour fermer le menu flottant
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.floating-menu-container')) {
+        setShowFloatingMenu(false);
+      }
+    };
+
+    if (showFloatingMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFloatingMenu]);
 
   const handleAddTransaction = async (transactionData: Partial<Transaction>) => {
     try {
@@ -50,12 +69,8 @@ const FinancesPage: React.FC = () => {
   const totalExpenses = transactions.filter((t: Transaction) => t.type === TransactionType.EXPENSE).reduce((sum: number, t: Transaction) => sum + t.amount, 0);
   const balance = totalIncome - totalExpenses;
 
-  const handleAddNew = () => {
-    setShowAddModal(true);
-  };
-
   return (
-    <div className="min-h-screen bg-gray-900 p-0">
+    <div className="min-h-screen bg-purple-900 p-0">
       {feedbackMessage && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50" data-testid="finances-feedback">
           {feedbackMessage}
@@ -112,41 +127,63 @@ const FinancesPage: React.FC = () => {
       </div>
 
       
-        {/* Etat de la finance */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <button 
-            className={`bg-purple-100 rounded-xl shadow-sm border p-6 flex flex-col items-center hover:bg-purple-200 transition-colors ${
-              filterType === 'all' ? 'ring-2 ring-purple-500' : ''
-            }`}
-            onClick={() => setFilterType('all')}
-            aria-label="Afficher toutes les transactions"
-          >
-            <Wallet className="text-purple-700 mb-2" size={32} />
-            <span className="font-bold text-lg text-gray-900 font-montserrat">Solde</span>
-            <span className="font-bold text-2xl text-purple-700" data-testid="finances-balance">{balance} €</span>
-          </button>
-          <button 
-            className={`bg-green-100 rounded-xl shadow-sm border p-6 flex flex-col items-center hover:bg-green-200 transition-colors ${
-              filterType === TransactionType.INCOME ? 'ring-2 ring-green-500' : ''
-            }`}
-            onClick={() => setFilterType(TransactionType.INCOME)}
-            aria-label="Filtrer les entrées"
-          >
-            <TrendingUp className="text-green-600 mb-2" size={32} />
-            <span className="font-bold text-lg text-gray-900 font-montserrat">Entrées</span>
-            <span className="font-bold text-2xl text-green-600" data-testid="finances-income">{totalIncome} €</span>
-          </button>
-          <button 
-            className={`bg-red-100 rounded-xl shadow-sm border p-6 flex flex-col items-center hover:bg-red-200 transition-colors ${
-              filterType === TransactionType.EXPENSE ? 'ring-2 ring-red-500' : ''
-            }`}
-            onClick={() => setFilterType(TransactionType.EXPENSE)}
-            aria-label="Filtrer les sorties"
-          >
-            <TrendingDown className="text-red-500 mb-2" size={32} />
-            <span className="font-bold text-lg text-gray-900 font-montserrat">Sorties</span>
-            <span className="font-bold text-2xl text-red-500" data-testid="finances-expenses">{totalExpenses} €</span>
-          </button>
+        {/* Statistiques financières avec boutons fonctionnels */}
+        <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <button 
+              className={`bg-purple-100 rounded-lg p-3 shadow hover:bg-purple-200 transition-colors border ${
+                filterType === 'all' ? 'ring-2 ring-purple-500 ring-offset-2' : ''
+              }`}
+              onClick={() => setFilterType('all')}
+              aria-label="Afficher toutes les transactions"
+            >
+              <div className="flex flex-col items-center space-y-1">
+                <Wallet className="h-6 w-6 text-purple-600" />
+                <div className="text-lg sm:text-xl font-bold text-purple-700" data-testid="finances-balance">{balance}€</div>
+                <div className="text-xs sm:text-sm text-purple-600">Solde</div>
+              </div>
+            </button>
+            <button 
+              className={`bg-green-100 rounded-lg p-3 shadow hover:bg-green-200 transition-colors border ${
+                filterType === TransactionType.INCOME ? 'ring-2 ring-green-500 ring-offset-2' : ''
+              }`}
+              onClick={() => setFilterType(filterType === TransactionType.INCOME ? 'all' : TransactionType.INCOME)}
+              aria-label="Filtrer les entrées"
+            >
+              <div className="flex flex-col items-center space-y-1">
+                <TrendingUp className="h-6 w-6 text-green-600" />
+                <div className="text-lg sm:text-xl font-bold text-green-700" data-testid="finances-income">{totalIncome}€</div>
+                <div className="text-xs sm:text-sm text-green-600">Entrées</div>
+              </div>
+            </button>
+            <button 
+              className={`bg-red-100 rounded-lg p-3 shadow hover:bg-red-200 transition-colors border ${
+                filterType === TransactionType.EXPENSE ? 'ring-2 ring-red-500 ring-offset-2' : ''
+              }`}
+              onClick={() => setFilterType(filterType === TransactionType.EXPENSE ? 'all' : TransactionType.EXPENSE)}
+              aria-label="Filtrer les sorties"
+            >
+              <div className="flex flex-col items-center space-y-1">
+                <TrendingDown className="h-6 w-6 text-red-600" />
+                <div className="text-lg sm:text-xl font-bold text-red-700" data-testid="finances-expenses">{totalExpenses}€</div>
+                <div className="text-xs sm:text-sm text-red-600">Sorties</div>
+              </div>
+            </button>
+            <button 
+              className="bg-blue-100 rounded-lg p-3 shadow hover:bg-blue-200 transition-colors border"
+              onClick={() => {
+                // Action pour voir les statistiques détaillées
+                console.log('Statistiques détaillées');
+              }}
+              aria-label="Voir statistiques détaillées"
+            >
+              <div className="flex flex-col items-center space-y-1">
+                <BarChart3 className="h-6 w-6 text-blue-600" />
+                <div className="text-lg sm:text-xl font-bold text-blue-700">{transactions.length}</div>
+                <div className="text-xs sm:text-sm text-blue-600">Transactions</div>
+              </div>
+            </button>
+          </div>
         </div>
 
       <div className="px-4 py-4 bg-white gap-6 mb-8">
@@ -229,14 +266,74 @@ const FinancesPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Bouton flottant d'ajout - Mobile First */}
-      <button
-        onClick={handleAddNew}
-        className="fixed bottom-6 right-6 bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors z-10"
-        aria-label="Ajouter une cotisation"
-      >
-        <Plus className="w-6 h-6" />
-      </button>
+      {/* Bouton flottant avec menu d'actions */}
+      <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
+        {/* Menu d'actions (visible quand showFloatingMenu est true) */}
+        {showFloatingMenu && (
+          <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] animate-fadeIn">
+            <button
+              onClick={() => {
+                setShowAddModal(true);
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Plus className="h-4 w-4 text-orange-600" />
+              <span>Nouvelle Transaction</span>
+            </button>
+            
+            <button
+              onClick={() => {
+                // Navigation vers cotisations
+                window.location.href = '/cotisations';
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Wallet className="h-4 w-4 text-blue-600" />
+              <span>Voir Cotisations</span>
+            </button>
+            
+            <div className="border-t border-gray-100 my-1"></div>
+            
+            <button
+              onClick={() => {
+                // Fonction d'export à implémenter
+                console.log('Export des finances');
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Download className="h-4 w-4 text-green-600" />
+              <span>Exporter Données</span>
+            </button>
+            
+            <button
+              onClick={() => {
+                // Fonction de rapport à implémenter
+                console.log('Générer bilan financier');
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <FileText className="h-4 w-4 text-purple-600" />
+              <span>Bilan Financier</span>
+            </button>
+          </div>
+        )}
+
+        {/* Bouton principal flottant */}
+        <button
+          onClick={() => setShowFloatingMenu(!showFloatingMenu)}
+          className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
+            showFloatingMenu 
+              ? 'bg-gray-600 hover:bg-gray-700 transform rotate-45' 
+              : 'bg-orange-500 hover:bg-orange-600 hover:scale-110'
+          }`}
+        >
+          <Plus className="h-6 w-6 text-white" />
+        </button>
+      </div>
     </div>
   );
 };

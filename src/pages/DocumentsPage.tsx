@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Upload,
   File,
@@ -13,6 +13,8 @@ import {
   FileSpreadsheet,
   FileImage,
   Plus,
+  Archive,
+  Share
 } from 'lucide-react';
 import type { DocumentType } from '../types';
 import { DocumentTypeEnum } from '../types';
@@ -80,6 +82,25 @@ const DocumentsPage: React.FC = () => {
   const [filterType, setFilterType] = useState<'all' | DocumentTypeEnum>('all');
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [feedback, setFeedback] = useState<string>('');
+  const [showFloatingMenu, setShowFloatingMenu] = useState(false);
+
+  // Gestion du clic extérieur pour fermer le menu flottant
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.floating-menu-container')) {
+        setShowFloatingMenu(false);
+      }
+    };
+
+    if (showFloatingMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFloatingMenu]);
 
   // États locaux pour l’upload
   const [uploadFile, setUploadFile] = useState<File | null>(null);
@@ -189,12 +210,8 @@ const DocumentsPage: React.FC = () => {
     setTimeout(() => setFeedback(''), 2000);
   }
 
-  const handleAddNew = () => {
-    setShowUploadModal(true);
-  };
-
   return (
-    <div className="max-h-screen bg-gray-900 p-0">
+    <div className="max-h-screen bg-purple-900 p-0">
       {feedback && (
         <div data-testid="documents-feedback" className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50">
           {feedback}
@@ -241,21 +258,69 @@ const DocumentsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Statistiques - colonne mobile, ligne desktop */}
-        <div className="flex flex-col md:flex-row gap-4 mb-4 px-4 sm:px-6 lg:px-8">
-          <button 
-            onClick={() => setFilterType('all')}
-            className={`bg-purple-100 p-4 rounded-lg shadow flex items-center justify-between flex-1 transition-colors hover:bg-purple-200 cursor-pointer ${
-              filterType === 'all' ? 'ring-2 ring-violet-500' : ''
-            }`}
-            aria-label="Afficher tous les documents"
-          >
-            <div>
-              <p className="text-xs font-poppins text-gray-600">Total documents</p>
-              <p className="text-xl font-bold font-montserrat text-purple-700">{documents.length}</p>
-            </div>
-            <File className="w-6 h-6 text-blue-600" />
-          </button>
+        {/* Statistiques avec boutons fonctionnels */}
+        <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <button 
+              onClick={() => setFilterType('all')}
+              className={`bg-purple-100 rounded-lg p-3 shadow hover:bg-purple-200 transition-colors border ${
+                filterType === 'all' ? 'ring-2 ring-purple-500 ring-offset-2' : ''
+              }`}
+              aria-label="Afficher tous les documents"
+            >
+              <div className="flex flex-col items-center space-y-1">
+                <FileText className="h-6 w-6 text-purple-600" />
+                <div className="text-lg sm:text-xl font-bold text-purple-700">{localDocuments.length}</div>
+                <div className="text-xs sm:text-sm text-purple-600">Total</div>
+              </div>
+            </button>
+            <button 
+              onClick={() => setFilterType(filterType === DocumentTypeEnum.PV ? 'all' : DocumentTypeEnum.PV)}
+              className={`bg-blue-100 rounded-lg p-3 shadow hover:bg-blue-200 transition-colors border ${
+                filterType === DocumentTypeEnum.PV ? 'ring-2 ring-blue-500 ring-offset-2' : ''
+              }`}
+              aria-label="Filtrer procès-verbaux"
+            >
+              <div className="flex flex-col items-center space-y-1">
+                <File className="h-6 w-6 text-blue-600" />
+                <div className="text-lg sm:text-xl font-bold text-blue-700">
+                  {localDocuments.filter(d => d.type === DocumentTypeEnum.PV).length}
+                </div>
+                <div className="text-xs sm:text-sm text-blue-600">PV</div>
+              </div>
+            </button>
+            <button 
+              onClick={() => setFilterType(filterType === DocumentTypeEnum.FINANCIAL_REPORT ? 'all' : DocumentTypeEnum.FINANCIAL_REPORT)}
+              className={`bg-green-100 rounded-lg p-3 shadow hover:bg-green-200 transition-colors border ${
+                filterType === DocumentTypeEnum.FINANCIAL_REPORT ? 'ring-2 ring-green-500 ring-offset-2' : ''
+              }`}
+              aria-label="Filtrer rapports financiers"
+            >
+              <div className="flex flex-col items-center space-y-1">
+                <FileSpreadsheet className="h-6 w-6 text-green-600" />
+                <div className="text-lg sm:text-xl font-bold text-green-700">
+                  {localDocuments.filter(d => d.type === DocumentTypeEnum.FINANCIAL_REPORT).length}
+                </div>
+                <div className="text-xs sm:text-sm text-green-600">Finances</div>
+              </div>
+            </button>
+            <button 
+              onClick={() => setFilterType(filterType === DocumentTypeEnum.STATUTES ? 'all' : DocumentTypeEnum.STATUTES)}
+              className={`bg-orange-100 rounded-lg p-3 shadow hover:bg-orange-200 transition-colors border ${
+                filterType === DocumentTypeEnum.STATUTES ? 'ring-2 ring-orange-500 ring-offset-2' : ''
+              }`}
+              aria-label="Filtrer statuts"
+            >
+              <div className="flex flex-col items-center space-y-1">
+                <Archive className="h-6 w-6 text-orange-600" />
+                <div className="text-lg sm:text-xl font-bold text-orange-700">
+                  {localDocuments.filter(d => d.type === DocumentTypeEnum.STATUTES).length}
+                </div>
+                <div className="text-xs sm:text-sm text-orange-600">Statuts</div>
+              </div>
+            </button>
+          </div>
+        </div>
           <button 
             onClick={() => setFilterType(filterType === DocumentTypeEnum.PV ? 'all' : DocumentTypeEnum.PV)}
             className={`bg-white p-4 rounded-lg shadow flex items-center justify-between flex-1 transition-colors hover:bg-blue-50 cursor-pointer ${
@@ -540,19 +605,77 @@ const DocumentsPage: React.FC = () => {
             </div>
           </div>
         )}
-        </div>
+      </div>
 
-      {/* Bouton flottant d'ajout - Mobile First */}
-      <button
-        data-testid="add-document-floating-btn"
-        onClick={handleAddNew}
-        className="fixed bottom-6 right-6 bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors z-10"
-        aria-label="Télécharger un document"
-      >
-        <Plus className="w-6 h-6" />
-      </button>
+      {/* Bouton flottant avec menu d'actions */}
+      <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
+        {/* Menu d'actions (visible quand showFloatingMenu est true) */}
+        {showFloatingMenu && (
+          <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] animate-fadeIn">
+            <button
+              onClick={() => {
+                setShowUploadModal(true);
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Upload className="h-4 w-4 text-orange-600" />
+              <span>Nouveau Document</span>
+            </button>
+            
+            <button
+              onClick={() => {
+                // Navigation vers événements pour voir les documents liés
+                window.location.href = '/events';
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Calendar className="h-4 w-4 text-blue-600" />
+              <span>Voir Événements</span>
+            </button>
+            
+            <div className="border-t border-gray-100 my-1"></div>
+            
+            <button
+              onClick={() => {
+                // Fonction d'export à implémenter
+                console.log('Export des documents');
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Download className="h-4 w-4 text-green-600" />
+              <span>Exporter Archive</span>
+            </button>
+            
+            <button
+              onClick={() => {
+                // Fonction de partage à implémenter
+                console.log('Partager documents');
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Share className="h-4 w-4 text-purple-600" />
+              <span>Partager Dossier</span>
+            </button>
+          </div>
+        )}
+
+        {/* Bouton principal flottant */}
+        <button
+          onClick={() => setShowFloatingMenu(!showFloatingMenu)}
+          className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
+            showFloatingMenu 
+              ? 'bg-gray-600 hover:bg-gray-700 transform rotate-45' 
+              : 'bg-orange-500 hover:bg-orange-600 hover:scale-110'
+          }`}
+        >
+          <Plus className="h-6 w-6 text-white" />
+        </button>
+      </div>
     </div>
-  </div>
   );
 };
 

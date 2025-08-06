@@ -328,7 +328,7 @@ export default function EventsPageMobile() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 p-0 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-purple-900 p-0 sm:p-6 lg:p-8">
       {/* En-tête décoré avec couleur orange */}
       <div className="bg-gradient-to-r from-orange-50 to-orange-100 border-l-4 border-orange-500 shadow-sm p-6">
         <div className="flex items-center space-x-3">

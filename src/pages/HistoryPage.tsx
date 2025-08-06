@@ -1,5 +1,17 @@
-import React, { useState } from 'react';
-import { Search, Calendar, Clock, User, Activity, ArrowLeft } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { 
+  Search, 
+  Calendar, 
+  Clock, 
+  User, 
+  Activity, 
+  ChevronLeft,
+  Download,
+  Filter,
+  Plus,
+  TrendingUp,
+  AlertCircle
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useHistory } from '../hooks/useHistory';
 
@@ -12,9 +24,25 @@ const HistoryPage: React.FC = () => {
   const [typeFilter, setTypeFilter] = useState<string>('ALL');
   const [actionFilter, setActionFilter] = useState<string>('ALL');
   const [dateFilter, setDateFilter] = useState<string>('ALL'); // ALL, TODAY, WEEK, MONTH
+  const [showFloatingMenu, setShowFloatingMenu] = useState(false);
   
   // Obtenir les statistiques
   const stats = getStats();
+
+  // Gestion de la fermeture du menu flottant
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (showFloatingMenu && !target.closest('.floating-menu-container')) {
+        setShowFloatingMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFloatingMenu]);
 
   // Configuration des types et actions
   const activityTypes = [
@@ -106,7 +134,7 @@ const HistoryPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 p-0 sm:p-0 md:p-0 lg:p-0">
+    <div className="min-h-screen bg-purple-900 p-0 sm:p-0 md:p-0 lg:p-0">
       {/* État de chargement */}
       {isLoading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -120,111 +148,125 @@ const HistoryPage: React.FC = () => {
       )}
 
       {/* Header */}
-      {/* En-tête décoré avec couleur orange */}
-      <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
-        <div className="space-y-4">
-          <div className="flex items-center space-x-3">
-            <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
-                <Clock className="h-6 w-6 text-white" />
-              </div>
+      {/* En-tête Mobile-First */}
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => navigate(-1)}
+            className="p-2 hover:bg-orange-200 rounded-lg transition-colors mr-2"
+            aria-label="Retour"
+          >
+            <ChevronLeft className="h-5 w-5 text-orange-600" />
+          </button>
+          <div className="flex-shrink-0">
+            <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+              <Clock className="h-6 w-6 text-white" />
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-orange-500">
-              Historique des Activités
-            </h1>
           </div>
-          <div>
-            <p className="text-gray-700 font-medium text-lg">
-              Traçabilité complète et audit de toutes les actions
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
+            Historique des Activités
+          </h1>
+        </div>
+        <div className="mt-4 hidden md:block">
+          <p className="text-sm sm:text-base text-gray-700 font-medium">
+            Traçabilité complète et audit de toutes les actions
+          </p>
+          <div className="text-xs text-gray-600 space-y-1 mt-2">
+            <p className="flex items-center">
+              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+              <strong>Suivi en temps réel :</strong> Toutes les actions sont automatiquement enregistrées
             </p>
-            <div className="text-sm text-gray-600 space-y-1">
-              <div className="text-sm text-gray-600 space-y-1">
-                <p className="flex items-center">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                  <strong>Suivi en temps réel :</strong> Toutes les actions sont automatiquement enregistrées
-                </p>
-                <p className="flex items-center">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                  <strong>Filtrage avancé :</strong> Recherchez par type, date ou utilisateur
-                </p>
-              </div>
-            </div>
+            <p className="flex items-center">
+              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+              <strong>Filtrage avancé :</strong> Recherchez par type, date ou utilisateur
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Statistiques rapides - Boutons fonctionnels */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <button
-          onClick={() => {
-            setDateFilter('ALL');
-            setTypeFilter('ALL');
-            setActionFilter('ALL');
-            setSearchTerm('');
-          }}
-          className={`bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200 text-left ${
-            dateFilter === 'ALL' && typeFilter === 'ALL' && actionFilter === 'ALL' && !searchTerm
-              ? 'ring-2 ring-violet-500 bg-violet-50'
-              : 'hover:bg-gray-50'
-          }`}
-        >
-          <div className="text-sm text-gray-500">Total activités</div>
-          <div className="text-2xl font-bold text-gray-900" data-testid="total-activities-count">{stats.total}</div>
-        </button>
-        
-        <button
-          onClick={() => {
-            setDateFilter('TODAY');
-            setTypeFilter('ALL');
-            setActionFilter('ALL');
-            setSearchTerm('');
-          }}
-          className={`bg-blue-50 rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200 text-left ${
-            dateFilter === 'TODAY'
-              ? 'ring-2 ring-blue-500 bg-blue-100'
-              : 'hover:bg-blue-100'
-          }`}
-        >
-          <div className="text-sm text-blue-600">Aujourd'hui</div>
-          <div className="text-2xl font-bold text-blue-900">{stats.today}</div>
-        </button>
-        
-        <button
-          onClick={() => {
-            setDateFilter('WEEK');
-            setTypeFilter('ALL');
-            setActionFilter('ALL');
-            setSearchTerm('');
-          }}
-          className={`bg-green-50 rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200 text-left ${
-            dateFilter === 'WEEK'
-              ? 'ring-2 ring-green-500 bg-green-100'
-              : 'hover:bg-green-100'
-          }`}
-        >
-          <div className="text-sm text-green-600">Cette semaine</div>
-          <div className="text-2xl font-bold text-green-900">{stats.thisWeek}</div>
-        </button>
-        
-        <button
-          onClick={() => {
-            setDateFilter('MONTH');
-            setTypeFilter('ALL');
-            setActionFilter('ALL');
-            setSearchTerm('');
-          }}
-          className={`bg-purple-50 rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-200 text-left ${
-            dateFilter === 'MONTH'
-              ? 'ring-2 ring-purple-500 bg-purple-100'
-              : 'hover:bg-purple-100'
-          }`}
-        >
-          <div className="text-sm text-purple-600">Ce mois</div>
-          <div className="text-2xl font-bold text-purple-900">{stats.thisMonth}</div>
-        </button>
-      </div>
+      <div className="px-4 sm:px-6 lg:px-8">
+        {/* Statistiques - Mobile First avec 4 tickets-boutons de filtre */}
+        <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <button
+              onClick={() => setDateFilter('ALL')}
+              className={`bg-gradient-to-br from-gray-100 to-gray-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+                dateFilter === 'ALL'
+                  ? 'ring-2 ring-gray-500 ring-offset-2'
+                  : 'hover:scale-105'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className="p-2 rounded-lg bg-gray-200">
+                  <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600" />
+                </div>
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl font-bold text-gray-700">{stats.total}</div>
+                  <div className="text-xs sm:text-sm text-gray-600 font-medium">Total Actions</div>
+                </div>
+              </div>
+            </button>
 
-      {/* Filtres et recherche */}
+            <button
+              onClick={() => setDateFilter('TODAY')}
+              className={`bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+                dateFilter === 'TODAY'
+                  ? 'ring-2 ring-blue-500 ring-offset-2'
+                  : 'hover:scale-105'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className="p-2 rounded-lg bg-blue-200">
+                  <Calendar className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+                </div>
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl font-bold text-blue-700">{stats.today}</div>
+                  <div className="text-xs sm:text-sm text-blue-600 font-medium">Aujourd'hui</div>
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setDateFilter('WEEK')}
+              className={`bg-gradient-to-br from-green-100 to-green-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+                dateFilter === 'WEEK'
+                  ? 'ring-2 ring-green-500 ring-offset-2'
+                  : 'hover:scale-105'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className="p-2 rounded-lg bg-green-200">
+                  <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+                </div>
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl font-bold text-green-700">{stats.thisWeek}</div>
+                  <div className="text-xs sm:text-sm text-green-600 font-medium">Cette Semaine</div>
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setDateFilter('MONTH')}
+              className={`bg-gradient-to-br from-purple-100 to-purple-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+                dateFilter === 'MONTH'
+                  ? 'ring-2 ring-purple-500 ring-offset-2'
+                  : 'hover:scale-105'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <div className="p-2 rounded-lg bg-purple-200">
+                  <AlertCircle className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
+                </div>
+                <div className="text-center">
+                  <div className="text-lg sm:text-xl font-bold text-purple-700">{stats.thisMonth}</div>
+                  <div className="text-xs sm:text-sm text-purple-600 font-medium">Ce Mois</div>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Filtres et recherche */}
       <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Recherche */}
@@ -397,6 +439,68 @@ const HistoryPage: React.FC = () => {
           </div>
         </div>
       )}
+
+        {/* Bouton flottant avec menu d'actions */}
+        <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
+          {/* Menu d'actions (visible quand showFloatingMenu est true) */}
+          {showFloatingMenu && (
+            <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] animate-fadeIn">
+              <button
+                onClick={() => {
+                  // Fonction de filtrage rapide
+                  setDateFilter('TODAY');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <Filter className="h-4 w-4 text-blue-600" />
+                <span>Filtrer Aujourd'hui</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  // Reset filtres
+                  setDateFilter('ALL');
+                  setTypeFilter('ALL');
+                  setActionFilter('ALL');
+                  setSearchTerm('');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <AlertCircle className="h-4 w-4 text-gray-600" />
+                <span>Réinitialiser Filtres</span>
+              </button>
+              
+              <div className="border-t border-gray-100 my-1"></div>
+              
+              <button
+                onClick={() => {
+                  // Fonction d'export à implémenter
+                  console.log('Export de l\'historique');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <Download className="h-4 w-4 text-green-600" />
+                <span>Exporter Historique</span>
+              </button>
+            </div>
+          )}
+
+          {/* Bouton principal flottant */}
+          <button
+            onClick={() => setShowFloatingMenu(!showFloatingMenu)}
+            className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
+              showFloatingMenu 
+                ? 'bg-gray-600 hover:bg-gray-700 transform rotate-45' 
+                : 'bg-orange-500 hover:bg-orange-600 hover:scale-110'
+            }`}
+          >
+            <Plus className="h-6 w-6 text-white" />
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

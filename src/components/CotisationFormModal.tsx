@@ -111,11 +111,11 @@ export const CotisationFormModal: React.FC<CotisationFormModalProps> = ({
   const selectedMember = members.find(m => m.id === formData.memberId);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-end sm:items-center justify-center">
+    <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-end sm:items-center justify-center p-4 sm:p-0">
       {/* Modal mobile - glisse depuis le bas */}
-      <div className="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl max-h-[90vh] overflow-hidden">
+      <div className="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white sticky top-0">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white flex-shrink-0">
           <h2 className="text-lg font-semibold text-gray-900">
             {isEditing ? 'Modifier la cotisation' : 'Nouvelle cotisation'}
           </h2>
@@ -128,9 +128,10 @@ export const CotisationFormModal: React.FC<CotisationFormModalProps> = ({
           </button>
         </div>
 
-        {/* Corps du formulaire */}
-        <form onSubmit={handleSubmit} className="p-4 overflow-y-auto">
-          <div className="space-y-4">
+        {/* Corps du formulaire - scrollable */}
+        <div className="flex-1 overflow-y-auto">
+          <form onSubmit={handleSubmit} className="p-4 pb-6">
+            <div className="space-y-4">
             {/* Sélection du membre */}
             <div>
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
@@ -306,15 +307,16 @@ export const CotisationFormModal: React.FC<CotisationFormModalProps> = ({
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                 placeholder="Ajouter des notes sur cette cotisation..."
                 rows={3}
-                className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 resize-none"
+                className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-violet-500 resize-none min-h-[80px] max-h-[120px]"
                 disabled={isLoading}
               />
             </div>
-          </div>
-        </form>
+            </div>
+          </form>
+        </div>
 
         {/* Footer avec actions */}
-        <div className="p-4 border-t border-gray-200 bg-gray-50 flex gap-3">
+        <div className="p-4 border-t border-gray-200 bg-gray-50 flex gap-3 flex-shrink-0">
           <button
             type="button"
             onClick={handleClose}

@@ -9,7 +9,9 @@ import {
   Users,
   Calendar,
   ArrowRight,
-  Star
+  Star,
+  Plus,
+  Download
 } from 'lucide-react';
 
 interface ActionPlan {
@@ -38,10 +40,26 @@ const ActionPlanPage: React.FC = () => {
   const [actionPlan, setActionPlan] = useState<ActionPlan | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
+  const [showFloatingMenu, setShowFloatingMenu] = useState(false);
 
   useEffect(() => {
     loadActionPlan();
   }, []);
+
+  // Fermer le menu flottant quand on clique à l'extérieur
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (showFloatingMenu && !target.closest('.floating-menu-container')) {
+        setShowFloatingMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFloatingMenu]);
 
   const loadActionPlan = async () => {
     try {
@@ -195,7 +213,7 @@ const ActionPlanPage: React.FC = () => {
   const progressPercentage = Math.round((completedActions / totalActions) * 100);
 
   return (
-    <div className="min-h-screen bg-gray-900 p-0">
+    <div className="min-h-screen bg-purple-900 p-0">
       {/* En-tête Mobile-First */}
       <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
         <div className="flex items-center space-x-3">
@@ -512,6 +530,73 @@ const ActionPlanPage: React.FC = () => {
             <Star className="h-6 w-6 mb-2" />
             <div className="font-medium mb-1">Nouveau Diagnostic</div>
             <div className="text-sm text-blue-100">Réévaluer votre niveau</div>
+          </button>
+        </div>
+
+        {/* Bouton flottant avec menu d'actions */}
+        <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
+          {/* Menu d'actions (visible quand showFloatingMenu est true) */}
+          {showFloatingMenu && (
+            <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] animate-fadeIn">
+              <button
+                onClick={() => {
+                  navigate('/guidance/recommendations');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <TrendingUp className="h-4 w-4 text-violet-600" />
+                <span>Voir Recommandations</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  navigate('/guidance/diagnostic');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <Star className="h-4 w-4 text-blue-600" />
+                <span>Nouveau Diagnostic</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  navigate('/guidance/compliance');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <CheckCircle className="h-4 w-4 text-green-600" />
+                <span>État Conformité</span>
+              </button>
+              
+              <div className="border-t border-gray-100 my-1"></div>
+              
+              <button
+                onClick={() => {
+                  // Fonction d'export à implémenter
+                  console.log('Export du plan d\'action');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <Download className="h-4 w-4 text-orange-600" />
+                <span>Exporter Plan PDF</span>
+              </button>
+            </div>
+          )}
+
+          {/* Bouton principal flottant */}
+          <button
+            onClick={() => setShowFloatingMenu(!showFloatingMenu)}
+            className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
+              showFloatingMenu 
+                ? 'bg-gray-600 hover:bg-gray-700 transform rotate-45' 
+                : 'bg-orange-500 hover:bg-orange-600 hover:scale-110'
+            }`}
+          >
+            <Plus className="h-6 w-6 text-white" />
           </button>
         </div>
       </div>

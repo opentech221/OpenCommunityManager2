@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import { CreditCard, Calendar, Download, AlertCircle, CheckCircle, Clock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { CreditCard, Calendar, Download, AlertCircle, CheckCircle, Clock, ChevronLeft } from 'lucide-react';
 
 interface Invoice {
   id: string;
@@ -12,6 +13,7 @@ interface Invoice {
 }
 
 const BillingPage: React.FC = () => {
+  const navigate = useNavigate();
   const [invoices, setInvoices] = React.useState<Invoice[]>([
     {
       id: 'INV-2024-001',
@@ -39,6 +41,7 @@ const BillingPage: React.FC = () => {
     }
   ]);
   const [feedback, setFeedback] = React.useState<string>('');
+  const [isFloatingMenuOpen, setIsFloatingMenuOpen] = React.useState(false);
   // Handlers
   const handleChangePlan = () => {
     setFeedback('Votre plan a été modifié avec succès.');
@@ -125,6 +128,13 @@ const BillingPage: React.FC = () => {
         <div className="mb-4 sm:mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-4 sm:p-6 border-l-4 border-orange-500 shadow-sm">
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
+              <button
+                onClick={() => navigate(-1)}
+                className="flex-shrink-0 p-2 hover:bg-orange-200 rounded-lg transition-colors sm:p-2"
+                aria-label="Retour"
+              >
+                <ChevronLeft className="h-5 w-5 text-orange-600" />
+              </button>
               <div className="flex-shrink-0">
                 <div className="w-8 h-8 sm:w-10 sm:h-10 bg-orange-500 rounded-lg flex items-center justify-center">
                   <CreditCard className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
@@ -397,6 +407,59 @@ const BillingPage: React.FC = () => {
               </table>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Bouton flottant */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <div className="relative">
+          <button
+            onClick={() => setIsFloatingMenuOpen(!isFloatingMenuOpen)}
+            className="bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
+            aria-label="Menu d'actions"
+          >
+            <div className="w-6 h-6 flex items-center justify-center">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+            </div>
+          </button>
+
+          {/* Menu contextuel */}
+          {isFloatingMenuOpen && (
+            <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-xl border p-2 w-48 z-50">
+              <button
+                onClick={() => {
+                  console.log('Exporter factures');
+                  setIsFloatingMenuOpen(false);
+                }}
+                className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-orange-50 rounded flex items-center space-x-2"
+              >
+                <Download className="w-4 h-4" />
+                <span>Exporter factures</span>
+              </button>
+              <button
+                onClick={() => {
+                  console.log('Paramètres facturation');
+                  setIsFloatingMenuOpen(false);
+                }}
+                className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-orange-50 rounded flex items-center space-x-2"
+              >
+                <CreditCard className="w-4 h-4" />
+                <span>Paramètres facturation</span>
+              </button>
+              <button
+                onClick={() => {
+                  console.log('Aide facturation');
+                  setIsFloatingMenuOpen(false);
+                }}
+                className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-orange-50 rounded flex items-center space-x-2"
+              >
+                <AlertCircle className="w-4 h-4" />
+                <span>Aide & Support</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Save, 
   Upload, 
@@ -9,12 +9,33 @@ import {
   Shield,
   Bell,
   Palette,
-  Globe
+  Globe,
+  ChevronLeft,
+  Plus,
+  Download
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function SettingsPage() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('profile');
+  const [showFloatingMenu, setShowFloatingMenu] = useState(false);
+
+  // Gestion de la fermeture du menu flottant
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (showFloatingMenu && !target.closest('.floating-menu-container')) {
+        setShowFloatingMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFloatingMenu]);
 
   const tabs = [
     { id: 'profile', name: 'Profil', icon: User },
@@ -27,37 +48,40 @@ export default function SettingsPage() {
 
   // Mobile-first : carrousel horizontal pour onglets, layout vertical, boutons larges, accessibilité
   return (
-    <div className="min-h-screen bg-gray-50 pb-0">
+    <div className="min-h-screen bg-purple-900 pb-0">
       <div className="px-3 py-4 sm:px-4 sm:py-6 lg:px-8">
-        {/* En-tête décoré avec couleur orange */}
+        {/* En-tête Mobile-First */}
         <div className="mb-4 sm:mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-4 sm:p-6 border-l-4 border-orange-500 shadow-sm">
-          <div className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <div className="flex-shrink-0">
-                <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
-                  <Shield className="h-6 w-6 text-white" />
-                </div>
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={() => navigate(-1)}
+              className="p-2 hover:bg-orange-200 rounded-lg transition-colors mr-2"
+              aria-label="Retour"
+            >
+              <ChevronLeft className="h-5 w-5 text-orange-600" />
+            </button>
+            <div className="flex-shrink-0">
+              <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                <Shield className="h-6 w-6 text-white" />
               </div>
-              <h1 className="text-2xl md:text-3xl font-bold text-orange-500">
-                Paramètres Système
-              </h1>
             </div>
-            <div>
-              <p className="text-gray-700 font-medium text-lg">
-                Personnalisez votre expérience et sécurisez votre association
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
+              Paramètres Système
+            </h1>
+          </div>
+          <div className="mt-4 hidden md:block">
+            <p className="text-sm sm:text-base text-gray-700 font-medium">
+              Personnalisez votre expérience et sécurisez votre association
+            </p>
+            <div className="text-xs text-gray-600 space-y-1 mt-2">
+              <p className="flex items-center">
+                <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                <strong>Configuration avancée :</strong> Adaptez l'application à vos besoins
               </p>
-              <div className="text-sm text-gray-600 space-y-1">
-                <div className="text-sm text-gray-600 space-y-1">
-                  <p className="flex items-center">
-                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                    <strong>Configuration complète :</strong> Profil, sécurité et préférences
-                  </p>
-                  <p className="flex items-center">
-                    <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-                    <strong>Contrôle total :</strong> Gérez tous les aspects de votre compte
-                  </p>
-                </div>
-              </div>
+              <p className="flex items-center">
+                <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
+                <strong>Sécurité renforcée :</strong> Protégez vos données sensibles
+              </p>
             </div>
           </div>
         </div>
@@ -456,6 +480,74 @@ export default function SettingsPage() {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Bouton flottant avec menu d'actions */}
+        <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
+          {/* Menu d'actions (visible quand showFloatingMenu est true) */}
+          {showFloatingMenu && (
+            <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] animate-fadeIn">
+              <button
+                onClick={() => {
+                  // Sauvegarde rapide
+                  console.log('Sauvegarde des paramètres');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <Save className="h-4 w-4 text-green-600" />
+                <span>Sauvegarder</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  setActiveTab('profile');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <User className="h-4 w-4 text-blue-600" />
+                <span>Profil</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  setActiveTab('security');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <Shield className="h-4 w-4 text-purple-600" />
+                <span>Sécurité</span>
+              </button>
+              
+              <div className="border-t border-gray-100 my-1"></div>
+              
+              <button
+                onClick={() => {
+                  // Fonction d'export à implémenter
+                  console.log('Export des paramètres');
+                  setShowFloatingMenu(false);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              >
+                <Download className="h-4 w-4 text-orange-600" />
+                <span>Exporter Config</span>
+              </button>
+            </div>
+          )}
+
+          {/* Bouton principal flottant */}
+          <button
+            onClick={() => setShowFloatingMenu(!showFloatingMenu)}
+            className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
+              showFloatingMenu 
+                ? 'bg-gray-600 hover:bg-gray-700 transform rotate-45' 
+                : 'bg-orange-500 hover:bg-orange-600 hover:scale-110'
+            }`}
+          >
+            <Plus className="h-6 w-6 text-white" />
+          </button>
         </div>
       </div>
     </div>

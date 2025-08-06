@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import EventForm from '../components/EventForm';
-import { Plus, Search, Calendar, MapPin, Users, Eye, Edit, Trash2, Clock, Filter } from 'lucide-react';
+import { Plus, Search, Calendar, MapPin, Users, Eye, Edit, Trash2, Clock, Filter, Download, FileText } from 'lucide-react';
 import type { EventType } from '../types';
 import { EventStatus } from '../types';
 import { useEvents } from '../hooks/useEvents';
@@ -19,11 +19,30 @@ export default function EventsPage() {
   const [showModal, setShowModal] = useState(false);
   const [modalEvent, setModalEvent] = useState<EventType | null>(null);
   const [feedback, setFeedback] = useState<string>('');
+  const [showFloatingMenu, setShowFloatingMenu] = useState(false);
   
   // States pour les filtres simples
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'PLANNED' | 'ONGOING' | 'COMPLETED' | 'CANCELLED'>('ALL');
   const [typeFilter, setTypeFilter] = useState<'all' | 'MEETING' | 'SOCIAL' | 'TRAINING'>('all');
+
+  // Gestion du clic extérieur pour fermer le menu flottant
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.floating-menu-container')) {
+        setShowFloatingMenu(false);
+      }
+    };
+
+    if (showFloatingMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFloatingMenu]);
 
   // Logique de filtrage simple
   const filteredEvents = events.filter(event => {
@@ -172,13 +191,8 @@ export default function EventsPage() {
     );
   }
 
-  // Fonction pour le bouton flottant d'ajout
-  const handleAddNew = () => {
-    openAddModal();
-  };
-
   return (
-    <div className="min-h-screen bg-gray-900 p-0">
+    <div className="min-h-screen bg-purple-900 p-0">
       {/* Feedback */}
       {feedback && (
         <div className="bg-green-100 border border-green-300 text-green-800 px-4 py-2 rounded-lg mx-4 mt-4 mb-2 text-center font-medium">
@@ -231,7 +245,7 @@ export default function EventsPage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           <button 
             className={`bg-purple-100 rounded-lg p-3 shadow hover:bg-purple-200 transition-colors border ${
-              statusFilter === 'ALL' ? 'ring-2 ring-violet-500' : ''
+              statusFilter === 'ALL' ? 'ring-2 ring-violet-500 ring-offset-2' : ''
             }`}
             onClick={() => setStatusFilter('ALL')}
             aria-label="Afficher tous les événements"
@@ -240,8 +254,8 @@ export default function EventsPage() {
             <div className="text-xs sm:text-sm text-purple-600">Total</div>
           </button>
           <button 
-            className={`bg-green-100 rounded-lg p-3 shadow hover:bg-green-200 transition-colors ${
-              statusFilter === EventStatus.PLANNED ? 'ring-2 ring-green-500' : ''
+            className={`bg-green-100 rounded-lg p-3 shadow hover:bg-green-200 transition-colors border ${
+              statusFilter === EventStatus.PLANNED ? 'ring-2 ring-green-500 ring-offset-2' : ''
             }`}
             onClick={() => setStatusFilter(statusFilter === EventStatus.PLANNED ? 'ALL' : EventStatus.PLANNED)}
             aria-label="Filtrer les événements planifiés"
@@ -250,8 +264,8 @@ export default function EventsPage() {
             <div className="text-xs sm:text-sm text-green-600">Planifiés</div>
           </button>
           <button 
-            className={`bg-yellow-100 rounded-lg p-3 shadow hover:bg-yellow-200 transition-colors ${
-              statusFilter === EventStatus.ONGOING ? 'ring-2 ring-yellow-500' : ''
+            className={`bg-yellow-100 rounded-lg p-3 shadow hover:bg-yellow-200 transition-colors border ${
+              statusFilter === EventStatus.ONGOING ? 'ring-2 ring-yellow-500 ring-offset-2' : ''
             }`}
             onClick={() => setStatusFilter(statusFilter === EventStatus.ONGOING ? 'ALL' : EventStatus.ONGOING)}
             aria-label="Filtrer les événements en cours"
@@ -260,8 +274,8 @@ export default function EventsPage() {
             <div className="text-xs sm:text-sm text-yellow-600">En cours</div>
           </button>
           <button 
-            className={`bg-red-100 rounded-lg p-3 shadow hover:bg-red-200 transition-colors ${
-              statusFilter === EventStatus.COMPLETED ? 'ring-2 ring-red-500' : ''
+            className={`bg-red-100 rounded-lg p-3 shadow hover:bg-red-200 transition-colors border ${
+              statusFilter === EventStatus.COMPLETED ? 'ring-2 ring-red-500 ring-offset-2' : ''
             }`}
             onClick={() => setStatusFilter(statusFilter === EventStatus.COMPLETED ? 'ALL' : EventStatus.COMPLETED)}
             aria-label="Filtrer les événements terminés"
@@ -470,14 +484,74 @@ export default function EventsPage() {
         </div>
       </div>
 
-      {/* Bouton flottant d'ajout - Mobile First */}
-      <button
-        onClick={handleAddNew}
-        className="fixed bottom-6 right-6 bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-orange-700 transition-colors z-10"
-        aria-label="Ajouter une cotisation"
-      >
-        <Plus className="w-6 h-6" />
-      </button>
+      {/* Bouton flottant avec menu d'actions */}
+      <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
+        {/* Menu d'actions (visible quand showFloatingMenu est true) */}
+        {showFloatingMenu && (
+          <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] animate-fadeIn">
+            <button
+              onClick={() => {
+                openAddModal();
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Plus className="h-4 w-4 text-orange-600" />
+              <span>Nouvel Événement</span>
+            </button>
+            
+            <button
+              onClick={() => {
+                // Navigation vers membres pour voir les participants
+                window.location.href = '/members';
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Users className="h-4 w-4 text-blue-600" />
+              <span>Voir Membres</span>
+            </button>
+            
+            <div className="border-t border-gray-100 my-1"></div>
+            
+            <button
+              onClick={() => {
+                // Fonction d'export à implémenter
+                console.log('Export des événements');
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <Download className="h-4 w-4 text-green-600" />
+              <span>Exporter Planning</span>
+            </button>
+            
+            <button
+              onClick={() => {
+                // Fonction de rapport à implémenter
+                console.log('Générer rapport événements');
+                setShowFloatingMenu(false);
+              }}
+              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+            >
+              <FileText className="h-4 w-4 text-purple-600" />
+              <span>Rapport Activités</span>
+            </button>
+          </div>
+        )}
+
+        {/* Bouton principal flottant */}
+        <button
+          onClick={() => setShowFloatingMenu(!showFloatingMenu)}
+          className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
+            showFloatingMenu 
+              ? 'bg-gray-600 hover:bg-gray-700 transform rotate-45' 
+              : 'bg-orange-500 hover:bg-orange-600 hover:scale-110'
+          }`}
+        >
+          <Plus className="h-6 w-6 text-white" />
+        </button>
+      </div>
     </div>
   );
 }

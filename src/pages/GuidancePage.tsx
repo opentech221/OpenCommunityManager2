@@ -6,7 +6,7 @@ export default function GuidancePage() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-900 p-0 sm:p-0 md:p-0 lg:p-0">
+    <div className="min-h-screen bg-purple-900 p-0 sm:p-0 md:p-0 lg:p-0">
       {/* En-tête Mobile-First */}
       <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
         <div className="flex items-center space-x-3">
