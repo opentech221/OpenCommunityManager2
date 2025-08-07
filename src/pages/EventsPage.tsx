@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import EventForm from '../components/EventForm';
 import { Plus, Search, Calendar, MapPin, Users, Eye, Edit, Trash2, Clock, Filter, Download, FileText } from 'lucide-react';
 import type { EventType } from '../types';
@@ -25,6 +25,13 @@ export default function EventsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'PLANNED' | 'ONGOING' | 'COMPLETED' | 'CANCELLED'>('ALL');
   const [typeFilter, setTypeFilter] = useState<'all' | 'MEETING' | 'SOCIAL' | 'TRAINING'>('all');
+  const [showSearchSuggestions, setShowSearchSuggestions] = useState(false);
+
+  // Mots-clés populaires pour les suggestions de recherche
+  const popularEventKeywords = [
+    'réunion', 'assemblée', 'formation', 'social', 'planifié', 'en cours', 'terminé', 'annulé',
+    'conférence', 'atelier', 'séminaire', 'event', 'urgent', 'important'
+  ];
 
   // Gestion du clic extérieur pour fermer le menu flottant
   useEffect(() => {
@@ -44,14 +51,46 @@ export default function EventsPage() {
     };
   }, [showFloatingMenu]);
 
-  // Logique de filtrage simple
+  // Logique de filtrage avec recherche avancée multi-mots-clés
   const filteredEvents = events.filter(event => {
-    const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         event.description?.toLowerCase().includes(searchTerm.toLowerCase());
+    if (!searchTerm) {
+      const matchesType = typeFilter === 'all' || event.type === typeFilter;
+      const matchesStatus = statusFilter === 'ALL' || event.status === statusFilter;
+      return matchesType && matchesStatus;
+    }
+
+    // Recherche par mots-clés multiples (séparés par des espaces)
+    const searchTerms = searchTerm.toLowerCase().split(' ').filter(term => term.length > 0);
+    
+    const searchableFields = [
+      event.title.toLowerCase(),
+      event.description?.toLowerCase() || '',
+      event.location?.toLowerCase() || '',
+      event.type.toLowerCase(),
+      event.status.toLowerCase(),
+      event.maxParticipants?.toString() || ''
+    ].join(' ');
+
+    const matchesSearch = searchTerms.every(term => searchableFields.includes(term));
     const matchesType = typeFilter === 'all' || event.type === typeFilter;
     const matchesStatus = statusFilter === 'ALL' || event.status === statusFilter;
     return matchesSearch && matchesType && matchesStatus;
   });
+
+  // Fonction pour mettre en surbrillance les termes de recherche
+  const highlightSearchTerms = (text: string, searchTerm: string) => {
+    if (!searchTerm || !text) return text;
+    
+    const searchTerms = searchTerm.toLowerCase().split(' ').filter(term => term.length > 0);
+    let highlightedText = text;
+    
+    searchTerms.forEach(term => {
+      const regex = new RegExp(`(${term})`, 'gi');
+      highlightedText = highlightedText.replace(regex, '<span class="bg-yellow-200 font-semibold">$1</span>');
+    });
+    
+    return highlightedText;
+  };
 
   // Handler unifié pour ajouter et modifier
   const handleSaveEvent = async (eventData: EventType | Omit<EventType, 'id'>) => {
@@ -289,18 +328,41 @@ export default function EventsPage() {
       {/* Recherche et filtres mobiles */}
       <div className="bg-white border-b border-gray-200 px-10 py-4 sm:px-6 lg:px-8">
         <div className="space-y-4">
-          {/* Barre de recherche */}
+          {/* Barre de recherche avec suggestions */}
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Search className="h-5 w-5 text-gray-400" />
             </div>
             <input
               type="text"
-              placeholder="Rechercher un événement..."
+              placeholder="Rechercher un événement... (ex: réunion, formation, planifié)"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => setShowSearchSuggestions(true)}
+              onBlur={() => setTimeout(() => setShowSearchSuggestions(false), 200)}
               className="block w-full pl-10 pr-3 py-2 border border-gray-300 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base"
             />
+            
+            {/* Suggestions de recherche */}
+            {showSearchSuggestions && searchTerm.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-40 overflow-y-auto">
+                {popularEventKeywords
+                  .filter(keyword => keyword.toLowerCase().includes(searchTerm.toLowerCase()) && !searchTerm.toLowerCase().includes(keyword.toLowerCase()))
+                  .slice(0, 5)
+                  .map((keyword, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setSearchTerm(searchTerm + ' ' + keyword);
+                        setShowSearchSuggestions(false);
+                      }}
+                      className="w-full text-left px-3 py-2 hover:bg-gray-100 text-sm border-b border-gray-100 last:border-0"
+                    >
+                      <span className="text-gray-600">+ {keyword}</span>
+                    </button>
+                  ))}
+              </div>
+            )}
           </div>
 
           {/* Filtres rapides */}
@@ -353,7 +415,11 @@ export default function EventsPage() {
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
                           <h3 className="text-base sm:text-lg font-semibold text-gray-900 line-clamp-2">
-                            {event.title}
+                            <span 
+                              dangerouslySetInnerHTML={{ 
+                                __html: highlightSearchTerms(event.title, searchTerm) 
+                              }}
+                            />
                           </h3>
                           <div className="flex items-center space-x-2 mt-1">
                             <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getEventTypeColor(event.type)}`}>
@@ -366,7 +432,11 @@ export default function EventsPage() {
                         </div>
                       </div>
                       <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                        {event.description}
+                        <span 
+                          dangerouslySetInnerHTML={{ 
+                            __html: highlightSearchTerms(event.description || '', searchTerm) 
+                          }}
+                        />
                       </p>
                       {/* Informations détaillées */}
                       <div className="space-y-2">

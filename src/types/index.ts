@@ -171,3 +171,53 @@ export const UserRole = {
   MEMBER: 'MEMBER'
 } as const;
 export type UserRole = typeof UserRole[keyof typeof UserRole];
+
+// Types pour la gestion des ressources
+export interface HumanResourceType {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  skills: string[];
+  availability: 'DISPONIBLE' | 'OCCUPÉ' | 'INDISPONIBLE';
+  position: string;
+  experience?: string;
+  associationId: string;
+  addedDate: Date;
+  notes?: string;
+}
+
+export const MaterialCategory = {
+  INFORMATIQUE: 'INFORMATIQUE',
+  MOBILIER: 'MOBILIER',
+  AUDIOVISUEL: 'AUDIOVISUEL',
+  TRANSPORT: 'TRANSPORT',
+  OUTILLAGE: 'OUTILLAGE',
+  SPORT: 'SPORT',
+  CUISINE: 'CUISINE',
+  DECORATION: 'DECORATION',
+  AUTRE: 'AUTRE'
+} as const;
+export type MaterialCategory = typeof MaterialCategory[keyof typeof MaterialCategory];
+
+export interface MaterialResourceType {
+  id: string;
+  name: string;
+  category: MaterialCategory;
+  description: string;
+  condition: 'EXCELLENT' | 'BON' | 'MOYEN' | 'MAUVAIS';
+  location: string;
+  purchaseDate?: Date;
+  purchasePrice?: number;
+  currentValue?: number;
+  responsible?: string;
+  availability: 'DISPONIBLE' | 'UTILISÉ' | 'EN_MAINTENANCE' | 'INDISPONIBLE';
+  associationId: string;
+  addedDate: Date;
+  serialNumber?: string;
+  warranty?: Date;
+  lastMaintenanceDate?: Date;
+  nextMaintenanceDate?: Date;
+  notes?: string;
+}

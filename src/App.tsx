@@ -18,6 +18,7 @@ const CotisationsPageResponsive = lazy(() => import('./pages/CotisationsPageResp
 const EventsPage = lazy(() => import('./pages/EventsPage'));
 const FinancesPage = lazy(() => import('./pages/FinancesPage'));
 const DocumentsPage = lazy(() => import('./pages/DocumentsPage'));
+const ResourcesPage = lazy(() => import('./pages/ResourcesPage'));
 const MessagesPage = lazy(() => import('./pages/MessagesPage'));
 const PublicProfilePage = lazy(() => import('./pages/PublicProfilePage'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
@@ -240,6 +241,16 @@ function App() {
               onCloseSidebar={closeSidebar}
             >
               <DocumentsPage />
+            </AppLayout>
+          } />
+
+          <Route path="/resources" element={
+            <AppLayout
+              sidebarOpen={sidebarOpen}
+              onToggleSidebar={toggleSidebar}
+              onCloseSidebar={closeSidebar}
+            >
+              <ResourcesPage />
             </AppLayout>
           } />
 

@@ -10,6 +10,7 @@ export { default as CotisationsPageResponsive } from './CotisationsPageResponsiv
 export { default as EventsPage } from './EventsPage';
 export { default as FinancesPage } from './FinancesPage';
 export { default as DocumentsPage } from './DocumentsPage';
+export { default as ResourcesPage } from './ResourcesPage';
 export { default as MessagesPage } from './MessagesPage';
 export { default as PublicProfilePage } from './PublicProfilePage';
 export { default as SettingsPage } from './SettingsPage';

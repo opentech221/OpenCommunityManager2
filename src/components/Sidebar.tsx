@@ -20,7 +20,8 @@ import {
   Lightbulb,
   CheckCircle,
   ClipboardList,
-  BarChart3
+  BarChart3,
+  Package
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -61,6 +62,7 @@ const menuItems: MenuItem[] = [
   { name: 'Événements', path: '/events', icon: Calendar },
   { name: 'Finances', path: '/finances', icon: DollarSign },
   { name: 'Documents', path: '/documents', icon: FolderOpen },
+  { name: 'Ressources', path: '/resources', icon: Package },
   { name: 'Messagerie', path: '/messages', icon: MessageSquare, badge: 5 },
   { name: 'Historique', path: '/history', icon: History },
   { name: 'Notifications', path: '/notifications', icon: Bell },

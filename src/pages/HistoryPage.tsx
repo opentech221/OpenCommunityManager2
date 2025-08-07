@@ -25,6 +25,13 @@ const HistoryPage: React.FC = () => {
   const [actionFilter, setActionFilter] = useState<string>('ALL');
   const [dateFilter, setDateFilter] = useState<string>('ALL'); // ALL, TODAY, WEEK, MONTH
   const [showFloatingMenu, setShowFloatingMenu] = useState(false);
+  const [showSearchSuggestions, setShowSearchSuggestions] = useState(false);
+  
+  // Mots-clés populaires pour les suggestions de recherche
+  const popularHistoryKeywords = [
+    'membre', 'événement', 'document', 'création', 'modification', 'suppression',
+    'marie', 'jean', 'sophie', 'aujourd\'hui', 'hier', 'urgent'
+  ];
   
   // Obtenir les statistiques
   const stats = getStats();
@@ -71,12 +78,43 @@ const HistoryPage: React.FC = () => {
     { value: 'MONTH', label: 'Ce mois' }
   ];
 
-  // Fonction pour filtrer les activités
+  // Fonction pour filtrer les activités avec recherche avancée
   const filteredActivities = activities.filter(activity => {
-    const matchesSearch = activity.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         activity.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         activity.user.toLowerCase().includes(searchTerm.toLowerCase());
+    // Recherche avancée multi-mots-clés
+    if (!searchTerm) {
+      const matchesType = typeFilter === 'ALL' || activity.type === typeFilter;
+      const matchesAction = actionFilter === 'ALL' || activity.action === actionFilter;
+      
+      // Filtre par date
+      let matchesDate = true;
+      const now = new Date();
+      const activityDate = activity.timestamp;
+      
+      if (dateFilter === 'TODAY') {
+        matchesDate = activityDate.toDateString() === now.toDateString();
+      } else if (dateFilter === 'WEEK') {
+        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        matchesDate = activityDate >= weekAgo;
+      } else if (dateFilter === 'MONTH') {
+        const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        matchesDate = activityDate >= monthAgo;
+      }
+      
+      return matchesType && matchesAction && matchesDate;
+    }
+
+    // Recherche par mots-clés multiples (séparés par des espaces)
+    const searchTerms = searchTerm.toLowerCase().split(' ').filter(term => term.length > 0);
     
+    const searchableFields = [
+      activity.title.toLowerCase(),
+      activity.description.toLowerCase(),
+      activity.user.toLowerCase(),
+      activity.type.toLowerCase(),
+      activity.action.toLowerCase()
+    ].join(' ');
+
+    const matchesSearch = searchTerms.every(term => searchableFields.includes(term));
     const matchesType = typeFilter === 'ALL' || activity.type === typeFilter;
     const matchesAction = actionFilter === 'ALL' || activity.action === actionFilter;
     
@@ -97,6 +135,21 @@ const HistoryPage: React.FC = () => {
     
     return matchesSearch && matchesType && matchesAction && matchesDate;
   });
+
+  // Fonction pour mettre en surbrillance les termes de recherche
+  const highlightSearchTerms = (text: string, searchTerm: string) => {
+    if (!searchTerm || !text) return text;
+    
+    const searchTerms = searchTerm.toLowerCase().split(' ').filter(term => term.length > 0);
+    let highlightedText = text;
+    
+    searchTerms.forEach(term => {
+      const regex = new RegExp(`(${term})`, 'gi');
+      highlightedText = highlightedText.replace(regex, '<span class="bg-yellow-200 font-semibold">$1</span>');
+    });
+    
+    return highlightedText;
+  };
 
   // Fonction pour obtenir l'icône selon le type
   const getTypeIcon = (type: string) => {

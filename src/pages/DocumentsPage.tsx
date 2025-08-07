@@ -83,6 +83,13 @@ const DocumentsPage: React.FC = () => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [feedback, setFeedback] = useState<string>('');
   const [showFloatingMenu, setShowFloatingMenu] = useState(false);
+  const [showSearchSuggestions, setShowSearchSuggestions] = useState(false);
+
+  // Mots-clés populaires pour les suggestions de recherche
+  const popularDocumentKeywords = [
+    'pv', 'rapport', 'financier', 'statuts', 'contrat', 'facture', 'photo',
+    'marie', 'jean', 'sophie', '2024', '2023', 'ag', 'assemblée'
+  ];
 
   // Gestion du clic extérieur pour fermer le menu flottant
   useEffect(() => {
@@ -107,13 +114,43 @@ const DocumentsPage: React.FC = () => {
   const [uploadType, setUploadType] = useState<DocumentTypeEnum>(DocumentTypeEnum.PV);
   const [uploadDescription, setUploadDescription] = useState('');
 
-  // Filtrage des documents
+  // Filtrage des documents avec recherche avancée multi-mots-clés
   const filteredDocuments = localDocuments.filter(doc => {
-    const matchesSearch = doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doc.uploadedBy.toLowerCase().includes(searchTerm.toLowerCase());
+    if (!searchTerm) {
+      const matchesType = filterType === 'all' || doc.type === filterType;
+      return matchesType;
+    }
+
+    // Recherche par mots-clés multiples (séparés par des espaces)
+    const searchTerms = searchTerm.toLowerCase().split(' ').filter(term => term.length > 0);
+    
+    const searchableFields = [
+      doc.name.toLowerCase(),
+      doc.uploadedBy.toLowerCase(),
+      getTypeLabel(doc.type).toLowerCase(),
+      doc.uploadDate.getFullYear().toString(),
+      formatFileSize(doc.size).toLowerCase()
+    ].join(' ');
+
+    const matchesSearch = searchTerms.every(term => searchableFields.includes(term));
     const matchesType = filterType === 'all' || doc.type === filterType;
     return matchesSearch && matchesType;
   });
+
+  // Fonction pour mettre en surbrillance les termes de recherche
+  const highlightSearchTerms = (text: string, searchTerm: string) => {
+    if (!searchTerm || !text) return text;
+    
+    const searchTerms = searchTerm.toLowerCase().split(' ').filter(term => term.length > 0);
+    let highlightedText = text;
+    
+    searchTerms.forEach(term => {
+      const regex = new RegExp(`(${term})`, 'gi');
+      highlightedText = highlightedText.replace(regex, '<span class="bg-yellow-200 font-semibold">$1</span>');
+    });
+    
+    return highlightedText;
+  };
 
   const formatFileSize = (bytes: number) => {
     if (bytes < 1024) return bytes + ' B';
@@ -327,18 +364,41 @@ const DocumentsPage: React.FC = () => {
           {/* Barre de recherche et filtres */}
           <div className="border-b border-gray-200 pb-3 mb-4">
           <div className="space-y-3">
-            {/* Barre de recherche */}
+            {/* Barre de recherche avec suggestions */}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-orange-600" />
               </div>
               <input
                 type="text"
-                placeholder="Rechercher un document..."
+                placeholder="Rechercher un document... (ex: pv marie, rapport 2024)"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                onFocus={() => setShowSearchSuggestions(true)}
+                onBlur={() => setTimeout(() => setShowSearchSuggestions(false), 200)}
                 className="block w-full pl-10 pr-3 py-2 border border-gray-300 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base"
               />
+              
+              {/* Suggestions de recherche */}
+              {showSearchSuggestions && searchTerm.length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-40 overflow-y-auto">
+                  {popularDocumentKeywords
+                    .filter(keyword => keyword.toLowerCase().includes(searchTerm.toLowerCase()) && !searchTerm.toLowerCase().includes(keyword.toLowerCase()))
+                    .slice(0, 5)
+                    .map((keyword, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          setSearchTerm(searchTerm + ' ' + keyword);
+                          setShowSearchSuggestions(false);
+                        }}
+                        className="w-full text-left px-3 py-2 hover:bg-gray-100 text-sm border-b border-gray-100 last:border-0"
+                      >
+                        <span className="text-gray-600">+ {keyword}</span>
+                      </button>
+                    ))}
+                </div>
+              )}
             </div>
 
             {/* Filtres */}
@@ -402,11 +462,22 @@ const DocumentsPage: React.FC = () => {
               <div key={document.id} data-testid={`document-card-${document.id}`} className="bg-white rounded-lg shadow p-3 flex flex-col gap-2 border-l-4 border-purple-500">
                 <div className="flex items-center gap-2">
                   {getFileIcon(document.name)}
-                  <span className="font-bold text-base text-gray-900 font-montserrat">{document.name}</span>
+                  <span className="font-bold text-base text-gray-900 font-montserrat">
+                    <span 
+                      dangerouslySetInnerHTML={{ 
+                        __html: highlightSearchTerms(document.name, searchTerm) 
+                      }}
+                    />
+                  </span>
                   <span className={`ml-auto inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTypeBadgeColor(document.type)}`}>{getTypeLabel(document.type)}</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-gray-500 font-poppins">
-                  <User className="w-4 h-4" /> {document.uploadedBy}
+                  <User className="w-4 h-4" /> 
+                  <span 
+                    dangerouslySetInnerHTML={{ 
+                      __html: highlightSearchTerms(document.uploadedBy, searchTerm) 
+                    }}
+                  />
                   <Calendar className="w-4 h-4 ml-2" /> {formatDate(document.uploadDate)}
                   <span className="ml-auto text-xs text-gray-700">{formatFileSize(document.size)}</span>
                 </div>
@@ -442,7 +513,11 @@ const DocumentsPage: React.FC = () => {
                           {getFileIcon(document.name)}
                           <div className="ml-2 flex-1">
                             <div className="text-xs font-medium text-gray-900 truncate" title={document.name}>
-                              {document.name}
+                              <span 
+                                dangerouslySetInnerHTML={{ 
+                                  __html: highlightSearchTerms(document.name, searchTerm) 
+                                }}
+                              />
                             </div>
                           </div>
                         </div>
