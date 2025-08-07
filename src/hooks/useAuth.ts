@@ -56,8 +56,8 @@ export const useAuthState = () => {
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      // Simulation d'appel API
-      const response = await fetch(apiUrl('/api/auth/login'), {
+      // Appel API d'authentification
+      const response = await fetch(apiUrl('/auth/login'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export const useAuthState = () => {
         password: data.password
       };
 
-      const response = await fetch(apiUrl('/api/auth/register'), {
+      const response = await fetch(apiUrl('/auth/register'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

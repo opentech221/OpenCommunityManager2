@@ -1,5 +1,10 @@
+import { API_BASE_URL } from '../services/config';
+
 export function apiUrl(path: string) {
-  const base = import.meta.env.VITE_BACKEND_URL || '';
+  // Si l'URL est déjà complète, la retourner telle quelle
   if (/^https?:\/\//.test(path)) return path;
-  return base.replace(/\/$/, '') + (path.startsWith('/') ? path : '/' + path);
+  
+  // Utiliser notre configuration centralisée
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `${API_BASE_URL}${cleanPath}`;
 }

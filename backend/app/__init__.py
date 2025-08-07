@@ -21,24 +21,14 @@ def create_app():
         from flask_talisman import Talisman
         Talisman(app, content_security_policy=None)
 
-    # Redirige toute requête HTTP vers HTTPS sauf pour les requêtes OPTIONS (préflight CORS)
+    # Gestion des requêtes OPTIONS pour CORS
     @app.before_request
     def before_request():
         # Ne jamais rediriger les requêtes OPTIONS (préflight CORS)
         if request.method == 'OPTIONS':
             return None  # Laisse Flask-CORS répondre
-            
-        # En production, on peut forcer HTTPS mais attention aux requêtes préflight
-        if not app.debug and not app.testing:
-            if request.headers.get('X-Forwarded-Proto') != 'https' and request.endpoint != 'health_check':
-                return redirect(request.url.replace('http://', 'https://'), code=301)
-            url = request.url.replace('http://', 'https://', 1)
-            return redirect(url, code=301)
-    # Force HTTPS en production
-    if not app.debug and not app.testing:
-        from flask_talisman import Talisman
-        Talisman(app, content_security_policy=None)
-    
+        # Railway gère déjà HTTPS au niveau du proxy, pas besoin de rediriger ici
+
     # Configuration
     app.config.from_object('config.Config')
     # Vérification explicite de la présence de DATABASE_URL

@@ -35,3 +35,7 @@ export const buildApiUrl = (endpoint: string) => {
 console.log('🔧 [Config] Environment:', import.meta.env.MODE);
 console.log('🔧 [Config] VITE_BACKEND_URL:', import.meta.env.VITE_BACKEND_URL);
 console.log('🔧 [Config] API_BASE_URL:', API_BASE_URL);
+
+// Test des URLs générées
+console.log('🧪 [Config] Test URL /auth/login:', buildApiUrl('/auth/login'));
+console.log('🧪 [Config] Test URL /finances:', buildApiUrl('/finances'));
