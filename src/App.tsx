@@ -20,6 +20,8 @@ const FinancesPage = lazy(() => import('./pages/FinancesPage'));
 const DocumentsPage = lazy(() => import('./pages/DocumentsPage'));
 const ResourcesPage = lazy(() => import('./pages/ResourcesPage'));
 const MessagesPage = lazy(() => import('./pages/MessagesPage'));
+const MessagesDemo = lazy(() => import('./pages/MessagesDemo').then(module => ({ default: module.MessagesDemo })));
+const WhatsAppMessagesPageAdvanced = lazy(() => import('./pages/WhatsAppMessagesPageAdvanced').then(module => ({ default: module.WhatsAppMessagesPageAdvanced })));
 const PublicProfilePage = lazy(() => import('./pages/PublicProfilePage'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 const NotificationsPage = lazy(() => import('./pages/NotificationsPage'));
@@ -262,6 +264,14 @@ function App() {
             >
               <MessagesPage />
             </AppLayout>
+          } />
+
+          <Route path="/messages-demo" element={
+            <MessagesDemo />
+          } />
+
+          <Route path="/whatsapp-messages" element={
+            <WhatsAppMessagesPageAdvanced />
           } />
 
           <Route path="/public-profile" element={

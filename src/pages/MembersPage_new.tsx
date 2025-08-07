@@ -11,7 +11,8 @@ import ConfirmDeleteModal from '../components/modals/ConfirmDeleteModal';
 export default function MembersPage() {
   const {
     members,
-    isLoading,
+    loading,
+    error,
     addMember,
     updateMember,
     deleteMember
@@ -65,22 +66,20 @@ export default function MembersPage() {
     setIsDeleteModalOpen(true);
   };
 
-  const handleAddMember = async (memberData: Omit<MemberType, 'id' | 'joinDate'>) => {
+  const handleAddMember = async (memberData: Omit<MemberType, 'id'>) => {
     try {
-      const newMember = {
-        ...memberData,
-        joinDate: new Date()
-      };
-      await addMember(newMember);
+      await addMember(memberData);
       setIsAddModalOpen(false);
     } catch (error) {
       console.error('Erreur lors de l\'ajout du membre:', error);
     }
   };
 
-  const handleUpdateMember = async (memberData: MemberType) => {
+  const handleUpdateMember = async (memberData: Omit<MemberType, 'id'>) => {
+    if (!selectedMember) return;
+    
     try {
-      await updateMember(memberData.id, memberData);
+      await updateMember(selectedMember.id, memberData);
       setIsEditModalOpen(false);
       setSelectedMember(null);
     } catch (error) {
@@ -98,6 +97,15 @@ export default function MembersPage() {
     } catch (error) {
       console.error('Erreur lors de la suppression du membre:', error);
     }
+  };
+
+  const closeModals = () => {
+    setSelectedMember(null);
+    setMemberToDelete(null);
+    setIsAddModalOpen(false);
+    setIsEditModalOpen(false);
+    setIsDetailModalOpen(false);
+    setIsDeleteModalOpen(false);
   };
 
   const getRoleIcon = (role: MemberRoleType) => {
@@ -151,13 +159,21 @@ export default function MembersPage() {
     }
   };
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-600">Chargement des membres...</p>
         </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+        <p className="text-red-700">Erreur lors du chargement des membres : {error}</p>
       </div>
     );
   }
@@ -424,7 +440,7 @@ export default function MembersPage() {
       <AddMemberModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
-        onAdd={handleAddMember}
+        onSubmit={handleAddMember}
       />
 
       {selectedMember && (
@@ -437,13 +453,17 @@ export default function MembersPage() {
               setIsDetailModalOpen(false);
               setIsEditModalOpen(true);
             }}
+            onDelete={() => {
+              setIsDetailModalOpen(false);
+              handleDeleteMember(selectedMember);
+            }}
           />
 
           <EditMemberModal
             isOpen={isEditModalOpen}
             onClose={() => setIsEditModalOpen(false)}
             member={selectedMember}
-            onUpdate={handleUpdateMember}
+            onSubmit={handleUpdateMember}
           />
         </>
       )}
