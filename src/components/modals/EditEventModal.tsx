@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { X, Calendar, MapPin, Users, FileText, Clock, Tag } from 'lucide-react';
-import type { EventType } from '../../types';
+import type { EventType, EventTypeEnum } from '../../types';
 import { EventStatus } from '../../types';
+import { safeToISOString, safeDateToInputString } from '../../utils';
 
 interface EditEventModalProps {
   isOpen: boolean;
@@ -39,21 +40,20 @@ const EditEventModal: React.FC<EditEventModalProps> = ({ isOpen, onClose, onUpda
 
   useEffect(() => {
     if (event) {
-      const eventDate = new Date(event.date);
-      
-      // Vérification de la validité de la date
-      const isValidDate = !isNaN(eventDate.getTime());
+      // Vérification de la validité de la date avec notre fonction sécurisée
+      const safeDateStr = event.startDate ? safeToISOString(new Date(event.startDate)) : null;
+      const safeInputDateStr = event.startDate ? safeDateToInputString(new Date(event.startDate)) : null;
       
       setFormData({
         title: event.title || '',
         description: event.description || '',
-        date: isValidDate ? eventDate.toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-        time: isValidDate ? eventDate.toTimeString().split(' ')[0].slice(0, 5) : '10:00',
+        date: safeInputDateStr || safeDateToInputString(new Date()) || new Date().toISOString().split('T')[0],
+        time: safeDateStr && event.startDate ? new Date(event.startDate).toTimeString().split(' ')[0].slice(0, 5) : '10:00',
         location: event.location || '',
         type: event.type || 'MEETING',
         status: event.status || EventStatus.PLANNED,
         maxParticipants: event.maxParticipants?.toString() || '',
-        participants: event.participants || []
+        participants: event.participants?.map(p => p.memberId) || []
       });
     }
   }, [event]);
@@ -94,21 +94,25 @@ const EditEventModal: React.FC<EditEventModalProps> = ({ isOpen, onClose, onUpda
       ...event,
       title: formData.title.trim(),
       description: formData.description.trim(),
-      date: dateTime,
+      startDate: dateTime,
       location: formData.location.trim(),
-      type: formData.type,
-      status: formData.status,
+      type: formData.type as EventTypeEnum,
+      status: formData.status as EventStatus,
       maxParticipants: formData.maxParticipants ? Number(formData.maxParticipants) : undefined,
-      participants: formData.participants
+      participants: formData.participants.map(memberId => ({
+        memberId,
+        registrationDate: new Date(),
+        attended: false
+      }))
     };
 
     onUpdate(updatedEvent);
   };
 
   const typeOptions = [
-    { value: 'MEETING', label: 'Réunion' },
-    { value: 'SOCIAL', label: 'Social' },
-    { value: 'TRAINING', label: 'Formation' }
+    { value: 'MEETING' as EventTypeEnum, label: 'Réunion' },
+    { value: 'SOCIAL' as EventTypeEnum, label: 'Social' },
+    { value: 'TRAINING' as EventTypeEnum, label: 'Formation' }
   ];
 
   const statusOptions = [
