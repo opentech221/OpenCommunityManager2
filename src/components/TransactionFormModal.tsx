@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, DollarSign, FileText, Tag, Calendar, AlertCircle } from 'lucide-react';
 import { TransactionType, type Transaction } from '../types';
+import { safeDateToInputString } from '../utils';
 
 interface TransactionFormModalProps {
   isOpen: boolean;
@@ -23,7 +24,7 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
     amount: '',
     type: TransactionType.EXPENSE as TransactionType,
     category: '',
-    date: new Date().toISOString().split('T')[0]
+    date: safeDateToInputString(new Date())
   });
   
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -36,7 +37,7 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
         amount: transaction.amount.toString(),
         type: transaction.type,
         category: transaction.category,
-        date: transaction.date.toISOString().split('T')[0]
+        date: safeDateToInputString(transaction.date)
       });
     } else {
       // Réinitialiser pour nouveau
@@ -45,7 +46,7 @@ export const TransactionFormModal: React.FC<TransactionFormModalProps> = ({
         amount: '',
         type: TransactionType.EXPENSE,
         category: '',
-        date: new Date().toISOString().split('T')[0]
+        date: safeDateToInputString(new Date())
       });
     }
     setErrors({});

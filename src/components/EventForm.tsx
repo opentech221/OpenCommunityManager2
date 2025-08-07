@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { type EventType } from '../types';
+import { safeToISOString } from '../utils';
 
 interface EventFormProps {
   event: EventType | null;
@@ -100,7 +101,7 @@ export default function EventForm({ event, onSave, onCancel }: EventFormProps) {
           id="event-date"
           type="datetime-local"
           name="startDate"
-          value={form.startDate.toISOString().slice(0,16)}
+          value={safeToISOString(form.startDate)?.slice(0,16) || ''}
           onChange={handleDateChange}
           required
           className="w-full px-3 py-2 border rounded-lg"
@@ -113,7 +114,7 @@ export default function EventForm({ event, onSave, onCancel }: EventFormProps) {
           id="event-end-date"
           type="datetime-local"
           name="endDate"
-          value={form.endDate ? form.endDate.toISOString().slice(0,16) : ''}
+          value={form.endDate ? (safeToISOString(form.endDate)?.slice(0,16) || '') : ''}
           onChange={handleDateChange}
           className="w-full px-3 py-2 border rounded-lg"
           aria-label="date de fin"

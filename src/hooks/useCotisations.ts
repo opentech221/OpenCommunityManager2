@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { apiUrl } from '../utils';
+import { apiUrl, safeToISOString } from '../utils';
 import type { CotisationType, PaymentStatus, PaymentMethod } from '../types';
 
 interface CotisationFilters {
@@ -50,9 +50,7 @@ function convertCotisationForAPI(cotisation: Partial<CotisationType>): Record<st
   if (cotisation.memberId !== undefined) apiData.member_id = cotisation.memberId;
   if (cotisation.amount !== undefined) apiData.amount = cotisation.amount;
   if (cotisation.paymentDate !== undefined) {
-    apiData.payment_date = cotisation.paymentDate instanceof Date 
-      ? cotisation.paymentDate.toISOString() 
-      : new Date(cotisation.paymentDate).toISOString();
+    apiData.payment_date = safeToISOString(cotisation.paymentDate);
   }
   if (cotisation.paymentMethod !== undefined) apiData.payment_method = cotisation.paymentMethod;
   if (cotisation.status !== undefined) apiData.status = cotisation.status;

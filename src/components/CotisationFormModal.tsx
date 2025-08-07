@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, Calendar, DollarSign, CreditCard, FileText, User, AlertCircle } from 'lucide-react';
 import { PaymentStatus, PaymentMethod, type CotisationType } from '../types';
-import { formatCurrency } from '../utils';
+import { formatCurrency, safeDateToInputString } from '../utils';
 import { useMembers } from '../hooks/useMembers';
 
 interface CotisationFormModalProps {
@@ -40,7 +40,7 @@ export const CotisationFormModal: React.FC<CotisationFormModalProps> = ({
       setFormData({
         memberId: cotisation.memberId,
         amount: cotisation.amount.toString(),
-        paymentDate: cotisation.paymentDate.toISOString().split('T')[0],
+        paymentDate: safeDateToInputString(cotisation.paymentDate),
         paymentMethod: cotisation.paymentMethod,
         status: cotisation.status,
         year: cotisation.year,
@@ -51,7 +51,7 @@ export const CotisationFormModal: React.FC<CotisationFormModalProps> = ({
       setFormData({
         memberId: '',
         amount: '',
-        paymentDate: new Date().toISOString().split('T')[0],
+        paymentDate: safeDateToInputString(new Date()),
         paymentMethod: PaymentMethod.CASH as PaymentMethod,
         status: PaymentStatus.PENDING as PaymentStatus,
         year: new Date().getFullYear(),

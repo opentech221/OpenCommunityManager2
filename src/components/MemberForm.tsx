@@ -3,7 +3,7 @@ import { X, Save, User, Mail, Phone, Calendar } from 'lucide-react';
 import type { MemberType } from '../types';
 import { MemberRole, MemberStatus } from '../types';
 import { MEMBER_ROLES } from '../constants';
-import { formatDate, isValidEmail, isValidPhoneNumber } from '../utils';
+import { formatDate, isValidEmail, isValidPhoneNumber, safeDateToInputString } from '../utils';
 
 interface MemberFormProps {
   member?: MemberType;
@@ -27,7 +27,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
     phone: member?.phone || '',
     role: member?.role || MemberRole.MEMBER,
     status: member?.status || MemberStatus.ACTIVE,
-    joinDate: member?.joinDate ? formatDate(member.joinDate) : new Date().toISOString().split('T')[0],
+    joinDate: member?.joinDate ? formatDate(member.joinDate) : safeDateToInputString(new Date()),
   });
 
   const validateForm = (): boolean => {

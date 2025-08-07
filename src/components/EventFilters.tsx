@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, Filter, Calendar, Tag, Clock } from 'lucide-react';
+import { safeDateToInputString } from '../utils';
 
 interface EventFiltersProps {
   onFiltersChange: (filters: EventFilters) => void;
@@ -148,7 +149,7 @@ const EventFilters: React.FC<EventFiltersProps> = ({
               </label>
               <input
                 type="date"
-                value={filters.startDate ? filters.startDate.toISOString().split('T')[0] : ''}
+                value={safeDateToInputString(filters.startDate)}
                 onChange={(e) => handleFilterChange('startDate', e.target.value ? new Date(e.target.value) : undefined)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               />
@@ -161,7 +162,7 @@ const EventFilters: React.FC<EventFiltersProps> = ({
               </label>
               <input
                 type="date"
-                value={filters.endDate ? filters.endDate.toISOString().split('T')[0] : ''}
+                value={safeDateToInputString(filters.endDate)}
                 onChange={(e) => handleFilterChange('endDate', e.target.value ? new Date(e.target.value) : undefined)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               />
