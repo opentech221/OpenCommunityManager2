@@ -27,7 +27,11 @@ def create_app():
         # Ne jamais rediriger les requêtes OPTIONS (préflight CORS)
         if request.method == 'OPTIONS':
             return None  # Laisse Flask-CORS répondre
-        if request.headers.get('X-Forwarded-Proto') != 'https':
+            
+        # En production, on peut forcer HTTPS mais attention aux requêtes préflight
+        if not app.debug and not app.testing:
+            if request.headers.get('X-Forwarded-Proto') != 'https' and request.endpoint != 'health_check':
+                return redirect(request.url.replace('http://', 'https://'), code=301)
             url = request.url.replace('http://', 'https://', 1)
             return redirect(url, code=301)
     # Force HTTPS en production
@@ -53,8 +57,9 @@ def create_app():
         app,
         origins=app.config['CORS_ORIGINS'],
         supports_credentials=True,
-        allow_headers=['authorization', 'content-type', 'accept', 'origin', 'x-requested-with'],
-        methods=['DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'POST', 'PUT']
+        allow_headers=['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With', 'Cache-Control'],
+        methods=['DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'POST', 'PUT'],
+        max_age=86400  # Cache préflight 24h
     )
     migrate.init_app(app, db)
     
@@ -81,6 +86,16 @@ def create_app():
     app.register_blueprint(main_bp, url_prefix='/api')
     app.register_blueprint(guidance_bp, url_prefix='/api/guidance')
     
+    # Route de santé pour vérifier l'API et CORS
+    @app.route('/health', methods=['GET', 'OPTIONS'])
+    def health_check():
+        return jsonify({
+            'status': 'ok',
+            'message': 'API fonctionnelle',
+            'cors_origins': app.config.get('CORS_ORIGINS', []),
+            'timestamp': datetime.now().isoformat()
+        }), 200
+
     # Route racine : message d'accueil API contextualisé
     @app.route('/')
     def hello():

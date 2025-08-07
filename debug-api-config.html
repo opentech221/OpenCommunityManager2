@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test API Configuration</title>
+</head>
+<body>
+    <h1>Test de Configuration API</h1>
+    <div id="results"></div>
+    
+    <script>
+        // Simulation des variables d'environnement
+        const env = {
+            MODE: 'production', // ou 'development'
+            PROD: true,
+            VITE_BACKEND_URL: undefined // ou l'URL définie
+        };
+        
+        console.log('Environment:', env.MODE);
+        console.log('Production:', env.PROD);
+        console.log('VITE_BACKEND_URL:', env.VITE_BACKEND_URL);
+        
+        // Simulation de la logique de configuration
+        const getApiBaseUrl = () => {
+            if (env.PROD) {
+                return env.VITE_BACKEND_URL || 'https://opencommunitymanager2.up.railway.app/api';
+            }
+            return env.VITE_BACKEND_URL || '/api';
+        };
+        
+        const API_BASE_URL = getApiBaseUrl();
+        console.log('API_BASE_URL:', API_BASE_URL);
+        
+        // Test de l'URL finale
+        const financeUrl = `${API_BASE_URL}/finances`;
+        console.log('Finance URL:', financeUrl);
+        
+        // Affichage des résultats
+        document.getElementById('results').innerHTML = `
+            <p><strong>Environment:</strong> ${env.MODE}</p>
+            <p><strong>Production:</strong> ${env.PROD}</p>
+            <p><strong>VITE_BACKEND_URL:</strong> ${env.VITE_BACKEND_URL || 'undefined'}</p>
+            <p><strong>API_BASE_URL:</strong> ${API_BASE_URL}</p>
+            <p><strong>Finance URL:</strong> ${financeUrl}</p>
+        `;
+    </script>
+</body>
+</html>

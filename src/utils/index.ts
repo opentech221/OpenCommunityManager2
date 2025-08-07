@@ -6,8 +6,23 @@ export { apiUrl };
 /**
  * Formate une date en français
  */
-export const formatDate = (date: Date | string): string => {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
+export const formatDate = (date: Date | string | null | undefined): string => {
+  if (!date) return 'Date non renseignée';
+  
+  let dateObj: Date;
+  
+  if (date instanceof Date) {
+    dateObj = date;
+  } else if (typeof date === 'string') {
+    dateObj = new Date(date);
+  } else {
+    return 'Date invalide';
+  }
+  
+  // Vérifier si la date est valide
+  if (isNaN(dateObj.getTime())) {
+    return 'Date invalide';
+  }
   
   return dateObj.toLocaleDateString('fr-FR', {
     year: 'numeric',
@@ -19,8 +34,23 @@ export const formatDate = (date: Date | string): string => {
 /**
  * Formate une date avec l'heure
  */
-export const formatDateTime = (date: Date | string): string => {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
+export const formatDateTime = (date: Date | string | null | undefined): string => {
+  if (!date) return 'Date non renseignée';
+  
+  let dateObj: Date;
+  
+  if (date instanceof Date) {
+    dateObj = date;
+  } else if (typeof date === 'string') {
+    dateObj = new Date(date);
+  } else {
+    return 'Date invalide';
+  }
+  
+  // Vérifier si la date est valide
+  if (isNaN(dateObj.getTime())) {
+    return 'Date invalide';
+  }
   
   return dateObj.toLocaleDateString('fr-FR', {
     year: 'numeric',

@@ -10,8 +10,8 @@ export interface AssociationType {
   logo?: string;
   description?: string;
   address?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | string | null;
+  updatedAt: Date | string | null;
 }
 
 export interface MemberType {
@@ -46,7 +46,7 @@ export interface CotisationType {
   id: string;
   memberId: string;
   amount: number;
-  paymentDate: Date;
+  paymentDate: Date | string | null;
   paymentMethod: PaymentMethod;
   status: PaymentStatus;
   year: number;
@@ -72,8 +72,8 @@ export interface EventType {
   id: string;
   title: string;
   description: string;
-  startDate: Date;
-  endDate?: Date;
+  startDate: Date | string | null;
+  endDate?: Date | string | null;
   location: string;
   type: EventTypeEnum;
   status: EventStatus;
@@ -81,8 +81,8 @@ export interface EventType {
   associationId: string;
   createdBy?: string;
   participants: EventParticipant[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | string | null;
+  updatedAt: Date | string | null;
 }
 
 export const EventTypeEnum = {
@@ -104,7 +104,7 @@ export type EventStatus = typeof EventStatus[keyof typeof EventStatus];
 
 export interface EventParticipant {
   memberId: string;
-  registrationDate: Date;
+  registrationDate: Date | string | null;
   attended: boolean;
 }
 
@@ -113,7 +113,7 @@ export interface Transaction {
   type: TransactionType;
   amount: number;
   description: string;
-  date: Date;
+  date: Date | string | null;
   category: string;
   associationId: string;
   receipt?: string;
@@ -131,7 +131,7 @@ export interface DocumentType {
   name: string;
   type: DocumentTypeEnum;
   url: string;
-  uploadDate: Date;
+  uploadDate: Date | string | null;
   uploadedBy: string;
   associationId: string;
   size: number;
@@ -151,7 +151,7 @@ export interface MessageType {
   recipientId?: string;
   subject: string;
   content: string;
-  sentAt: Date;
+  sentAt: Date | string | null;
   isRead: boolean;
   associationId: string;
 }

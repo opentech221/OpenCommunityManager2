@@ -3,8 +3,7 @@
  * Interface entre le frontend et le backend pour les transactions financières
  */
 import type { Transaction, TransactionType } from '../types';
-
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000/api';
+import { API_BASE_URL } from './config';
 
 interface FinanceStats {
   total_income: number;

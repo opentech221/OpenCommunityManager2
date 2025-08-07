@@ -101,14 +101,31 @@ export default function EventsPage() {
   };
 
   // Helper functions
-  const formatDate = (date: Date) => {
+  const formatDate = (date: Date | string | null | undefined): string => {
+    if (!date) return 'Date non renseignée';
+    
+    let dateObj: Date;
+    
+    if (date instanceof Date) {
+      dateObj = date;
+    } else if (typeof date === 'string') {
+      dateObj = new Date(date);
+    } else {
+      return 'Date invalide';
+    }
+    
+    // Vérifier si la date est valide
+    if (isNaN(dateObj.getTime())) {
+      return 'Date invalide';
+    }
+    
     return new Intl.DateTimeFormat('fr-FR', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
-    }).format(new Date(date));
+    }).format(dateObj);
   };
 
   const getStatusLabel = (status: string) => {

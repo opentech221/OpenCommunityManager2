@@ -4,7 +4,19 @@
 
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api/guidance';
+// Configuration API avec fallback automatique
+const getApiBaseUrl = () => {
+  // En production, utiliser l'URL Railway directement
+  if (import.meta.env.PROD) {
+    const baseUrl = import.meta.env.VITE_BACKEND_URL || 'https://opencommunitymanager2.up.railway.app/api';
+    return `${baseUrl}/guidance`;
+  }
+  // En développement, utiliser le proxy local
+  const baseUrl = import.meta.env.VITE_BACKEND_URL || '/api';
+  return `${baseUrl}/guidance`;
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 // Configuration axios
 const api = axios.create({
