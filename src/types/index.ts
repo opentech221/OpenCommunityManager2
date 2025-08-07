@@ -22,7 +22,7 @@ export interface MemberType {
   phone: string;
   role: MemberRole;
   status: MemberStatus;
-  joinDate: Date;
+  joinDate: Date | string | null;
   associationId: string;
 }
 

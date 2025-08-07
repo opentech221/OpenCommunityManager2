@@ -13,12 +13,29 @@ interface MemberDetailModalProps {
 const MemberDetailModal: React.FC<MemberDetailModalProps> = ({ isOpen, onClose, onEdit, member }) => {
   if (!isOpen || !member) return null;
 
-  const formatDate = (date: Date) => {
+  const formatDate = (date: Date | string | null | undefined): string => {
+    if (!date) return 'Date non renseignée';
+    
+    let dateObj: Date;
+    
+    if (date instanceof Date) {
+      dateObj = date;
+    } else if (typeof date === 'string') {
+      dateObj = new Date(date);
+    } else {
+      return 'Date invalide';
+    }
+    
+    // Vérifier si la date est valide
+    if (isNaN(dateObj.getTime())) {
+      return 'Date invalide';
+    }
+    
     return new Intl.DateTimeFormat('fr-FR', {
       day: 'numeric',
       month: 'long',
       year: 'numeric'
-    }).format(date);
+    }).format(dateObj);
   };
 
   const getRoleIcon = (role: string) => {
