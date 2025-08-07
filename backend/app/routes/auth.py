@@ -12,6 +12,20 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+@auth_bp.route('/test', methods=['GET', 'OPTIONS'])
+def test_auth():
+    """Route de test pour vérifier l'API d'authentification"""
+    return jsonify({
+        'status': 'ok',
+        'message': 'API auth fonctionnelle',
+        'routes': ['/login', '/register']
+    }), 200
+
+@auth_bp.route('/register', methods=['OPTIONS'])
+def register_preflight():
+    """Handle CORS preflight requests for register"""
+    return '', 204
+
 @auth_bp.route('/register', methods=['POST'])
 def register():
     try:
@@ -66,6 +80,11 @@ def register():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': 'Erreur lors de l\'inscription: ' + str(e)}), 500
+
+@auth_bp.route('/login', methods=['OPTIONS'])
+def login_preflight():
+    """Handle CORS preflight requests for login"""
+    return '', 204
 
 @auth_bp.route('/login', methods=['POST'])
 def login():

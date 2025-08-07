@@ -57,7 +57,7 @@ export const useAuthState = () => {
     setIsLoading(true);
     try {
       // Appel API d'authentification
-      const response = await fetch(apiUrl('/auth/login'), {
+      const response = await fetch(apiUrl('/api/auth/login'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export const useAuthState = () => {
         password: data.password
       };
 
-      const response = await fetch(apiUrl('/auth/register'), {
+      const response = await fetch(apiUrl('/api/auth/register'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
