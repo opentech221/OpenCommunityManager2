@@ -37,11 +37,57 @@ interface UseEventsReturn {
 }
 
 // Utilitaire pour convertir camelCase en snake_case
+// Fonction utilitaire pour convertir une date en ISO string de manière sécurisée
+const safeToISOString = (date: Date | string | null | undefined): string | null => {
+  if (!date) return null;
+  
+  let dateObj: Date;
+  if (date instanceof Date) {
+    dateObj = date;
+  } else if (typeof date === 'string') {
+    dateObj = new Date(date);
+  } else {
+    return null;
+  }
+  
+  if (isNaN(dateObj.getTime())) {
+    console.warn('⚠️ [safeToISOString] Date invalide:', date);
+    return null;
+  }
+  
+  return dateObj.toISOString();
+};
+
+// Fonction utilitaire pour créer une date sécurisée
+const safeDate = (date: Date | string | null | undefined): Date | null => {
+  if (!date) return null;
+  
+  let dateObj: Date;
+  if (date instanceof Date) {
+    dateObj = date;
+  } else if (typeof date === 'string') {
+    dateObj = new Date(date);
+  } else {
+    return null;
+  }
+  
+  if (isNaN(dateObj.getTime())) {
+    console.warn('⚠️ [safeDate] Date invalide:', date);
+    return null;
+  }
+  
+  return dateObj;
+};
+
 function toSnakeCase(obj: unknown): unknown {
   if (Array.isArray(obj)) {
     return obj.map(toSnakeCase);
   } else if (obj instanceof Date) {
-    // Convertir les objets Date en string ISO
+    // Vérifier si la date est valide avant de convertir en ISO string
+    if (isNaN(obj.getTime())) {
+      console.warn('⚠️ [toSnakeCase] Date invalide détectée:', obj);
+      return null;
+    }
     return obj.toISOString();
   } else if (obj !== null && typeof obj === 'object') {
     const result: Record<string, unknown> = {};
@@ -114,10 +160,10 @@ export const useEvents = (): UseEventsReturn => {
       // Convertir les dates en ISO string pour l'API
       const eventForAPI = {
         ...eventDataWithoutId,
-        startDate: eventDataWithoutId.startDate.toISOString(),
-        endDate: eventDataWithoutId.endDate ? eventDataWithoutId.endDate.toISOString() : null,
-        createdAt: eventDataWithoutId.createdAt.toISOString(),
-        updatedAt: eventDataWithoutId.updatedAt.toISOString()
+        startDate: safeToISOString(eventDataWithoutId.startDate),
+        endDate: safeToISOString(eventDataWithoutId.endDate),
+        createdAt: safeToISOString(eventDataWithoutId.createdAt),
+        updatedAt: safeToISOString(eventDataWithoutId.updatedAt)
       };
       
       const response = await fetch(apiUrl('/api/events/'), {
@@ -279,15 +325,31 @@ export const useEvents = (): UseEventsReturn => {
   const getUpcomingEvents = (): EventType[] => {
     const now = new Date();
     return events
-      .filter(event => new Date(event.startDate) > now)
-      .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+      .filter(event => {
+        const eventStartDate = safeDate(event.startDate);
+        return eventStartDate && eventStartDate > now;
+      })
+      .sort((a, b) => {
+        const dateA = safeDate(a.startDate);
+        const dateB = safeDate(b.startDate);
+        if (!dateA || !dateB) return 0;
+        return dateA.getTime() - dateB.getTime();
+      });
   };
 
   const getPastEvents = (): EventType[] => {
     const now = new Date();
     return events
-      .filter(event => new Date(event.endDate || event.startDate) < now)
-      .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
+      .filter(event => {
+        const eventEndDate = safeDate(event.endDate || event.startDate);
+        return eventEndDate && eventEndDate < now;
+      })
+      .sort((a, b) => {
+        const dateA = safeDate(a.startDate);
+        const dateB = safeDate(b.startDate);
+        if (!dateA || !dateB) return 0;
+        return dateB.getTime() - dateA.getTime();
+      });
   };
 
   // Nouvelles fonctions de filtrage
@@ -314,8 +376,8 @@ export const useEvents = (): UseEventsReturn => {
 
   const getEventsByDateRange = (startDate: Date, endDate: Date): EventType[] => {
     return events.filter(event => {
-      const eventDate = new Date(event.startDate);
-      return eventDate >= startDate && eventDate <= endDate;
+      const eventDate = safeDate(event.startDate);
+      return eventDate && eventDate >= startDate && eventDate <= endDate;
     });
   };
 
@@ -342,10 +404,16 @@ export const useEvents = (): UseEventsReturn => {
       const now = new Date();
       switch (filters.dateRange) {
         case 'upcoming':
-          filteredEvents = filteredEvents.filter(event => new Date(event.startDate) > now);
+          filteredEvents = filteredEvents.filter(event => {
+            const eventStartDate = safeDate(event.startDate);
+            return eventStartDate && eventStartDate > now;
+          });
           break;
         case 'past':
-          filteredEvents = filteredEvents.filter(event => new Date(event.endDate || event.startDate) < now);
+          filteredEvents = filteredEvents.filter(event => {
+            const eventEndDate = safeDate(event.endDate || event.startDate);
+            return eventEndDate && eventEndDate < now;
+          });
           break;
         case 'thisWeek': {
           const startOfWeek = new Date(now);
@@ -470,9 +538,18 @@ export const useEvents = (): UseEventsReturn => {
     }
   };
 
-  const getEventParticipants = (eventId: string) => {
+  const getEventParticipants = (eventId: string): Array<{
+    memberId: string;
+    registrationDate: Date;
+    attended: boolean;
+  }> => {
     const event = getEventById(eventId);
-    return event?.participants || [];
+    if (!event?.participants) return [];
+    
+    return event.participants.map(participant => ({
+      ...participant,
+      registrationDate: safeDate(participant.registrationDate) || new Date()
+    }));
   };
 
   return {
