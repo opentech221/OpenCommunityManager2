@@ -26,7 +26,9 @@ interface APITransactionData {
   notes?: string;
 }
 
-class FinanceAPI {
+import { safeToISOString } from '../utils';
+
+export class FinanceAPI {
   private getAuthHeaders() {
     const token = localStorage.getItem('token');
     return {
@@ -88,7 +90,7 @@ class FinanceAPI {
         amount: transactionData.amount,
         type: transactionData.type,
         category: transactionData.category,
-        date: transactionData.date?.toISOString(),
+        date: safeToISOString(transactionData.date),
         receipt: transactionData.receipt || null,
         notes: transactionData.notes || null
       };
@@ -119,7 +121,7 @@ class FinanceAPI {
         ...(updates.amount && { amount: updates.amount }),
         ...(updates.type && { type: updates.type }),
         ...(updates.category && { category: updates.category }),
-        ...(updates.date && { date: updates.date.toISOString() }),
+        ...(updates.date && { date: safeToISOString(updates.date) }),
         ...(updates.receipt !== undefined && { receipt: updates.receipt }),
         ...(updates.notes !== undefined && { notes: updates.notes })
       };

@@ -211,16 +211,18 @@ export const useEvents = (): UseEventsReturn => {
       
       // Convertir les dates en chaînes ISO si elles existent
       if (updates.startDate) {
-        (updatesForAPI as Record<string, unknown>).start_date = updates.startDate instanceof Date 
-          ? updates.startDate.toISOString() 
-          : new Date(updates.startDate).toISOString();
+        const startDateISO = safeToISOString(updates.startDate);
+        if (startDateISO) {
+          (updatesForAPI as Record<string, unknown>).start_date = startDateISO;
+        }
         delete (updatesForAPI as Record<string, unknown>).startDate;
       }
       
       if (updates.endDate) {
-        (updatesForAPI as Record<string, unknown>).end_date = updates.endDate instanceof Date 
-          ? updates.endDate.toISOString() 
-          : new Date(updates.endDate).toISOString();
+        const endDateISO = safeToISOString(updates.endDate);
+        if (endDateISO) {
+          (updatesForAPI as Record<string, unknown>).end_date = endDateISO;
+        }
         delete (updatesForAPI as Record<string, unknown>).endDate;
       }
       

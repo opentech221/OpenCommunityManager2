@@ -1,4 +1,51 @@
 import React, { useState, useEffect } from 'react';
+import { X, Save, Package, Calendar, DollarSign, User, MapPin, AlertCircle, FileText } from 'lucide-react';
+import { MaterialResourceType, MaterialCategory, MaterialCategoryEnum } from '../../types';
+import { MaterialResourceFormData } from '../../types/MaterialResourceFormData';
+
+const EditMaterialResourceModal = ({ resource, isOpen, onClose, onSave }: {
+  resource: MaterialResourceType | null;
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (id: string, updates: Partial<MaterialResourceType>) => void;
+}) => {
+  // Fonction utilitaire pour convertir une date en string de manière sécurisée
+  const safeDateToString = (date: Date | string | null | undefined): string => {
+    if (!date) return '';
+    
+    let dateObj: Date;
+    if (date instanceof Date) {
+      dateObj = date;
+    } else if (typeof date === 'string') {
+      dateObj = new Date(date);
+    } else {
+      return '';
+    }
+    
+    if (isNaN(dateObj.getTime())) {
+      console.warn('⚠️ [safeDateToString] Date invalide:', date);
+      return '';
+    }
+    
+    return dateObj.toISOString().split('T')[0];
+  };
+
+  const [formData, setFormData] = useState<MaterialResourceFormData>({
+    name: resource?.name || '',
+    category: (resource?.category || MaterialCategoryEnum.AUTRE) as MaterialCategory,
+    description: resource?.description || '',
+    condition: (resource?.condition || 'BON') as 'EXCELLENT' | 'BON' | 'MOYEN' | 'MAUVAIS',
+    location: resource?.location || '',
+    purchaseDate: safeDateToString(resource?.purchaseDate),
+    purchasePrice: resource?.purchasePrice?.toString() || '',
+    currentValue: resource?.currentValue?.toString() || '',
+    responsible: resource?.responsible || '',
+    availability: (resource?.availability || 'DISPONIBLE') as 'DISPONIBLE' | 'UTILISÉ' | 'EN_MAINTENANCE' | 'INDISPONIBLE',
+    serialNumber: resource?.serialNumber || '',
+    warranty: safeDateToString(resource?.warranty),
+    notes: resource?.notes || ''
+  });
+  });eEffect } from 'react';
 import { X, Package, DollarSign, MapPin, User, Calendar, FileText, Wrench } from 'lucide-react';
 import type { MaterialResourceType, MaterialCategory } from '../../types';
 import { MaterialCategory as MaterialCategoryEnum } from '../../types';

@@ -3,6 +3,38 @@ import { apiUrl } from './apiUrl.vite';
 
 // Export de la fonction apiUrl depuis l'implémentation réelle
 export { apiUrl };
+
+/**
+ * Convertit une date en ISO string de manière sécurisée
+ */
+export const safeToISOString = (date: Date | string | null | undefined): string | null => {
+  if (!date) return null;
+  
+  let dateObj: Date;
+  if (date instanceof Date) {
+    dateObj = date;
+  } else if (typeof date === 'string') {
+    dateObj = new Date(date);
+  } else {
+    return null;
+  }
+  
+  if (isNaN(dateObj.getTime())) {
+    console.warn('⚠️ [safeToISOString] Date invalide:', date);
+    return null;
+  }
+  
+  return dateObj.toISOString();
+};
+
+/**
+ * Convertit une date en format YYYY-MM-DD de manière sécurisée
+ */
+export const safeDateToInputString = (date: Date | string | null | undefined): string => {
+  const isoString = safeToISOString(date);
+  return isoString ? isoString.split('T')[0] : '';
+};
+
 /**
  * Formate une date en français
  */

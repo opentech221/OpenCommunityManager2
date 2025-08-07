@@ -40,11 +40,15 @@ const EditEventModal: React.FC<EditEventModalProps> = ({ isOpen, onClose, onUpda
   useEffect(() => {
     if (event) {
       const eventDate = new Date(event.date);
+      
+      // Vérification de la validité de la date
+      const isValidDate = !isNaN(eventDate.getTime());
+      
       setFormData({
         title: event.title || '',
         description: event.description || '',
-        date: eventDate.toISOString().split('T')[0],
-        time: eventDate.toTimeString().split(' ')[0].slice(0, 5),
+        date: isValidDate ? eventDate.toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+        time: isValidDate ? eventDate.toTimeString().split(' ')[0].slice(0, 5) : '10:00',
         location: event.location || '',
         type: event.type || 'MEETING',
         status: event.status || EventStatus.PLANNED,

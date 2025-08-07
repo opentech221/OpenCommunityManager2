@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { Transaction, TransactionType } from '../types';
-import { apiUrl } from '../utils';
+import { apiUrl, safeToISOString } from '../utils';
 
 const API_BASE_URL = apiUrl('/finances');
 
@@ -116,7 +116,7 @@ export const useFinances = () => {
         amount: transactionData.amount,
         type: transactionData.type,
         category: transactionData.category,
-        date: transactionData.date?.toISOString(),
+        date: safeToISOString(transactionData.date),
         receipt: transactionData.receipt || null,
         notes: transactionData.notes || null
       };
@@ -158,7 +158,7 @@ export const useFinances = () => {
         ...(updates.amount && { amount: updates.amount }),
         ...(updates.type && { type: updates.type }),
         ...(updates.category && { category: updates.category }),
-        ...(updates.date && { date: updates.date.toISOString() }),
+        ...(updates.date && { date: safeToISOString(updates.date) }),
         ...(updates.receipt !== undefined && { receipt: updates.receipt }),
         ...(updates.notes !== undefined && { notes: updates.notes })
       };

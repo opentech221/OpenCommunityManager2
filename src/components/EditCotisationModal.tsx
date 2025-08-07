@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, Calendar, DollarSign, CreditCard, FileText, User, AlertCircle } from 'lucide-react';
 import { PaymentStatus, PaymentMethod, type CotisationType } from '../types';
-import { formatCurrency } from '../utils';
+import { formatCurrency, safeDateToInputString } from '../utils';
 
 interface EditCotisationModalProps {
   isOpen: boolean;
@@ -44,7 +44,7 @@ export const EditCotisationModal: React.FC<EditCotisationModalProps> = ({
       setFormData({
         memberId: cotisation.memberId,
         amount: cotisation.amount.toString(),
-        paymentDate: cotisation.paymentDate.toISOString().split('T')[0],
+        paymentDate: safeDateToInputString(cotisation.paymentDate),
         paymentMethod: cotisation.paymentMethod,
         status: cotisation.status,
         year: cotisation.year,
