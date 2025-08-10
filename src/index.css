@@ -542,7 +542,7 @@ html {
   align-items: center;
   justify-content: center;
   padding: 0.5rem 1rem;
-  background-color: var(--color-primary-500);
+  background-color: #6600cc;
   color: white;
   font-weight: 500;
   border-radius: 0.5rem;
@@ -553,7 +553,7 @@ html {
 }
 
 .btn-primary:hover {
-  background-color: var(--color-primary-600);
+  background-color: #5a00b8;
   transform: translateY(-1px);
 }
 
