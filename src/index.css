@@ -18,6 +18,15 @@ html, body {
   overflow-x: hidden;
 }
 
+/* Masquer la scrollbar horizontale pour les filtres */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}
+
 /* Mobile viewport fixes */
 @media (max-width: 768px) {
   body {

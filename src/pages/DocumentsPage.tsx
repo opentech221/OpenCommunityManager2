@@ -22,6 +22,19 @@ import {
 } from '../components';
 
 const DocumentsPage: React.FC = () => {
+  // Détection mobile
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // États locaux
   const [search, setSearch] = useState('');
   const [filterType, setFilterType] = useState<DocumentTypeEnum | 'all'>('all');
@@ -251,6 +264,7 @@ const DocumentsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-purple-900 p-0">
+      <div className="px-1 sm:px-2 lg:px-3 py-6">
       {/* Header décoré avec couleur orange */}
       <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
         <div className="flex items-center justify-between">
@@ -299,77 +313,85 @@ const DocumentsPage: React.FC = () => {
       )}
 
       {/* Tableau de bord des statistiques */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className={`grid gap-4 mb-6 ${
+        isMobile ? 'grid-cols-2' : 'grid-cols-2 lg:grid-cols-4'
+      }`}>
         <button 
-          className={`bg-white rounded-lg p-4 shadow hover:shadow-md transition-shadow border ${
-            filterType === 'all' ? 'ring-2 ring-purple-500 ring-offset-2' : ''
-          }`} 
+          className={`bg-white rounded-lg shadow hover:shadow-md transition-shadow border ${
+            isMobile ? 'p-2' : 'p-4'
+          } ${filterType === 'all' ? 'ring-2 ring-purple-500 ring-offset-2' : ''}`} 
           onClick={() => setFilterType('all')} 
           aria-label="Afficher tous les documents"
         >
-          <div className="text-2xl font-bold text-purple-600">{totalDocuments}</div>
-          <div className="text-sm text-purple-600">Total</div>
+          <div className={`font-bold text-purple-600 ${isMobile ? 'text-lg' : 'text-2xl'}`}>{totalDocuments}</div>
+          <div className={`text-purple-600 ${isMobile ? 'text-xs' : 'text-sm'}`}>Total</div>
         </button>
         
         <button 
-          className={`bg-white rounded-lg p-4 shadow hover:shadow-md transition-shadow border ${
-            filterType === DocumentTypeEnum.PV ? 'ring-2 ring-blue-500 ring-offset-2' : ''
-          }`} 
+          className={`bg-white rounded-lg shadow hover:shadow-md transition-shadow border ${
+            isMobile ? 'p-2' : 'p-4'
+          } ${filterType === DocumentTypeEnum.PV ? 'ring-2 ring-blue-500 ring-offset-2' : ''}`}
           onClick={() => setFilterType(filterType === DocumentTypeEnum.PV ? 'all' : DocumentTypeEnum.PV)}
         >
-          <div className="text-2xl font-bold text-blue-600">{pvCount}</div>
-          <div className="text-sm text-blue-600">PV</div>
+          <div className={`font-bold text-blue-600 ${isMobile ? 'text-lg' : 'text-2xl'}`}>{pvCount}</div>
+          <div className={`text-blue-600 ${isMobile ? 'text-xs' : 'text-sm'}`}>PV</div>
         </button>
         
         <button 
-          className={`bg-white rounded-lg p-4 shadow hover:shadow-md transition-shadow border ${
-            filterType === DocumentTypeEnum.FINANCIAL_REPORT ? 'ring-2 ring-green-500 ring-offset-2' : ''
-          }`} 
+          className={`bg-white rounded-lg shadow hover:shadow-md transition-shadow border ${
+            isMobile ? 'p-2' : 'p-4'
+          } ${filterType === DocumentTypeEnum.FINANCIAL_REPORT ? 'ring-2 ring-green-500 ring-offset-2' : ''}`}
           onClick={() => setFilterType(filterType === DocumentTypeEnum.FINANCIAL_REPORT ? 'all' : DocumentTypeEnum.FINANCIAL_REPORT)}
         >
-          <div className="text-2xl font-bold text-green-600">{financialReportCount}</div>
-          <div className="text-sm text-green-600">Financiers</div>
+          <div className={`font-bold text-green-600 ${isMobile ? 'text-lg' : 'text-2xl'}`}>{financialReportCount}</div>
+          <div className={`text-green-600 ${isMobile ? 'text-xs' : 'text-sm'}`}>Financiers</div>
         </button>
         
         <button 
-          className={`bg-white rounded-lg p-4 shadow hover:shadow-md transition-shadow border ${
-            filterType === DocumentTypeEnum.STATUTES ? 'ring-2 ring-purple-500 ring-offset-2' : ''
-          }`} 
+          className={`bg-white rounded-lg shadow hover:shadow-md transition-shadow border ${
+            isMobile ? 'p-2' : 'p-4'
+          } ${filterType === DocumentTypeEnum.STATUTES ? 'ring-2 ring-purple-500 ring-offset-2' : ''}`} 
           onClick={() => setFilterType(filterType === DocumentTypeEnum.STATUTES ? 'all' : DocumentTypeEnum.STATUTES)}
         >
-          <div className="text-2xl font-bold text-purple-600">{statutesCount}</div>
-          <div className="text-sm text-purple-600">Statuts</div>
+          <div className={`font-bold text-purple-600 ${isMobile ? 'text-lg' : 'text-2xl'}`}>{statutesCount}</div>
+          <div className={`text-purple-600 ${isMobile ? 'text-xs' : 'text-sm'}`}>Statuts</div>
         </button>
       </div>
 
       {/* Liste des documents */}
-      <div className="bg-white rounded-lg shadow p-4">
+      <div className={`bg-white rounded-lg shadow ${isMobile ? 'p-2' : 'p-4'}`}>
         {/* Barre de recherche */}
-        <div className="relative mb-4">
+        <div className={`relative mb-4 ${isMobile ? 'mb-3' : ''}`}>
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-5 w-5 text-gray-400" />
+            <Search className={`text-gray-400 ${isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
           </div>
           <input
             type="text"
-            placeholder="Rechercher un document..."
+            placeholder={isMobile ? 'Rechercher...' : 'Rechercher un document...'}
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="block flex-1 w-full pl-10 pr-3 py-2 border border-gray-300 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm sm:text-base"
+            className={`block flex-1 w-full border border-gray-300 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
+              isMobile ? 'pl-8 pr-2 py-2 text-sm' : 'pl-10 pr-3 py-2 text-sm sm:text-base'
+            }`}
           />
         </div>
 
         {localDocuments.length === 0 ? (
-          <div className="text-center py-8">
+          <div className={`text-center ${isMobile ? 'py-6' : 'py-8'}`}>
             <div className="text-gray-400 mb-4">
-              <FileText className="w-16 h-16 mx-auto mb-4" />
+              <FileText className={`mx-auto mb-4 ${isMobile ? 'w-12 h-12' : 'w-16 h-16'}`} />
             </div>
-            <p className="text-lg font-medium text-gray-900 mb-2">Aucun document enregistré</p>
-            <p className="text-gray-500 mb-4">Commencez par télécharger votre premier document</p>
+            <p className={`font-medium text-gray-900 mb-2 ${isMobile ? 'text-base' : 'text-lg'}`}>Aucun document enregistré</p>
+            <p className={`text-gray-500 mb-4 ${isMobile ? 'text-sm' : ''}`}>
+              {isMobile ? 'Ajoutez votre premier document' : 'Commencez par télécharger votre premier document'}
+            </p>
             <button 
               onClick={openAddModal}
-              className="bg-orange-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-600 transition-colors"
+              className={`bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 transition-colors ${
+                isMobile ? 'px-4 py-2 text-sm' : 'px-6 py-3'
+              }`}
             >
-              Télécharger un document
+              {isMobile ? 'Ajouter' : 'Télécharger un document'}
             </button>
           </div>
         ) : filteredDocuments.length === 0 ? (
@@ -377,19 +399,69 @@ const DocumentsPage: React.FC = () => {
             <p className="text-gray-500">Aucun document trouvé pour votre recherche</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 sticky top-0">
-                <tr>
-                  <th className="text-left p-3 font-medium text-gray-700">Document</th>
-                  <th className="text-left p-3 font-medium text-gray-700">Type</th>
-                  <th className="text-left p-3 font-medium text-gray-700">Taille</th>
-                  <th className="text-left p-3 font-medium text-gray-700">Auteur</th>
-                  <th className="text-left p-3 font-medium text-gray-700">Date</th>
-                  <th className="text-left p-3 font-medium text-gray-700">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
+          <>
+          {isMobile ? (
+            // Vue mobile - Liste de cartes
+            <div className="space-y-3">
+              {filteredDocuments.map((document) => (
+                <div key={document.id} className="border border-gray-200 rounded-lg p-3 bg-gray-50">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center space-x-2 mb-2">
+                        {getFileIcon(document.name)}
+                        <div className="font-medium text-gray-900 text-sm truncate">{document.name}</div>
+                      </div>
+                      <div className="flex items-center space-x-4 text-xs text-gray-500">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getTypeBadgeColor(document.type)}`}>
+                          {getTypeLabel(document.type)}
+                        </span>
+                        <span>{formatFileSize(document.size)}</span>
+                        <span>{formatDate(document.uploadDate)}</span>
+                      </div>
+                      <div className="text-xs text-gray-400 mt-1">Par {document.uploadedBy}</div>
+                    </div>
+                    <div className="flex space-x-1 ml-2">
+                      <button 
+                        className="inline-flex items-center justify-center w-8 h-8 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-full transition-colors" 
+                        onClick={() => openDetailModal(document)} 
+                        aria-label="Voir détails"
+                      >
+                        <Eye size={14} />
+                      </button>
+                      <button 
+                        className="inline-flex items-center justify-center w-8 h-8 text-orange-500 hover:text-orange-700 hover:bg-orange-50 rounded-full transition-colors" 
+                        onClick={() => openEditModal(document)}
+                        aria-label="Modifier"
+                      >
+                        <Edit size={14} />
+                      </button>
+                      <button 
+                        className="inline-flex items-center justify-center w-8 h-8 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors" 
+                        onClick={() => handleDelete(document.id)}
+                        aria-label="Supprimer"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            // Vue desktop - Tableau
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50 sticky top-0">
+                  <tr>
+                    <th className="text-left p-3 font-medium text-gray-700">Document</th>
+                    <th className="text-left p-3 font-medium text-gray-700">Type</th>
+                    <th className="text-left p-3 font-medium text-gray-700">Taille</th>
+                    <th className="text-left p-3 font-medium text-gray-700">Auteur</th>
+                    <th className="text-left p-3 font-medium text-gray-700">Date</th>
+                    <th className="text-left p-3 font-medium text-gray-700">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
                 {filteredDocuments.map((document, index) => (
                   <tr key={document.id} className={`border-b hover:bg-gray-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-25'}`}>
                     <td className="p-3">
@@ -455,7 +527,9 @@ const DocumentsPage: React.FC = () => {
                 ))}
               </tbody>
             </table>
-          </div>
+            </div>
+          )}
+          </>
         )}
       </div>
 
@@ -547,6 +621,7 @@ const DocumentsPage: React.FC = () => {
         >
           <Plus className="h-6 w-6 text-white" />
         </button>
+      </div>
       </div>
     </div>
   );
