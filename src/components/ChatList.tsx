@@ -358,13 +358,13 @@ export const ChatList: React.FC<ChatListProps> = ({
     <div className="h-full flex flex-col bg-white">
       {/* Header */}
       <div className={`${
-        isMobile ? 'p-3 pb-2' : 'p-4'
+        isMobile ? 'p-2 pb-1' : 'p-4'
       } border-b border-gray-200 bg-white shadow-sm`}>
         <div className={`flex items-center justify-between ${
-          isMobile ? 'mb-3' : 'mb-4'
+          isMobile ? 'mb-2' : 'mb-4'
         }`}>
           <h2 className={`${
-            isMobile ? 'text-lg' : 'text-xl'
+            isMobile ? 'text-base' : 'text-xl'
           } font-bold text-gray-900`}>Messages</h2>
           <div className="flex items-center space-x-3">
             {totalUnreadCount > 0 && (
@@ -414,14 +414,14 @@ export const ChatList: React.FC<ChatListProps> = ({
 
         {/* Barre de recherche */}
         <div className="relative">
-          <Search size={isMobile ? 18 : 16} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          <Search size={isMobile ? 16 : 16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             placeholder="Rechercher une conversation..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className={`w-full ${
-              isMobile ? 'pl-11 pr-4 py-3 text-base' : 'pl-10 pr-4 py-2 text-sm'
+              isMobile ? 'pl-9 pr-4 py-2 text-sm' : 'pl-10 pr-4 py-2 text-sm'
             } border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all ${
               isMobile ? 'shadow-sm' : ''
             }`}
@@ -438,7 +438,7 @@ export const ChatList: React.FC<ChatListProps> = ({
 
         {/* Filtres */}
         <div className={`flex items-center justify-between ${
-          isMobile ? 'mt-3' : 'mt-3'
+          isMobile ? 'mt-2' : 'mt-3'
         }`}>
           <div className={`flex overflow-x-auto ${
             isMobile ? 'space-x-1' : 'space-x-2'
@@ -448,7 +448,7 @@ export const ChatList: React.FC<ChatListProps> = ({
                 key={option.key}
                 onClick={() => setFilterBy(option.key as FilterOption)}
                 className={`${
-                  isMobile ? 'px-3 py-1.5 text-xs min-w-max' : 'px-4 py-2 text-sm'
+                  isMobile ? 'px-2 py-1 text-xs min-w-max' : 'px-4 py-2 text-sm'
                 } rounded-full font-medium whitespace-nowrap transition-colors shadow-sm flex-shrink-0 ${
                   filterBy === option.key
                     ? 'bg-green-500 text-white'
@@ -505,7 +505,7 @@ export const ChatList: React.FC<ChatListProps> = ({
               <div
                 key={conversation.id}
                 className={`${
-                  isMobile ? 'p-3 border-b border-gray-100 active:bg-gray-50' : 'p-4 hover:bg-gray-50 active:bg-gray-100'
+                  isMobile ? 'p-2 border-b border-gray-100 active:bg-gray-50' : 'p-4 hover:bg-gray-50 active:bg-gray-100'
                 } cursor-pointer transition-colors relative group ${
                   selectedConversationId === conversation.id 
                     ? `${isMobile ? 'bg-green-50 border-r-4 border-green-500' : 'bg-orange-50 border-r-4 border-orange-500'}` 
@@ -514,7 +514,7 @@ export const ChatList: React.FC<ChatListProps> = ({
                 onClick={() => onSelectConversation(conversation)}
               >
                 <div className={`flex items-start ${
-                  isMobile ? 'space-x-3' : 'space-x-4'
+                  isMobile ? 'space-x-2' : 'space-x-4'
                 }`}>
                   <div className="relative flex-shrink-0">
                     {conversation.avatar ? (
@@ -522,12 +522,12 @@ export const ChatList: React.FC<ChatListProps> = ({
                         src={conversation.avatar} 
                         alt={conversation.name}
                         className={`${
-                          isMobile ? 'w-12 h-12' : 'w-12 h-12'
+                          isMobile ? 'w-10 h-10' : 'w-12 h-12'
                         } rounded-full object-cover`}
                       />
                     ) : (
                       <div className={`${
-                        isMobile ? 'w-12 h-12' : 'w-12 h-12'
+                        isMobile ? 'w-10 h-10' : 'w-12 h-12'
                       } rounded-full bg-gradient-to-br ${getAvatarColor(conversation.name)} flex items-center justify-center shadow-sm`}>
                         <span className={`text-white font-medium ${
                           isMobile ? 'text-sm' : 'text-sm'
@@ -561,12 +561,12 @@ export const ChatList: React.FC<ChatListProps> = ({
                   
                   <div className={`flex-1 min-w-0 ${isMobile ? 'max-w-[240px]' : ''}`}>
                     <div className={`flex items-center justify-between ${
-                      isMobile ? 'mb-1.5' : 'mb-1'
+                      isMobile ? 'mb-1' : 'mb-1'
                     }`}>
                       <h3 className={`font-medium truncate flex items-center ${
                         conversation.unreadCount > 0 ? 'text-gray-900' : 'text-gray-800'
                       } ${
-                        isMobile ? 'text-sm max-w-[150px]' : 'text-sm'
+                        isMobile ? 'text-xs max-w-[150px]' : 'text-sm'
                       }`}>
                         <span className="truncate mr-1">{conversation.name}</span>
                         {!isMobile && (
@@ -612,17 +612,17 @@ export const ChatList: React.FC<ChatListProps> = ({
                       <p className={`truncate ${
                         conversation.unreadCount > 0 ? 'font-medium text-gray-900' : 'text-gray-600'
                       } ${
-                        isMobile ? 'text-xs max-w-[180px]' : 'text-sm flex-1 mr-2'
+                        isMobile ? 'text-xs max-w-[160px]' : 'text-sm flex-1 mr-2'
                       }`}>
-                        {isMobile && conversation.lastMessage.length > 40 
-                          ? conversation.lastMessage.substring(0, 40) + '...'
+                        {isMobile && conversation.lastMessage.length > 35 
+                          ? conversation.lastMessage.substring(0, 35) + '...'
                           : conversation.lastMessage
                         }
                       </p>
                       
                       {conversation.unreadCount > 0 && (
                         <span className={`bg-green-500 text-white font-bold flex-shrink-0 rounded-full shadow-sm ml-2 ${
-                          isMobile ? 'text-xs px-2 py-0.5 min-w-[18px] text-center' : 'text-xs px-2 py-1'
+                          isMobile ? 'text-xs px-1.5 py-0.5 min-w-[16px] text-center' : 'text-xs px-2 py-1'
                         }`}>
                           {isMobile && conversation.unreadCount > 9 ? '9+' : conversation.unreadCount > 99 ? '99+' : conversation.unreadCount}
                         </span>

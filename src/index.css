@@ -18,6 +18,26 @@ html, body {
   overflow-x: hidden;
 }
 
+/* Full-height messaging layout */
+.messages-page-container {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+.messages-chat-area {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.messages-input-fixed {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+}
+
 /* Masquer la scrollbar horizontale pour les filtres */
 .scrollbar-hide {
   -ms-overflow-style: none;  /* Internet Explorer 10+ */

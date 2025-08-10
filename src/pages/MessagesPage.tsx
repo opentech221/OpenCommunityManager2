@@ -148,18 +148,18 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage, onSendSticke
 
       {/* Panneau de stickers */}
       {showStickers && (
-        <div className={`absolute bottom-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl mb-2 max-h-32 overflow-y-auto z-10 ${
-          isMobile ? 'p-2' : 'p-4'
+        <div className={`absolute bottom-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl mb-1 max-h-24 overflow-y-auto z-10 ${
+          isMobile ? 'p-1' : 'p-4'
         }`}>
           <div className={`grid ${
-            isMobile ? 'grid-cols-8 gap-1' : 'grid-cols-6 gap-2'
+            isMobile ? 'grid-cols-10 gap-0.5' : 'grid-cols-6 gap-2'
           }`}>
             {stickers.map((sticker, idx) => (
               <button
                 key={idx}
                 onClick={() => handleStickerClick(sticker)}
                 className={`${
-                  isMobile ? 'p-2 text-lg' : 'p-3 text-2xl'
+                  isMobile ? 'p-1 text-sm' : 'p-3 text-2xl'
                 } rounded-xl hover:bg-gray-100 active:bg-gray-200 transition-colors active:scale-95`}
                 title={sticker.name}
               >
@@ -172,13 +172,13 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage, onSendSticke
       
       {/* Zone de saisie style WhatsApp */}
       <div className={`flex items-end ${
-        isMobile ? 'space-x-2 p-2' : 'space-x-2 p-2'
+        isMobile ? 'space-x-1 p-1' : 'space-x-2 p-2'
       }`}>
         {/* Bouton fichiers */}
         <button
           onClick={openFileDialog}
           className={`flex-shrink-0 ${
-            isMobile ? 'w-8 h-8 text-sm' : 'w-10 h-10 text-lg'
+            isMobile ? 'w-7 h-7 text-xs' : 'w-10 h-10 text-lg'
           } bg-gray-100 hover:bg-gray-200 active:bg-gray-300 rounded-full flex items-center justify-center transition-colors shadow-sm active:scale-95`}
           title="Joindre un fichier"
         >
@@ -187,12 +187,12 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage, onSendSticke
 
         {/* Container de l'input avec sticker */}
         <div className={`flex-1 bg-white rounded-full border border-gray-300 shadow-sm flex items-center ${
-          isMobile ? 'min-h-[36px] px-3 py-2' : 'min-h-[40px] px-3 py-2'
+          isMobile ? 'min-h-[32px] px-2 py-1' : 'min-h-[40px] px-3 py-2'
         }`}>
           <button
             onClick={() => setShowStickers(!showStickers)}
-            className={`flex-shrink-0 mr-2 hover:scale-110 transition-transform ${
-              isMobile ? 'text-base' : 'text-lg'
+            className={`flex-shrink-0 mr-1 hover:scale-110 transition-transform ${
+              isMobile ? 'text-sm' : 'text-lg'
             } ${showStickers ? 'scale-110' : ''}`}
             title="Stickers"
           >
@@ -203,7 +203,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage, onSendSticke
             type="text"
             placeholder={isMobile ? "Message..." : "Tapez votre message..."}
             className={`flex-1 outline-none bg-transparent ${
-              isMobile ? 'text-sm placeholder-gray-500' : 'text-sm placeholder-gray-500'
+              isMobile ? 'text-xs placeholder-gray-500' : 'text-sm placeholder-gray-500'
             }`}
             onKeyPress={handleKeyPress}
           />
@@ -213,7 +213,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage, onSendSticke
         <button 
           onClick={handleSend}
           className={`flex-shrink-0 ${
-            isMobile ? 'w-8 h-8 text-sm' : 'w-10 h-10 text-lg'
+            isMobile ? 'w-7 h-7 text-xs' : 'w-10 h-10 text-lg'
           } bg-green-500 hover:bg-green-600 active:bg-green-700 rounded-full flex items-center justify-center transition-colors text-white shadow-sm active:scale-95`}
           title="Envoyer"
         >
@@ -928,24 +928,21 @@ const MessagesPage: React.FC = () => {
   const activeMembers = conversations.filter(c => c.isOnline && c.type === 'private').length;
 
   return (
-    <div className="h-screen max-h-screen bg-white flex flex-col overflow-hidden">
-      <div className={`flex flex-col h-full ${
-        isMobile ? 'px-0' : 'px-1 sm:px-2 lg:px-3'
-      }`}>
+    <div className="messages-page-container h-screen max-h-screen bg-white flex flex-col overflow-hidden">
       {/* Header principal (mobile uniquement) */}
       {isMobile && showConversationList && (
-        <div className="bg-green-600 p-3 flex-shrink-0 shadow-md">
+        <div className="bg-green-600 p-2 flex-shrink-0 shadow-md">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl font-bold text-white">Messages</h1>
-            <div className="flex items-center space-x-1">
-              <button className="p-2 hover:bg-green-700 rounded-full text-white transition-colors">
-                <Search size={18} />
+            <h1 className="text-lg font-bold text-white">Messages</h1>
+            <div className="flex items-center space-x-0.5">
+              <button className="p-1.5 hover:bg-green-700 rounded-full text-white transition-colors">
+                <Search size={16} />
               </button>
-              <button className="p-2 hover:bg-green-700 rounded-full text-white transition-colors">
-                <Plus size={18} />
+              <button className="p-1.5 hover:bg-green-700 rounded-full text-white transition-colors">
+                <Plus size={16} />
               </button>
-              <button className="p-2 hover:bg-green-700 rounded-full text-white transition-colors">
-                <MoreVertical size={18} />
+              <button className="p-1.5 hover:bg-green-700 rounded-full text-white transition-colors">
+                <MoreVertical size={16} />
               </button>
             </div>
           </div>
@@ -973,36 +970,38 @@ const MessagesPage: React.FC = () => {
         {selectedConversation ? (
           <div 
             key={`conversation-${selectedConversation.id}`}
-            className={`flex-1 flex flex-col min-h-0 ${isMobile && !showConversationList ? 'w-full' : ''}`}
+            className={`messages-chat-area flex-1 flex flex-col min-h-0 ${isMobile && !showConversationList ? 'w-full' : ''}`}
           >
             {/* Header de conversation */}
             <div className={`bg-green-600 flex-shrink-0 shadow-sm ${
-              isMobile ? 'p-1 sm:p-2' : 'p-1 sm:p-2 lg:p-3'
+              isMobile ? 'p-1' : 'p-1 sm:p-2 lg:p-3'
             }`}>
               <div className="flex items-center">
                 {isMobile && (
                   <button 
                     onClick={handleBackToList}
                     className={`${
-                      isMobile ? 'mr-2 p-2' : 'mr-3 p-2'
+                      isMobile ? 'mr-1 p-1' : 'mr-3 p-2'
                     } hover:bg-green-700 rounded-full text-white transition-colors active:bg-green-800`}
-                    style={{ fontSize: isMobile ? '16px' : '16px' }}
+                    style={{ fontSize: isMobile ? '14px' : '16px' }}
                   >
                     ←
                   </button>
                 )}
                 <div className={`bg-gray-300 rounded-full flex items-center justify-center text-gray-700 font-semibold overflow-hidden ${
-                  isMobile ? 'w-9 h-9 mr-2' : 'w-10 h-10 mr-3'
+                  isMobile ? 'w-7 h-7 mr-2' : 'w-10 h-10 mr-3'
                 }`}>
                   {selectedConversation.avatar ? (
                     <img src={selectedConversation.avatar} alt={selectedConversation.name} className="w-full h-full object-cover" />
                   ) : (
-                    selectedConversation.name[0].toUpperCase()
+                    <span className={`${isMobile ? 'text-xs' : 'text-base'}`}>
+                      {selectedConversation.name[0].toUpperCase()}
+                    </span>
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <h2 className={`font-semibold text-white truncate ${
-                    isMobile ? 'text-base' : 'text-lg'
+                    isMobile ? 'text-sm' : 'text-lg'
                   }`}>{selectedConversation.name}</h2>
                   <p className={`text-green-100 truncate ${
                     isMobile ? 'text-xs' : 'text-sm'
@@ -1108,34 +1107,25 @@ const MessagesPage: React.FC = () => {
               id={`messages-${selectedConversation.id}`}
               key={`messages-${selectedConversation.id}`}
               className={`flex-1 overflow-y-auto ${
-                isMobile ? 'p-1' : 'p-4'
+                isMobile ? 'p-0' : 'p-4'
               } bg-gradient-to-b from-green-50 to-green-100 min-h-0`}
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3e%3cg fill='none' fill-rule='evenodd'%3e%3cg fill='%23d1fae5' fill-opacity='0.1'%3e%3ccircle cx='30' cy='30' r='2'/%3e%3c/g%3e%3c/g%3e%3c/svg%3e")`
               }}
             >
-              <div className={`${isMobile ? 'space-y-2' : 'space-y-3'} h-full`}>
-                {/* Indicateur de conversation - plus compact sur mobile */}
-                {!isMobile && (
-                  <div className="text-center">
-                    <div className="bg-blue-100 text-blue-800 px-3 py-2 rounded-full inline-block shadow-sm text-xs truncate">
-                      Conversation avec {selectedConversation.name} • {currentMessages.length} messages
-                    </div>
-                  </div>
-                )}
-
+              <div className={`${isMobile ? 'space-y-0.5 h-full px-1' : 'space-y-3 h-full'}`}>
                 {/* Liste des messages */}
                 {currentMessages.map((message) => (
                   <div
                     key={`${selectedConversation.id}-${message.id}`}
                     className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} ${
-                      isMobile ? 'mb-1.5' : 'mb-2'
+                      isMobile ? 'mb-1' : 'mb-2'
                     } group`}
                   >
                     <div className={`relative ${
-                      isMobile ? 'max-w-[280px]' : 'max-w-xs lg:max-w-md'
+                      isMobile ? 'max-w-[260px]' : 'max-w-xs lg:max-w-md'
                     } ${
-                      isMobile ? 'px-3 py-2 pr-6' : 'px-3 py-2 pr-6 lg:px-4 lg:pr-8'
+                      isMobile ? 'px-2 py-1 pr-4' : 'px-3 py-2 pr-6 lg:px-4 lg:pr-8'
                     } rounded-2xl shadow-sm ${
                       message.sender === 'user'
                         ? message.type === 'sticker' 
@@ -1263,20 +1253,20 @@ const MessagesPage: React.FC = () => {
                       {/* Contenu du message */}
                       {message.type === 'sticker' && message.sticker ? (
                         <div className="flex flex-col items-center py-1">
-                          <div className={`${isMobile ? 'text-4xl' : 'text-4xl'} mb-0.5`}>{message.sticker.emoji}</div>
+                          <div className={`${isMobile ? 'text-2xl' : 'text-4xl'} mb-0.5`}>{message.sticker.emoji}</div>
                           <div className="text-xs opacity-75">{message.sticker.name}</div>
                         </div>
                       ) : message.type === 'file' && message.attachments ? (
-                        <div className="space-y-2">
-                          {message.text && <p className={`${isMobile ? 'text-sm' : 'text-sm'}`}>{message.text}</p>}
+                        <div className="space-y-1">
+                          {message.text && <p className={`${isMobile ? 'text-xs' : 'text-sm'}`}>{message.text}</p>}
                           {message.attachments.map(attachment => (
                             <div key={`${message.id}-${attachment.id}`} className={`bg-black bg-opacity-10 rounded-lg ${
-                              isMobile ? 'p-2' : 'p-3'
+                              isMobile ? 'p-1.5' : 'p-3'
                             } flex items-center space-x-2`}>
                               <div className={`flex-shrink-0 ${
-                                isMobile ? 'w-8 h-8' : 'w-10 h-10'
+                                isMobile ? 'w-6 h-6' : 'w-10 h-10'
                               } bg-blue-100 rounded-lg flex items-center justify-center`}
-                              style={{ fontSize: isMobile ? '14px' : '16px' }}
+                              style={{ fontSize: isMobile ? '12px' : '16px' }}
                               >
                                 {attachment.type.startsWith('image/') ? '🖼️' : 
                                  attachment.type.startsWith('video/') ? '🎬' :
@@ -1285,16 +1275,16 @@ const MessagesPage: React.FC = () => {
                               </div>
                               <div className="flex-1 min-w-0">
                                 <p className={`${
-                                  isMobile ? 'text-sm' : 'text-sm'
+                                  isMobile ? 'text-xs' : 'text-sm'
                                 } font-medium truncate`}>{attachment.name}</p>
                                 <p className="text-xs opacity-70">
                                   {(attachment.size / 1024 / 1024).toFixed(1)} MB
                                 </p>
                               </div>
                               <button className={`flex-shrink-0 ${
-                                isMobile ? 'p-2' : 'p-2'
+                                isMobile ? 'p-1' : 'p-2'
                               } hover:bg-black hover:bg-opacity-10 rounded-full`}
-                              style={{ fontSize: isMobile ? '14px' : '16px' }}
+                              style={{ fontSize: isMobile ? '12px' : '16px' }}
                               >
                                 ⬇️
                               </button>
@@ -1379,8 +1369,8 @@ const MessagesPage: React.FC = () => {
             {/* Zone de saisie */}
             <div 
               key={`input-${selectedConversation.id}`}
-              className={`bg-white border-t border-gray-200 flex-shrink-0 ${
-                isMobile ? 'px-1 py-2 shadow-lg' : 'px-4 py-3'
+              className={`messages-input-fixed bg-white border-t border-gray-200 flex-shrink-0 ${
+                isMobile ? 'px-1 py-1 shadow-lg' : 'px-4 py-3'
               }`}
             >
               <MessageInput 
@@ -1465,7 +1455,6 @@ const MessagesPage: React.FC = () => {
             </div>
           </div>
         )}
-      </div>
 
       {/* Barre de statut (mobile uniquement) */}
       {isMobile && !selectedConversation && (
