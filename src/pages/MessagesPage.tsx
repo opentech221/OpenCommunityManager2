@@ -928,7 +928,7 @@ const MessagesPage: React.FC = () => {
   const activeMembers = conversations.filter(c => c.isOnline && c.type === 'private').length;
 
   return (
-    <div className="messages-page-container h-screen max-h-screen bg-white flex flex-col overflow-hidden">
+  <div className="messages-page-container h-screen max-h-screen bg-white flex flex-col overflow-hidden" style={{ height: '100dvh', maxHeight: '100dvh' }}>
       {/* Header principal (mobile uniquement) */}
       {isMobile && showConversationList && (
         <div className="bg-green-600 p-2 flex-shrink-0 shadow-md">
@@ -1106,7 +1106,7 @@ const MessagesPage: React.FC = () => {
             <div 
               id={`messages-${selectedConversation.id}`}
               key={`messages-${selectedConversation.id}`}
-              className={`flex-1 overflow-y-auto ${
+              className={`flex-1 overflow-y-auto scrollbar-hide ${
                 isMobile ? 'p-0' : 'p-4'
               } bg-gradient-to-b from-green-50 to-green-100 min-h-0`}
               style={{
@@ -1382,7 +1382,7 @@ const MessagesPage: React.FC = () => {
           </div>
         ) : !isMobile && (
           // Écran de bienvenue (desktop uniquement)
-          <div className="flex-1 flex flex-col items-center justify-center bg-gradient-to-br from-orange-50 to-violet-50 p-1 min-h-0 overflow-y-auto sm:p-2 lg:p-8">
+          <div className="flex-1 flex flex-col items-center justify-center bg-gradient-to-br from-orange-50 to-violet-50 p-1 min-h-0 overflow-hidden sm:p-2 lg:p-8">
             <div className="text-center max-w-md">
               {/* Icône principale */}
               <div className="w-24 h-24 mx-auto mb-8 bg-gradient-to-br from-orange-500 to-violet-600 rounded-full flex items-center justify-center shadow-lg">
