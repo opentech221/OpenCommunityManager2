@@ -28,7 +28,7 @@ export default function GuidancePage() {
   return (
     <div className="min-h-screen bg-purple-900 p-0 sm:p-0 md:p-0 lg:p-0">
       {/* En-tête Mobile-First */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-1 py-6 sm:px-2 lg:px-3 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
         <div className="flex items-center space-x-3">
           <button
             onClick={() => navigate(-1)}
@@ -64,11 +64,11 @@ export default function GuidancePage() {
       </div>
 
       {/* Navigation rapide - Mobile First avec 4 tickets */}
-      <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
+      <div className="bg-white px-1 py-4 sm:px-2 lg:px-3 mb-6">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           <button 
             onClick={() => navigate('/guidance/diagnostic')}
-            className="bg-gradient-to-br from-violet-100 to-violet-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 hover:from-violet-200 hover:to-violet-100 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 group"
+            className="bg-gradient-to-br from-violet-100 to-violet-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 hover:from-violet-200 hover:to-violet-100 border border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 group"
             aria-label="Accéder au diagnostic organisationnel"
           >
             <div className="flex flex-col items-center space-y-2">
@@ -84,7 +84,7 @@ export default function GuidancePage() {
 
           <button 
             onClick={() => navigate('/guidance/recommendations')}
-            className="bg-gradient-to-br from-orange-100 to-orange-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 hover:from-orange-200 hover:to-orange-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 group"
+            className="bg-gradient-to-br from-orange-100 to-orange-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 hover:from-orange-200 hover:to-orange-100 border border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 group"
             aria-label="Voir les recommandations"
           >
             <div className="flex flex-col items-center space-y-2">
@@ -100,7 +100,7 @@ export default function GuidancePage() {
 
           <button 
             onClick={() => navigate('/guidance/compliance')}
-            className="bg-gradient-to-br from-green-100 to-green-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 hover:from-green-200 hover:to-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 group"
+            className="bg-gradient-to-br from-green-100 to-green-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 hover:from-green-200 hover:to-green-100 border border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 group"
             aria-label="Vérifier la conformité"
           >
             <div className="flex flex-col items-center space-y-2">
@@ -116,7 +116,7 @@ export default function GuidancePage() {
 
           <button 
             onClick={() => navigate('/guidance/action-plan')}
-            className="bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 hover:from-blue-200 hover:to-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 group"
+            className="bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 hover:from-blue-200 hover:to-blue-100 border border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 group"
             aria-label="Accéder au plan d'action"
           >
             <div className="flex flex-col items-center space-y-2">
@@ -133,7 +133,7 @@ export default function GuidancePage() {
       </div>
 
       {/* Contenu principal */}
-      <div className="px-4 sm:px-6 lg:px-8">
+      <div className="px-1 sm:px-2 lg:px-3">
         <OrganizationalGuidanceDashboard />
       </div>
 

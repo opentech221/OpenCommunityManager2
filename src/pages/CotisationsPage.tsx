@@ -193,7 +193,7 @@ export default function CotisationsPage() {
       )}
 
       {/* Tableau de bord des statistiques */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="bg-white grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <button 
           className={`bg-white rounded-lg p-4 shadow hover:shadow-md transition-shadow border ${
             statusFilter === 'ALL' ? 'ring-2 ring-purple-500 ring-offset-2' : ''

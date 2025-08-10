@@ -149,7 +149,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage, onSendSticke
 
       {/* Panneau de stickers */}
       {showStickers && (
-        <div className="absolute bottom-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl p-4 mb-2 max-h-48 overflow-y-auto z-10">
+        <div className="absolute bottom-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl p-1 mb-2 max-h-48 overflow-y-auto z-10 sm:p-2 lg:p-4">
           <div className="grid grid-cols-6 gap-2">
             {stickers.map((sticker, idx) => (
               <button
@@ -181,7 +181,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage, onSendSticke
 
         {/* Container de l'input avec sticker */}
         <div className={`flex-1 bg-white rounded-full border border-gray-300 flex items-center ${
-          isMobile ? 'min-h-[44px] px-4 py-2' : 'min-h-[40px] px-4 py-2'
+          isMobile ? 'min-h-[44px] px-2 py-2' : 'min-h-[40px] px-2 py-2 sm:px-3 lg:px-4'
         }`}>
           <button
             onClick={() => setShowStickers(!showStickers)}
@@ -924,9 +924,10 @@ const MessagesPage: React.FC = () => {
 
   return (
     <div className="h-screen max-h-screen bg-white flex flex-col overflow-hidden">
+      <div className="px-1 sm:px-2 lg:px-3 flex flex-col h-full">
       {/* Header principal (mobile uniquement) */}
       {isMobile && showConversationList && (
-        <div className="bg-green-600 p-4 flex-shrink-0 shadow-sm">
+        <div className="bg-green-600 p-1 flex-shrink-0 shadow-sm sm:p-2 lg:p-3">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold text-white">WhatsApp</h1>
             <div className="flex items-center space-x-2">
@@ -969,7 +970,7 @@ const MessagesPage: React.FC = () => {
           >
             {/* Header de conversation */}
             <div className={`bg-green-600 flex-shrink-0 shadow-sm ${
-              isMobile ? 'p-3' : 'p-4'
+              isMobile ? 'p-1 sm:p-2' : 'p-1 sm:p-2 lg:p-3'
             }`}>
               <div className="flex items-center">
                 {isMobile && (
@@ -1100,7 +1101,7 @@ const MessagesPage: React.FC = () => {
               id={`messages-${selectedConversation.id}`}
               key={`messages-${selectedConversation.id}`}
               className={`flex-1 overflow-y-auto ${
-                isMobile ? 'p-2' : 'p-4'
+                isMobile ? 'p-1 sm:p-2' : 'p-1 sm:p-2 lg:p-4'
               } bg-gradient-to-b from-green-50 to-green-100 min-h-0`}
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3e%3cg fill='none' fill-rule='evenodd'%3e%3cg fill='%23d1fae5' fill-opacity='0.1'%3e%3ccircle cx='30' cy='30' r='2'/%3e%3c/g%3e%3c/g%3e%3c/svg%3e")`
@@ -1127,7 +1128,7 @@ const MessagesPage: React.FC = () => {
                     <div className={`relative ${
                       isMobile ? 'max-w-[280px]' : 'max-w-xs lg:max-w-md'
                     } ${
-                      isMobile ? 'px-3 py-2 pr-8' : 'px-4 py-2 pr-8'
+                      isMobile ? 'px-2 py-2 pr-6' : 'px-2 py-2 pr-6 sm:px-3 lg:px-4 lg:pr-8'
                     } rounded-2xl shadow-sm ${
                       message.sender === 'user'
                         ? message.type === 'sticker' 
@@ -1380,7 +1381,7 @@ const MessagesPage: React.FC = () => {
           </div>
         ) : !isMobile && (
           // Écran de bienvenue (desktop uniquement)
-          <div className="flex-1 flex flex-col items-center justify-center bg-gradient-to-br from-orange-50 to-violet-50 p-8 min-h-0 overflow-y-auto">
+          <div className="flex-1 flex flex-col items-center justify-center bg-gradient-to-br from-orange-50 to-violet-50 p-1 min-h-0 overflow-y-auto sm:p-2 lg:p-8">
             <div className="text-center max-w-md">
               {/* Icône principale */}
               <div className="w-24 h-24 mx-auto mb-8 bg-gradient-to-br from-orange-500 to-violet-600 rounded-full flex items-center justify-center shadow-lg">
@@ -1397,7 +1398,7 @@ const MessagesPage: React.FC = () => {
 
               {/* Statistiques */}
               <div className="grid grid-cols-3 gap-4 mb-8">
-                <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                <div className="bg-white rounded-lg p-1 shadow-sm border border-gray-100 sm:p-2 lg:p-4">
                   <div className="flex flex-col items-center">
                     <MessageCircle size={24} className="text-orange-500 mb-2" />
                     <span className="text-2xl font-bold text-gray-900">{totalConversations}</span>
@@ -1405,7 +1406,7 @@ const MessagesPage: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                <div className="bg-white rounded-lg p-1 shadow-sm border border-gray-100 sm:p-2 lg:p-4">
                   <div className="flex flex-col items-center">
                     <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center mb-2">
                       <span className="text-white font-bold text-xs">{totalUnreadCount}</span>
@@ -1415,7 +1416,7 @@ const MessagesPage: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                <div className="bg-white rounded-lg p-1 shadow-sm border border-gray-100 sm:p-2 lg:p-4">
                   <div className="flex flex-col items-center">
                     <Users size={24} className="text-green-500 mb-2" />
                     <span className="text-2xl font-bold text-gray-900">{activeMembers}</span>
@@ -1425,7 +1426,7 @@ const MessagesPage: React.FC = () => {
               </div>
 
               {/* Guide d'utilisation */}
-              <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 text-left">
+              <div className="bg-white rounded-lg p-1 shadow-sm border border-gray-100 text-left sm:p-2 lg:p-6">
                 <h3 className="font-semibold text-gray-900 mb-3">✨ Fonctionnalités disponibles</h3>
                 <ul className="space-y-2 text-sm text-gray-600">
                   <li className="flex items-center space-x-2">
@@ -1457,7 +1458,7 @@ const MessagesPage: React.FC = () => {
 
       {/* Barre de statut (mobile uniquement) */}
       {isMobile && !selectedConversation && (
-        <div className="bg-green-600 p-4 flex-shrink-0">
+        <div className="bg-green-600 p-1 flex-shrink-0 sm:p-2 lg:p-4">
           <div className="flex justify-center items-center space-x-4 text-sm text-green-100">
             <span>{totalConversations} discussions</span>
             <span>•</span>
@@ -1467,6 +1468,7 @@ const MessagesPage: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

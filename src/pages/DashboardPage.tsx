@@ -170,7 +170,7 @@ export const DashboardPage: React.FC = () => {
             <button
               key={stat.name}
               onClick={() => navigate(stat.route)}
-              className="bg-gradient-to-br from-purple-100 to-purple-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 hover:from-purple-200 hover:to-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 group"
+              className="bg-gradient-to-br from-purple-100 to-purple-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 hover:from-purple-200 hover:to-purple-100 border border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 group"
               aria-label={stat.description}
             >
               <div className="flex flex-col items-center space-y-2">
@@ -204,11 +204,11 @@ export const DashboardPage: React.FC = () => {
             <h2 className="text-lg font-semibold text-gray-900">
               Activités récentes
             </h2>
-            <Activity className="h-5 w-5 text-gray-400" />
+            <Activity className="h-6 w-6 text-purple-500" />
           </div>
           <div className="space-y-4">
             {recentActivities.map((activity) => (
-              <div key={activity.id} className="border border-gray-200 bg-purple-100 rounded-lg p-4">
+              <div key={activity.id} className="border border-purple-500 bg-purple-100 rounded-lg p-4">
                 <div className="flex-shrink-0">
                   <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
                     <activity.icon className="h-4 w-4 text-purple-600" />
@@ -237,11 +237,11 @@ export const DashboardPage: React.FC = () => {
             <h2 className="text-lg font-semibold text-gray-900">
               Événements à venir
             </h2>
-            <Calendar className="h-5 w-5 text-gray-400" />
+            <Calendar className="h-6 w-6 text-purple-500" />
           </div>
           <div className="space-y-4">
             {upcomingEvents.map((event) => (
-              <div key={event.id} className="border border-gray-200 bg-purple-100 rounded-lg p-4">
+              <div key={event.id} className="border border-purple-500 bg-purple-100 rounded-lg p-4">
                 <h3 className="font-medium text-gray-900 mb-2">{event.title}</h3>
                 <div className="flex items-center justify-between text-sm text-gray-600">
                   <span>{new Date(event.date).toLocaleDateString('fr-FR')} à {event.time}</span>

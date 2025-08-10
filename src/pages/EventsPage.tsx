@@ -180,7 +180,7 @@ export default function EventsPage() {
   return (
     <div className="min-h-screen bg-purple-900 p-0 sm:p-0 md:p-0 lg:p-0">
       {/* En-tête */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6 mx-4 mt-4">
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-2 py-6 sm:px-3 lg:px-4 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6 mt-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="flex-shrink-0">
@@ -219,10 +219,10 @@ export default function EventsPage() {
       </div>
 
       {/* Statistiques avec boutons fonctionnels */}
-      <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6 mx-4">
+      <div className="bg-white px-2 py-4 sm:px-3 lg:px-4 mb-6">
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
           <button 
-            className={`bg-purple-100 rounded-lg p-3 shadow hover:bg-purple-200 transition-colors border ${
+            className={`bg-purple-100 rounded-lg p-3 shadow hover:bg-purple-200 transition-colors border border-purple-500 ${
               statusFilter === 'ALL' ? 'ring-2 ring-violet-500' : ''
             }`}
             onClick={() => setStatusFilter('ALL')}
@@ -232,7 +232,7 @@ export default function EventsPage() {
             <div className="text-xs sm:text-sm text-gray-500">Total</div>
           </button>
           <button 
-            className={`bg-blue-100 rounded-lg p-3 shadow hover:bg-blue-200 transition-colors border ${
+            className={`bg-blue-100 rounded-lg p-3 shadow hover:bg-blue-200 transition-colors border border-blue-500 ${
               statusFilter === EventStatus.PLANNED ? 'ring-2 ring-blue-500' : ''
             }`}
             onClick={() => setStatusFilter(statusFilter === EventStatus.PLANNED ? 'ALL' : EventStatus.PLANNED)}
@@ -242,7 +242,7 @@ export default function EventsPage() {
             <div className="text-xs sm:text-sm text-blue-600">Planifiés</div>
           </button>
           <button 
-            className={`bg-green-100 rounded-lg p-3 shadow hover:bg-green-200 transition-colors border ${
+            className={`bg-green-100 rounded-lg p-3 shadow hover:bg-green-200 transition-colors border border-green-500 ${
               statusFilter === EventStatus.ONGOING ? 'ring-2 ring-green-500' : ''
             }`}
             onClick={() => setStatusFilter(statusFilter === EventStatus.ONGOING ? 'ALL' : EventStatus.ONGOING)}
@@ -252,7 +252,7 @@ export default function EventsPage() {
             <div className="text-xs sm:text-sm text-green-600">En cours</div>
           </button>
           <button 
-            className={`bg-gray-100 rounded-lg p-3 shadow hover:bg-gray-200 transition-colors border ${
+            className={`bg-gray-100 rounded-lg p-3 shadow hover:bg-gray-200 transition-colors border border-gray-500 ${
               statusFilter === EventStatus.COMPLETED ? 'ring-2 ring-gray-500' : ''
             }`}
             onClick={() => setStatusFilter(statusFilter === EventStatus.COMPLETED ? 'ALL' : EventStatus.COMPLETED)}
@@ -262,7 +262,7 @@ export default function EventsPage() {
             <div className="text-xs sm:text-sm text-gray-600">Terminés</div>
           </button>
           <button 
-            className={`bg-red-100 rounded-lg p-3 shadow hover:bg-red-200 transition-colors border ${
+            className={`bg-red-100 rounded-lg p-3 shadow hover:bg-red-200 transition-colors border border-red-500 ${
               statusFilter === EventStatus.CANCELLED ? 'ring-2 ring-red-500' : ''
             }`}
             onClick={() => setStatusFilter(statusFilter === EventStatus.CANCELLED ? 'ALL' : EventStatus.CANCELLED)}
@@ -275,7 +275,7 @@ export default function EventsPage() {
       </div>
 
       {/* Section de recherche et filtres */}
-      <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6 mx-4">
+      <div className="bg-white px-2 py-4 sm:px-3 lg:px-4 mb-6">
         <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -332,7 +332,7 @@ export default function EventsPage() {
       </div>
 
       {/* Liste des événements */}
-      <div className="bg-white px-4 py-6 sm:px-6 lg:px-8 mx-4">
+      <div className="bg-white px-2 py-6 sm:px-3 lg:px-4">
         {filteredEvents.length === 0 ? (
           <div className="text-center py-12">
             <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -425,7 +425,7 @@ export default function EventsPage() {
       </div>
 
       {/* Actions en bas de page */}
-      <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mt-6 mx-4">
+      <div className="bg-white px-2 py-4 sm:px-3 lg:px-4 mt-6">
         <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
           <div className="text-sm text-gray-600">
             {filteredEvents.length} événement{filteredEvents.length > 1 ? 's' : ''} affiché{filteredEvents.length > 1 ? 's' : ''}

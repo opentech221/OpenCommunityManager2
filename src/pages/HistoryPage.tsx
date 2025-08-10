@@ -202,7 +202,7 @@ const HistoryPage: React.FC = () => {
 
       {/* Header */}
       {/* En-tête Mobile-First */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-1 py-6 sm:px-2 lg:px-3 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
         <div className="flex items-center space-x-3">
           <button
             onClick={() => navigate(-1)}
@@ -237,9 +237,9 @@ const HistoryPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="px-4 sm:px-6 lg:px-8">
+      <div className="px-1 sm:px-2 lg:px-3">
         {/* Statistiques - Mobile First avec 4 tickets-boutons de filtre */}
-        <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
+        <div className="bg-white px-1 py-4 sm:px-2 lg:px-3 mb-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
             <button
               onClick={() => setDateFilter('ALL')}
@@ -320,7 +320,7 @@ const HistoryPage: React.FC = () => {
         </div>
 
         {/* Filtres et recherche */}
-      <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+      <div className="bg-white rounded-lg shadow-sm px-1 py-4 sm:px-2 lg:px-3 mb-6">
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Recherche */}
           <div className="flex-1">
@@ -431,7 +431,7 @@ const HistoryPage: React.FC = () => {
         ) : (
           <div className="divide-y divide-gray-200">
             {filteredActivities.map((activity) => (
-              <div key={activity.id} className="p-6 hover:bg-gray-50 transition-colors">
+              <div key={activity.id} className="px-1 py-4 sm:px-2 lg:px-3 hover:bg-gray-50 transition-colors">
                 <div className="flex items-start space-x-4">
                   {/* Icône du type d'activité */}
                   <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-${getTypeColor(activity.type)}-100`}>

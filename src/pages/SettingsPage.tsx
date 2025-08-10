@@ -49,7 +49,7 @@ export default function SettingsPage() {
   // Mobile-first : carrousel horizontal pour onglets, layout vertical, boutons larges, accessibilité
   return (
     <div className="min-h-screen bg-purple-900 pb-0">
-      <div className="px-3 py-4 sm:px-4 sm:py-6 lg:px-8">
+      <div className="px-1 py-4 sm:px-2 sm:py-6 lg:px-3">
         {/* En-tête Mobile-First */}
         <div className="mb-4 sm:mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-4 sm:p-6 border-l-4 border-orange-500 shadow-sm">
           <div className="flex items-center space-x-3">
@@ -87,7 +87,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Statistiques du compte - Mobile First avec 4 tickets-boutons de navigation */}
-        <div className="bg-white px-3 py-3 sm:px-4 sm:py-4 lg:px-6 lg:py-4 mb-4 sm:mb-6 rounded-lg shadow-sm">
+        <div className="bg-white px-1 py-3 sm:px-2 sm:py-4 lg:px-3 lg:py-4 mb-4 sm:mb-6 rounded-lg shadow-sm">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
             <button
               onClick={() => setActiveTab('profile')}
@@ -170,14 +170,14 @@ export default function SettingsPage() {
         <div className="bg-white rounded-lg shadow-sm md:grid md:grid-cols-5 md:gap-0">
           {/* Onglets - carrousel mobile, menu vertical desktop */}
           <nav
-            className="flex flex-row flex-nowrap w-full gap-x-2 px-0 py-2 md:flex-col md:gap-y-2 md:col-span-1 md:py-8 md:px-4 md:border-r md:border-gray-100 md:bg-gray-50"
+            className="flex flex-row flex-nowrap w-full gap-x-2 px-0 py-2 md:flex-col md:gap-y-2 md:col-span-1 md:py-8 md:px-1 md:border-r md:border-gray-100 md:bg-gray-50"
             aria-label="Onglets paramètres"
           >
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 min-w-0 px-1 py-1 rounded-lg flex flex-col items-center justify-center space-y-0 text-[11px] font-medium font-poppins transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 md:min-w-0 md:max-w-none md:flex-row md:space-y-0 md:space-x-2 md:rounded-lg md:border-l-4 md:py-3 md:px-2 md:justify-start md:items-center
+                className={`flex-1 min-w-0 px-1 py-1 rounded-lg flex flex-col items-center justify-center space-y-0 text-[11px] font-medium font-poppins transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 md:min-w-0 md:max-w-none md:flex-row md:space-y-0 md:space-x-2 md:rounded-lg md:border-l-4 md:py-3 md:px-1 md:justify-start md:items-center
                   ${activeTab === tab.id
                     ? 'bg-orange-100 text-orange-700 border-l-4 border-orange-500 shadow md:bg-orange-50 md:shadow-none'
                     : 'bg-gray-50 text-gray-500 hover:bg-gray-100 border-l-4 border-transparent md:bg-transparent md:hover:bg-gray-100'}
@@ -190,7 +190,7 @@ export default function SettingsPage() {
             ))}
           </nav>
           {/* Contenu des onglets - layout vertical mobile, carte à droite desktop */}
-          <div className="p-3 sm:p-4 md:p-6 lg:p-8 md:col-span-4">
+          <div className="p-1 sm:p-2 md:p-3 lg:p-3 md:col-span-4">
             {activeTab === 'profile' && (
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold text-gray-900">Profil utilisateur</h2>

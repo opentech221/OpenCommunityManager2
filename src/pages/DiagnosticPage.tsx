@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Target, 
@@ -20,47 +20,32 @@ const DiagnosticPage: React.FC = () => {
   const [isRunningDiagnostic, setIsRunningDiagnostic] = useState(false);
   const [showFloatingMenu, setShowFloatingMenu] = useState(false);
 
-  useEffect(() => {
-    loadDiagnostics();
-  }, []);
-
-  // Fermer le menu flottant quand on clique à l'extérieur
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      if (showFloatingMenu && !target.closest('.floating-menu-container')) {
-        setShowFloatingMenu(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showFloatingMenu]);
-
-  const loadDiagnostics = async () => {
-    try {
-      setIsLoading(true);
-      const response = await guidanceAPI.getDiagnostics();
-      if (response.data.diagnostics && response.data.diagnostics.length > 0) {
-        setCurrentDiagnostic(response.data.diagnostics[0]);
-      } else {
-        // Fallback avec données de test si aucun diagnostic trouvé
-        loadTestDiagnostic();
-      }
-    } catch (error) {
-      console.error('Erreur lors du chargement des diagnostics:', error);
-      // Charger les données de test en cas d'erreur
-      loadTestDiagnostic();
-    } finally {
-      setIsLoading(false);
+  // Fonction utilitaire pour formater les dates de manière sécurisée
+  const formatDiagnosticDate = (dateStr: string | undefined | null, options?: Intl.DateTimeFormatOptions): string => {
+    if (!dateStr) return 'Date non renseignée';
+    
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) {
+      return 'Date invalide';
     }
+    
+    return date.toLocaleDateString('fr-FR', options || {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
   };
 
   const loadTestDiagnostic = () => {
+    const today = new Date();
+    const nextMonth = new Date(today);
+    nextMonth.setMonth(today.getMonth() + 1);
+    
     const testDiagnostic: DiagnosticAPI = {
       id: 'test-1',
+      association_id: 'test-association-1',
+      performed_at: today.toISOString(),
+      next_assessment_date: nextMonth.toISOString(),
       current_maturity_level: 2,
       target_maturity_level: 3,
       overall_score: 78,
@@ -81,17 +66,48 @@ const DiagnosticPage: React.FC = () => {
         'Communication externe à améliorer',
         'Processus opérationnels à standardiser',
         'Système d\'évaluation des performances manquant'
-      ],
-      recommendations: [
-        'Mettre en place une stratégie de communication',
-        'Créer des procédures standardisées',
-        'Implémenter des KPIs de performance'
-      ],
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      ]
     };
     setCurrentDiagnostic(testDiagnostic);
   };
+
+  const loadDiagnostics = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const response = await guidanceAPI.getDiagnostics();
+      if (response.data.diagnostics && response.data.diagnostics.length > 0) {
+        setCurrentDiagnostic(response.data.diagnostics[0]);
+      } else {
+        // Fallback avec données de test si aucun diagnostic trouvé
+        loadTestDiagnostic();
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement des diagnostics:', error);
+      // Charger les données de test en cas d'erreur
+      loadTestDiagnostic();
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadDiagnostics();
+  }, [loadDiagnostics]);
+
+  // Fermer le menu flottant quand on clique à l'extérieur
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (showFloatingMenu && !target.closest('.floating-menu-container')) {
+        setShowFloatingMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFloatingMenu]);
 
   const runNewDiagnostic = async () => {
     try {
@@ -171,7 +187,7 @@ const DiagnosticPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-purple-900 p-0">
       {/* En-tête Mobile-First */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-1 py-6 sm:px-2 lg:px-3 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <button
@@ -225,55 +241,110 @@ const DiagnosticPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="px-4 sm:px-6 lg:px-8 py-6">
+      <div className="px-1 sm:px-2 lg:px-3 py-6">
         {currentDiagnostic ? (
           <div className="space-y-6">
             {/* Vue d'ensemble */}
-            <div className="bg-white rounded-xl p-6 border border-gray-200">
+            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-lg">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Niveau actuel */}
-                <div className="text-center">
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">Niveau Actuel</h3>
-                  <div className={`inline-block px-4 py-2 rounded-lg ${getMaturityLevelName(currentDiagnostic.current_maturity_level).color}`}>
-                    <span className="font-semibold text-lg">
+                <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50 p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-violet-500">
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-violet-500/10 to-purple-500/10 rounded-full -mr-10 -mt-10"></div>
+                  <div className="relative">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-semibold text-gray-800">Niveau Actuel</h3>
+                      <div className="w-10 h-10 bg-violet-100 rounded-full flex items-center justify-center">
+                        <Target className="w-5 h-5 text-violet-600" />
+                      </div>
+                    </div>
+                    <div className={`inline-flex px-4 py-2 rounded-lg font-medium text-sm mb-4 ${getMaturityLevelName(currentDiagnostic.current_maturity_level).color} shadow-sm`}>
                       {getMaturityLevelName(currentDiagnostic.current_maturity_level).name}
-                    </span>
+                    </div>
+                    <div className="flex items-baseline space-x-2">
+                      <div className="text-4xl font-bold text-violet-600">
+                        {currentDiagnostic.overall_score}
+                      </div>
+                      <div className="text-xl text-violet-500 font-medium">%</div>
+                    </div>
+                    <div className="text-sm text-gray-600 mt-1">Score global</div>
+                    <div className="mt-4 w-full bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-gradient-to-r from-violet-500 to-purple-500 h-2 rounded-full transition-all duration-1000" 
+                        style={{ width: `${currentDiagnostic.overall_score}%` }}
+                      ></div>
+                    </div>
                   </div>
-                  <div className="mt-3 text-3xl font-bold text-violet-600">
-                    {currentDiagnostic.overall_score}%
-                  </div>
-                  <div className="text-sm text-gray-500">Score global</div>
                 </div>
 
                 {/* Progression */}
-                <div className="text-center">
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">Progression</h3>
-                  <div className="flex items-center justify-center gap-2 mb-3">
-                    <div className={`px-3 py-1 rounded-lg text-sm ${getMaturityLevelName(currentDiagnostic.current_maturity_level).color}`}>
-                      Niveau {currentDiagnostic.current_maturity_level}
+                <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-orange-500">
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-orange-500/10 to-amber-500/10 rounded-full -mr-10 -mt-10"></div>
+                  <div className="relative">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-semibold text-gray-800">Progression</h3>
+                      <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                        <TrendingUp className="w-5 h-5 text-orange-600" />
+                      </div>
                     </div>
-                    <TrendingUp className="h-4 w-4 text-gray-400" />
-                    <div className={`px-3 py-1 rounded-lg text-sm ${getMaturityLevelName(currentDiagnostic.target_maturity_level).color}`}>
-                      Niveau {currentDiagnostic.target_maturity_level}
+                    <div className="flex items-center justify-center space-x-3 mb-4">
+                      <div className="flex flex-col items-center">
+                        <div className={`px-3 py-1.5 rounded-lg text-sm font-medium ${getMaturityLevelName(currentDiagnostic.current_maturity_level).color} shadow-sm`}>
+                          Niveau {currentDiagnostic.current_maturity_level}
+                        </div>
+                        <span className="text-xs text-gray-500 mt-1">Actuel</span>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                          <TrendingUp className="h-4 w-4 text-orange-600" />
+                        </div>
+                        <div className="w-12 h-0.5 bg-gradient-to-r from-orange-300 to-orange-500 mt-2"></div>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <div className={`px-3 py-1.5 rounded-lg text-sm font-medium ${getMaturityLevelName(currentDiagnostic.target_maturity_level).color} shadow-sm`}>
+                          Niveau {currentDiagnostic.target_maturity_level}
+                        </div>
+                        <span className="text-xs text-gray-500 mt-1">Objectif</span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    Objectif à atteindre
+                    <div className="text-center">
+                      <div className="text-sm text-gray-600 font-medium">
+                        Objectif à atteindre
+                      </div>
+                      <div className="text-xs text-orange-600 mt-1">
+                        +{currentDiagnostic.target_maturity_level - currentDiagnostic.current_maturity_level} niveau{currentDiagnostic.target_maturity_level - currentDiagnostic.current_maturity_level > 1 ? 'x' : ''}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 {/* Date */}
-                <div className="text-center">
-                  <h3 className="text-lg font-medium text-gray-900 mb-3">Dernier diagnostic</h3>
-                  <div className="text-lg text-gray-600">
-                    {new Date(currentDiagnostic.performed_at).toLocaleDateString('fr-FR', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
-                  </div>
-                  <div className="text-sm text-gray-500 mt-2">
-                    Prochain : {new Date(currentDiagnostic.next_assessment_date).toLocaleDateString('fr-FR')}
+                <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-emerald-500">
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-full -mr-10 -mt-10"></div>
+                  <div className="relative">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-semibold text-gray-800">Dernier diagnostic</h3>
+                      <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
+                        <CheckCircle className="w-5 h-5 text-emerald-600" />
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="bg-white/60 backdrop-blur-sm rounded-lg p-3 border border-emerald-100">
+                        <div className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">Effectué le</div>
+                        <div className="text-lg font-semibold text-gray-800">
+                          {formatDiagnosticDate(currentDiagnostic.performed_at, {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </div>
+                      </div>
+                      <div className="bg-white/60 backdrop-blur-sm rounded-lg p-3 border border-emerald-100">
+                        <div className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">Prochain prévu</div>
+                        <div className="text-sm font-medium text-emerald-700">
+                          {formatDiagnosticDate(currentDiagnostic.next_assessment_date)}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

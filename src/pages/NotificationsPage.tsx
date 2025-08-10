@@ -134,7 +134,7 @@ const NotificationsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-purple-900 p-0">
       {/* En-tête Mobile-First */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-1 py-6 sm:px-2 lg:px-3 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
         <div className="flex items-center space-x-3">
           <button
             onClick={() => navigate(-1)}
@@ -174,9 +174,9 @@ const NotificationsPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="px-4 sm:px-6 lg:px-8">
+      <div className="px-1 sm:px-2 lg:px-3">
         {/* Statistiques - Mobile First avec 4 tickets-boutons de filtre */}
-        <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
+        <div className="bg-white px-1 py-4 sm:px-2 lg:px-3 mb-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
             <button
               onClick={() => setFilterType('all')}
@@ -262,7 +262,7 @@ const NotificationsPage: React.FC = () => {
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           {/* Header */}
-          <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+          <div className="px-1 py-4 sm:px-2 lg:px-3 border-b border-gray-200 bg-gray-50">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div>
@@ -289,7 +289,7 @@ const NotificationsPage: React.FC = () => {
               notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  className={`p-6 hover:bg-gray-50 transition-colors ${
+                  className={`p-1 sm:p-2 lg:p-3 hover:bg-gray-50 transition-colors ${
                     !notification.read ? 'bg-blue-50/50 border-l-4 border-l-purple-500' : ''
                   }`}
                 >

@@ -165,7 +165,7 @@ export default function MembersPage() {
   return (
     <div className="min-h-screen bg-purple-900 p-0 sm:p-0 md:p-0 lg:p-0">
       {/* En-tête Mobile-First */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-2 py-6 sm:px-3 lg:px-4 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="flex-shrink-0">
@@ -204,10 +204,10 @@ export default function MembersPage() {
       </div>
 
       {/* Statistiques avec boutons fonctionnels */}
-      <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
+      <div className="bg-white px-2 py-4 sm:px-3 lg:px-4 mb-6">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           <button 
-            className={`bg-purple-100 rounded-lg p-3 shadow hover:bg-purple-200 transition-colors border ${
+            className={`bg-purple-100 rounded-lg p-3 shadow hover:bg-purple-200 transition-colors border border-purple-500 ${
               statusFilter === 'all' ? 'ring-2 ring-violet-500' : ''
             }`}
             onClick={() => setStatusFilter('all')}
@@ -217,7 +217,7 @@ export default function MembersPage() {
             <div className="text-xs sm:text-sm text-gray-500">Total</div>
           </button>
           <button 
-            className={`bg-green-100 rounded-lg p-3 shadow hover:bg-green-200 transition-colors ${
+            className={`bg-green-100 rounded-lg p-3 shadow hover:bg-green-200 border border-green-500 transition-colors ${
               statusFilter === MemberStatus.ACTIVE ? 'ring-2 ring-green-500' : ''
             }`}
             onClick={() => setStatusFilter(statusFilter === MemberStatus.ACTIVE ? 'all' : MemberStatus.ACTIVE)}
@@ -227,7 +227,7 @@ export default function MembersPage() {
             <div className="text-xs sm:text-sm text-green-600">Actifs</div>
           </button>
           <button 
-            className={`bg-yellow-100 rounded-lg p-3 shadow hover:bg-yellow-200 transition-colors ${
+            className={`bg-yellow-100 rounded-lg p-3 shadow hover:bg-yellow-200 border border-yellow-500  transition-colors ${
               statusFilter === MemberStatus.SUSPENDED ? 'ring-2 ring-yellow-500' : ''
             }`}
             onClick={() => setStatusFilter(statusFilter === MemberStatus.SUSPENDED ? 'all' : MemberStatus.SUSPENDED)}
@@ -237,7 +237,7 @@ export default function MembersPage() {
             <div className="text-xs sm:text-sm text-yellow-600">Suspendus</div>
           </button>
           <button 
-            className={`bg-red-100 rounded-lg p-3 shadow hover:bg-red-200 transition-colors ${
+            className={`bg-red-100 rounded-lg p-3 shadow hover:bg-red-200 border border-red-500 transition-colors ${
               statusFilter === MemberStatus.INACTIVE ? 'ring-2 ring-red-500' : ''
             }`}
             onClick={() => setStatusFilter(statusFilter === MemberStatus.INACTIVE ? 'all' : MemberStatus.INACTIVE)}
@@ -250,7 +250,7 @@ export default function MembersPage() {
       </div>
 
       {/* Section de recherche et filtres */}
-      <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
+      <div className="bg-white px-2 py-4 sm:px-3 lg:px-4 mb-6">
         <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -308,7 +308,7 @@ export default function MembersPage() {
       </div>
 
       {/* Liste des membres */}
-      <div className="bg-white px-4 py-6 sm:px-6 lg:px-8">
+      <div className="bg-white px-2 py-6 sm:px-3 lg:px-4">
         {filteredMembers.length === 0 ? (
           <div className="text-center py-12">
             <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -401,7 +401,7 @@ export default function MembersPage() {
       </div>
 
       {/* Actions en bas de page */}
-      <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mt-6">
+      <div className="bg-white px-2 py-4 sm:px-3 lg:px-4 mt-6">
         <div className="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
           <div className="text-sm text-gray-600">
             {filteredMembers.length} membre{filteredMembers.length > 1 ? 's' : ''} affiché{filteredMembers.length > 1 ? 's' : ''}

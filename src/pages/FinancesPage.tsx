@@ -83,7 +83,7 @@ const FinancesPage: React.FC = () => {
         </div>
       )}
       
-      <div className="px-4 sm:px-6 lg:px-8">
+      <div className="">
         {/* En-tête décoré avec couleur orange */}
         <div className="mb-8 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
           <div className="flex items-center justify-between">
@@ -128,10 +128,10 @@ const FinancesPage: React.FC = () => {
 
       
         {/* Statistiques financières avec boutons fonctionnels */}
-        <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
+        <div className="bg-white px-2 py-4 sm:px-3 lg:px-4 mb-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
             <button 
-              className={`bg-purple-100 rounded-lg p-3 shadow hover:bg-purple-200 transition-colors border ${
+              className={`bg-purple-100 rounded-lg p-3 shadow hover:bg-purple-200 transition-colors border border-purple-500 ${
                 filterType === 'all' ? 'ring-2 ring-purple-500 ring-offset-2' : ''
               }`}
               onClick={() => setFilterType('all')}
@@ -144,7 +144,7 @@ const FinancesPage: React.FC = () => {
               </div>
             </button>
             <button 
-              className={`bg-green-100 rounded-lg p-3 shadow hover:bg-green-200 transition-colors border ${
+              className={`bg-green-100 rounded-lg p-3 shadow hover:bg-green-200 transition-colors border border-green-500 ${
                 filterType === TransactionType.INCOME ? 'ring-2 ring-green-500 ring-offset-2' : ''
               }`}
               onClick={() => setFilterType(filterType === TransactionType.INCOME ? 'all' : TransactionType.INCOME)}
@@ -157,7 +157,7 @@ const FinancesPage: React.FC = () => {
               </div>
             </button>
             <button 
-              className={`bg-red-100 rounded-lg p-3 shadow hover:bg-red-200 transition-colors border ${
+              className={`bg-red-100 rounded-lg p-3 shadow hover:bg-red-200 transition-colors border border-red-500 ${
                 filterType === TransactionType.EXPENSE ? 'ring-2 ring-red-500 ring-offset-2' : ''
               }`}
               onClick={() => setFilterType(filterType === TransactionType.EXPENSE ? 'all' : TransactionType.EXPENSE)}
@@ -170,7 +170,7 @@ const FinancesPage: React.FC = () => {
               </div>
             </button>
             <button 
-              className="bg-blue-100 rounded-lg p-3 shadow hover:bg-blue-200 transition-colors border"
+              className="bg-blue-100 rounded-lg p-3 shadow hover:bg-blue-200 transition-colors border border-blue-500"
               onClick={() => {
                 // Action pour voir les statistiques détaillées
                 console.log('Statistiques détaillées');
@@ -186,7 +186,7 @@ const FinancesPage: React.FC = () => {
           </div>
         </div>
 
-      <div className="px-4 py-4 bg-white gap-6 mb-8">
+      <div className="px-2 sm:px-3 lg:px-4 py-4 bg-white gap-6 mb-8">
         {/* Systeme de filtre des transactions */}
         <div className="mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex gap-2 items-center">

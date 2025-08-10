@@ -208,7 +208,7 @@ const RecommendationsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-purple-900 p-0 sm:p-0 md:p-0 lg:p-0">
       {/* En-tête Mobile-First */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-1 py-6 sm:px-2 lg:px-3 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
         <div className="flex items-center space-x-3">
           <button
             onClick={() => navigate('/guidance')}
@@ -243,16 +243,16 @@ const RecommendationsPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="px-4 sm:px-6 lg:px-8">
+      <div className="px-1 sm:px-2 lg:px-3">
         {/* Statistiques - Mobile First avec 4 tickets-boutons de filtre */}
-        <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
+        <div className="bg-white px-1 py-4 sm:px-2 lg:px-3 mb-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
             <button
               onClick={() => {
                 setSelectedPriority('all');
                 setSelectedStatus('all');
               }}
-              className={`bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-blue-100 to-blue-50 border border-blue-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedPriority === 'all' && selectedStatus === 'all' 
                   ? 'ring-2 ring-blue-500 ring-offset-2' 
                   : 'hover:scale-105'
@@ -274,7 +274,7 @@ const RecommendationsPage: React.FC = () => {
                 setSelectedPriority('high');
                 setSelectedStatus('all');
               }}
-              className={`bg-gradient-to-br from-red-100 to-red-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-red-100 to-red-50 border border-red-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedPriority === 'high' && selectedStatus === 'all'
                   ? 'ring-2 ring-red-500 ring-offset-2'
                   : 'hover:scale-105'
@@ -298,7 +298,7 @@ const RecommendationsPage: React.FC = () => {
                 setSelectedPriority('all');
                 setSelectedStatus('in_progress');
               }}
-              className={`bg-gradient-to-br from-green-100 to-green-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-green-100 to-green-50 border border-green-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedPriority === 'all' && selectedStatus === 'in_progress'
                   ? 'ring-2 ring-green-500 ring-offset-2'
                   : 'hover:scale-105'
@@ -322,7 +322,7 @@ const RecommendationsPage: React.FC = () => {
                 setSelectedPriority('all');
                 setSelectedStatus('completed');
               }}
-              className={`bg-gradient-to-br from-purple-100 to-purple-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-purple-100 to-purple-50 border border-purple-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedPriority === 'all' && selectedStatus === 'completed'
                   ? 'ring-2 ring-purple-500 ring-offset-2'
                   : 'hover:scale-105'

@@ -210,7 +210,7 @@ const AnalyticsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-purple-900 p-0">
       {/* En-tête Mobile-First */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-1 py-6 sm:px-2 lg:px-3 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <button
@@ -266,13 +266,13 @@ const AnalyticsPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="px-4 sm:px-6 lg:px-8 py-6">
+      <div className="px-1 sm:px-2 lg:px-3 py-6">
         {/* Statistiques - Mobile First avec 4 tickets-boutons de filtre */}
-        <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
+        <div className="bg-white px-1 py-4 sm:px-2 lg:px-3 mb-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
             <button
               onClick={() => setSelectedMetric('diagnostics')}
-              className={`bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-blue-100 to-blue-50 border border-blue-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedMetric === 'diagnostics'
                   ? 'ring-2 ring-blue-500 ring-offset-2'
                   : 'hover:scale-105'
@@ -291,7 +291,7 @@ const AnalyticsPage: React.FC = () => {
 
             <button
               onClick={() => setSelectedMetric('maturity')}
-              className={`bg-gradient-to-br from-orange-100 to-orange-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-orange-100 to-orange-50 border border-orange-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedMetric === 'maturity'
                   ? 'ring-2 ring-orange-500 ring-offset-2'
                   : 'hover:scale-105'
@@ -310,7 +310,7 @@ const AnalyticsPage: React.FC = () => {
 
             <button
               onClick={() => setSelectedMetric('actions')}
-              className={`bg-gradient-to-br from-green-100 to-green-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-green-100 to-green-50 border border-green-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedMetric === 'actions'
                   ? 'ring-2 ring-green-500 ring-offset-2'
                   : 'hover:scale-105'
@@ -329,7 +329,7 @@ const AnalyticsPage: React.FC = () => {
 
             <button
               onClick={() => setSelectedMetric('all')}
-              className={`bg-gradient-to-br from-violet-100 to-violet-50 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-violet-100 to-violet-50 border border-violet-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedMetric === 'all'
                   ? 'ring-2 ring-violet-500 ring-offset-2'
                   : 'hover:scale-105'
@@ -349,7 +349,7 @@ const AnalyticsPage: React.FC = () => {
         </div>
 
         {/* Indicateur de tendance */}
-        <div className="bg-white rounded-lg p-4 mb-6 border border-gray-200">
+        <div className="bg-white rounded-lg p-1 mb-6 border border-gray-200 sm:p-2 lg:p-3">
           <div className="flex items-center justify-center">
             <TrendingUp className={`h-4 w-4 ${analyticsData.overview.trend === 'up' ? 'text-green-600' : 'text-red-600'}`} />
             <span className={`text-sm ml-1 ${analyticsData.overview.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
@@ -360,7 +360,7 @@ const AnalyticsPage: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           {/* Évolution de la maturité */}
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-white rounded-xl p-1 border border-gray-200 sm:p-2 lg:p-3">
             <h3 className="text-xl font-montserrat font-semibold mb-4">Évolution de la Maturité</h3>
             <div className="space-y-3">
               {analyticsData.maturityEvolution.map((item, index) => (
@@ -384,7 +384,7 @@ const AnalyticsPage: React.FC = () => {
           </div>
 
           {/* Scores par catégorie */}
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-white rounded-xl p-1 border border-gray-200 sm:p-2 lg:p-3">
             <h3 className="text-xl font-montserrat font-semibold mb-4">Performance par Catégorie</h3>
             <div className="space-y-4">
               {analyticsData.categoryScores.map((category, index) => (
@@ -416,7 +416,7 @@ const AnalyticsPage: React.FC = () => {
         </div>
 
         {/* Activités récentes */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200">
+        <div className="bg-white rounded-xl p-1 border border-gray-200 sm:p-2 lg:p-3">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xl font-montserrat font-semibold">Activités Récentes</h3>
             <button className="flex items-center gap-2 text-violet-600 hover:text-violet-700 transition-colors">
@@ -427,7 +427,7 @@ const AnalyticsPage: React.FC = () => {
 
           <div className="space-y-4">
             {analyticsData.recentActivities.map((activity) => (
-              <div key={activity.id} className="flex items-center gap-4 p-4 border border-gray-500 rounded-lg hover:bg-gray-50 transition-colors">
+              <div key={activity.id} className="flex items-center gap-4 p-1 border border-gray-500 rounded-lg hover:bg-gray-50 transition-colors sm:p-2 lg:p-3">
                 <div className="flex-shrink-0">
                   {getActivityIcon(activity.type)}
                 </div>

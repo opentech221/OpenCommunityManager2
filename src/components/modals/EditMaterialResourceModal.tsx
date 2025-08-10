@@ -1,54 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, Package, Calendar, DollarSign, User, MapPin, AlertCircle, FileText } from 'lucide-react';
-import { MaterialResourceType, MaterialCategory, MaterialCategoryEnum } from '../../types';
-import { MaterialResourceFormData } from '../../types/MaterialResourceFormData';
-
-const EditMaterialResourceModal = ({ resource, isOpen, onClose, onSave }: {
-  resource: MaterialResourceType | null;
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (id: string, updates: Partial<MaterialResourceType>) => void;
-}) => {
-  // Fonction utilitaire pour convertir une date en string de manière sécurisée
-  const safeDateToString = (date: Date | string | null | undefined): string => {
-    if (!date) return '';
-    
-    let dateObj: Date;
-    if (date instanceof Date) {
-      dateObj = date;
-    } else if (typeof date === 'string') {
-      dateObj = new Date(date);
-    } else {
-      return '';
-    }
-    
-    if (isNaN(dateObj.getTime())) {
-      console.warn('⚠️ [safeDateToString] Date invalide:', date);
-      return '';
-    }
-    
-    return dateObj.toISOString().split('T')[0];
-  };
-
-  const [formData, setFormData] = useState<MaterialResourceFormData>({
-    name: resource?.name || '',
-    category: (resource?.category || MaterialCategoryEnum.AUTRE) as MaterialCategory,
-    description: resource?.description || '',
-    condition: (resource?.condition || 'BON') as 'EXCELLENT' | 'BON' | 'MOYEN' | 'MAUVAIS',
-    location: resource?.location || '',
-    purchaseDate: safeDateToString(resource?.purchaseDate),
-    purchasePrice: resource?.purchasePrice?.toString() || '',
-    currentValue: resource?.currentValue?.toString() || '',
-    responsible: resource?.responsible || '',
-    availability: (resource?.availability || 'DISPONIBLE') as 'DISPONIBLE' | 'UTILISÉ' | 'EN_MAINTENANCE' | 'INDISPONIBLE',
-    serialNumber: resource?.serialNumber || '',
-    warranty: safeDateToString(resource?.warranty),
-    notes: resource?.notes || ''
-  });
-  });eEffect } from 'react';
 import { X, Package, DollarSign, MapPin, User, Calendar, FileText, Wrench } from 'lucide-react';
-import type { MaterialResourceType, MaterialCategory } from '../../types';
-import { MaterialCategory as MaterialCategoryEnum } from '../../types';
+import { type MaterialResourceType, MaterialCategory } from '../../types';
+import { safeDateToInputString } from '../../utils';
 
 interface EditMaterialResourceModalProps {
   isOpen: boolean;
@@ -60,17 +13,17 @@ interface EditMaterialResourceModalProps {
 const EditMaterialResourceModal: React.FC<EditMaterialResourceModalProps> = ({ isOpen, onClose, onUpdate, resource }) => {
   const [formData, setFormData] = useState({
     name: resource?.name || '',
-    category: (resource?.category || MaterialCategoryEnum.AUTRE) as MaterialCategory,
+    category: (resource?.category || MaterialCategory.AUTRE) as MaterialCategory,
     description: resource?.description || '',
     condition: (resource?.condition || 'BON') as 'EXCELLENT' | 'BON' | 'MOYEN' | 'MAUVAIS',
     location: resource?.location || '',
-    purchaseDate: resource?.purchaseDate ? resource.purchaseDate.toISOString().split('T')[0] : '',
+    purchaseDate: safeDateToInputString(resource?.purchaseDate) || '',
     purchasePrice: resource?.purchasePrice?.toString() || '',
     currentValue: resource?.currentValue?.toString() || '',
     responsible: resource?.responsible || '',
     availability: (resource?.availability || 'DISPONIBLE') as 'DISPONIBLE' | 'UTILISÉ' | 'EN_MAINTENANCE' | 'INDISPONIBLE',
     serialNumber: resource?.serialNumber || '',
-    warranty: resource?.warranty ? resource.warranty.toISOString().split('T')[0] : '',
+    warranty: safeDateToInputString(resource?.warranty) || '',
     notes: resource?.notes || ''
   });
 
@@ -85,13 +38,13 @@ const EditMaterialResourceModal: React.FC<EditMaterialResourceModalProps> = ({ i
         description: resource.description,
         condition: resource.condition,
         location: resource.location,
-        purchaseDate: resource.purchaseDate ? resource.purchaseDate.toISOString().split('T')[0] : '',
+        purchaseDate: safeDateToInputString(resource.purchaseDate) || '',
         purchasePrice: resource.purchasePrice?.toString() || '',
         currentValue: resource.currentValue?.toString() || '',
         responsible: resource.responsible || '',
         availability: resource.availability,
         serialNumber: resource.serialNumber || '',
-        warranty: resource.warranty ? resource.warranty.toISOString().split('T')[0] : '',
+        warranty: safeDateToInputString(resource.warranty) || '',
         notes: resource.notes || ''
       });
       setErrors({});
@@ -205,7 +158,7 @@ const EditMaterialResourceModal: React.FC<EditMaterialResourceModalProps> = ({ i
                 onChange={(e) => setFormData({ ...formData, category: e.target.value as MaterialCategory })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                {Object.values(MaterialCategoryEnum).map(category => (
+                {Object.values(MaterialCategory).map(category => (
                   <option key={category} value={category}>{getCategoryLabel(category)}</option>
                 ))}
               </select>

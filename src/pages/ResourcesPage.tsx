@@ -411,14 +411,14 @@ const ResourcesPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-purple-900 p-4">
+    <div className="min-h-screen bg-purple-900 p-0">
       {feedback && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow z-50">
           {feedback}
         </div>
       )}
       
-      <div className="flex-1 px-4 py-2 sm:px-6 lg:px-8 flex flex-col min-h-0">
+      <div className="flex-1 px-1 py-2 sm:px-2 lg:px-3 flex flex-col min-h-0">
         {/* En-tête avec couleur orange */}
         <div className="mb-3 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-3 border-l-4 border-orange-500 shadow-sm flex-shrink-0">
           <div className="flex items-center justify-between">
@@ -469,7 +469,7 @@ const ResourcesPage: React.FC = () => {
         </div>
 
         {/* Section principale */}
-        <div className="bg-white rounded-xl shadow-sm border px-4 py-4 sm:px-6 lg:px-8 mb-8">
+        <div className="bg-white rounded-xl shadow-sm border px-1 py-4 sm:px-2 lg:px-3 mb-8">
           {/* Onglets */}
           <div className="flex space-x-1 mb-4 bg-gray-100 rounded-lg p-1">
             <button

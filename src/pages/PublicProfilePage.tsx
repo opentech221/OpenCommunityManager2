@@ -73,7 +73,7 @@ export default function PublicProfilePage() {
   return (
     <div className="min-h-screen bg-purple-900 p-0 sm:p-0 md:p-0 lg:p-0">
       {/* En-tête Mobile-First */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-4 py-6 sm:px-6 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-1 py-6 sm:px-2 lg:px-3 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
         <div className="flex items-center space-x-3">
           <button
             onClick={() => navigate(-1)}
@@ -108,9 +108,9 @@ export default function PublicProfilePage() {
         </div>
       </div>
 
-      <div className="px-4 sm:px-6 lg:px-8">
+      <div className="px-1 sm:px-2 lg:px-3">
         {/* Statistiques - Mobile First avec 4 tickets-boutons de filtre */}
-        <div className="bg-white px-4 py-4 sm:px-6 lg:px-8 mb-6">
+        <div className="bg-white px-1 py-4 sm:px-2 lg:px-3 mb-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
             <button
               onClick={() => console.log('Vues du profil')}
@@ -182,7 +182,7 @@ export default function PublicProfilePage() {
             {/* Colonne principale */}
             <div className="lg:col-span-2 space-y-8">
               {/* À propos */}
-              <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="bg-white rounded-lg shadow-sm p-1 sm:p-2 lg:p-3">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-2xl font-semibold text-gray-900">À propos</h2>
                   <button 
@@ -196,7 +196,7 @@ export default function PublicProfilePage() {
             </div>
 
             {/* Projets récents */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="bg-white rounded-lg shadow-sm p-1 sm:p-2 lg:p-3">
               <h2 className="text-2xl font-semibold text-gray-900 mb-6">Projets récents</h2>
               <div className="space-y-4">
                 {association.projects.map((project, index) => (
@@ -222,7 +222,7 @@ export default function PublicProfilePage() {
             </div>
 
             {/* Réalisations */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="bg-white rounded-lg shadow-sm p-1 sm:p-2 lg:p-3">
               <h2 className="text-2xl font-semibold text-gray-900 mb-6">Nos réalisations</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {association.achievements.map((achievement, index) => (
@@ -238,7 +238,7 @@ export default function PublicProfilePage() {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Informations de contact */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="bg-white rounded-lg shadow-sm p-1 sm:p-2 lg:p-3">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Informations de contact</h3>
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
@@ -261,7 +261,7 @@ export default function PublicProfilePage() {
             </div>
 
             {/* Statistiques */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="bg-white rounded-lg shadow-sm p-1 sm:p-2 lg:p-3">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Statistiques</h3>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -282,7 +282,7 @@ export default function PublicProfilePage() {
             </div>
 
             {/* Actions */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="bg-white rounded-lg shadow-sm p-1 sm:p-2 lg:p-3">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Actions</h3>
               <div className="space-y-3">
                 <button className="w-full flex items-center justify-center space-x-2 bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors">
