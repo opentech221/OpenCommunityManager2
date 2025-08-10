@@ -206,64 +206,64 @@ const RecommendationsPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-purple-900 p-0 sm:p-0 md:p-0 lg:p-0">
+    <div className="min-h-screen bg-purple-900 p-4 sm:p-6 md:p-8 lg:p-10">
       {/* En-tête Mobile-First */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-1 py-6 sm:px-2 lg:px-3 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
-        <div className="flex items-center space-x-3">
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-5 py-6 sm:px-6 sm:py-7 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6 sm:mb-8">
+        <div className="flex items-center space-x-2 sm:space-x-3">
           <button
             onClick={() => navigate('/guidance')}
-            className="p-2 hover:bg-orange-200 rounded-lg transition-colors mr-2"
+            className="p-1.5 sm:p-2 hover:bg-orange-200 rounded-lg transition-colors"
             aria-label="Retour au guide"
           >
-            <ChevronLeft className="h-5 w-5 text-orange-600" />
+            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 text-orange-600" />
           </button>
           <div className="flex-shrink-0">
-            <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
-              <Lightbulb className="h-6 w-6 text-white" />
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+              <Lightbulb className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
             </div>
           </div>
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
+          <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-orange-500 truncate">
             Recommandations
           </h1>
         </div>
-        <div className="mt-4 hidden md:block">
+        <div className="mt-3 sm:mt-4 hidden sm:block">
           <p className="text-sm sm:text-base text-gray-700 font-medium">
             Actions prioritaires pour améliorer votre organisation
           </p>
-          <div className="text-xs text-gray-600 space-y-1 mt-2">
-            <p className="flex items-center">
-              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-              <strong>Actions ciblées :</strong> Recommandations personnalisées basées sur votre diagnostic
+          <div className="text-xs sm:text-sm text-gray-600 space-y-1 mt-2">
+            <p className="flex items-start sm:items-center">
+              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2 mt-1.5 sm:mt-0 flex-shrink-0"></span>
+              <span><strong>Actions ciblées :</strong> Recommandations personnalisées basées sur votre diagnostic</span>
             </p>
-            <p className="flex items-center">
-              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-              <strong>Suivi du progrès :</strong> Avancement et priorités clairement définis
+            <p className="flex items-start sm:items-center">
+              <span className="w-2 h-2 bg-orange-500 rounded-full mr-2 mt-1.5 sm:mt-0 flex-shrink-0"></span>
+              <span><strong>Suivi du progrès :</strong> Avancement et priorités clairement définis</span>
             </p>
           </div>
         </div>
       </div>
 
-      <div className="px-1 sm:px-2 lg:px-3">
+      <div className="px-4 sm:px-6 md:px-8 lg:px-10 max-w-7xl mx-auto">
         {/* Statistiques - Mobile First avec 4 tickets-boutons de filtre */}
-        <div className="bg-white px-1 py-4 sm:px-2 lg:px-3 mb-6">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="bg-white px-5 py-6 sm:px-6 sm:py-7 lg:px-8 mb-6 sm:mb-8 rounded-lg shadow-sm">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
             <button
               onClick={() => {
                 setSelectedPriority('all');
                 setSelectedStatus('all');
               }}
-              className={`bg-gradient-to-br from-blue-100 to-blue-50 border border-blue-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-blue-100 to-blue-50 border border-blue-500 rounded-lg p-4 sm:p-5 lg:p-6 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedPriority === 'all' && selectedStatus === 'all' 
                   ? 'ring-2 ring-blue-500 ring-offset-2' 
                   : 'hover:scale-105'
               }`}
             >
-              <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-blue-200">
-                  <Lightbulb className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+              <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="p-2 sm:p-2.5 rounded-lg bg-blue-200">
+                  <Lightbulb className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-blue-600" />
                 </div>
                 <div className="text-center">
-                  <div className="text-lg sm:text-xl font-bold text-blue-700">{recommendations.length}</div>
+                  <div className="text-base sm:text-lg lg:text-xl font-bold text-blue-700">{recommendations.length}</div>
                   <div className="text-xs sm:text-sm text-blue-600 font-medium">Total</div>
                 </div>
               </div>
@@ -274,18 +274,18 @@ const RecommendationsPage: React.FC = () => {
                 setSelectedPriority('high');
                 setSelectedStatus('all');
               }}
-              className={`bg-gradient-to-br from-red-100 to-red-50 border border-red-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-red-100 to-red-50 border border-red-500 rounded-lg p-4 sm:p-5 lg:p-6 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedPriority === 'high' && selectedStatus === 'all'
                   ? 'ring-2 ring-red-500 ring-offset-2'
                   : 'hover:scale-105'
               }`}
             >
-              <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-red-200">
-                  <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
+              <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="p-2 sm:p-2.5 rounded-lg bg-red-200">
+                  <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-red-600" />
                 </div>
                 <div className="text-center">
-                  <div className="text-lg sm:text-xl font-bold text-red-700">
+                  <div className="text-base sm:text-lg lg:text-xl font-bold text-red-700">
                     {recommendations.filter(r => r.priority === 'high').length}
                   </div>
                   <div className="text-xs sm:text-sm text-red-600 font-medium">Urgentes</div>
@@ -298,18 +298,18 @@ const RecommendationsPage: React.FC = () => {
                 setSelectedPriority('all');
                 setSelectedStatus('in_progress');
               }}
-              className={`bg-gradient-to-br from-green-100 to-green-50 border border-green-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-green-100 to-green-50 border border-green-500 rounded-lg p-4 sm:p-5 lg:p-6 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedPriority === 'all' && selectedStatus === 'in_progress'
                   ? 'ring-2 ring-green-500 ring-offset-2'
                   : 'hover:scale-105'
               }`}
             >
-              <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-green-200">
-                  <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
+              <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="p-2 sm:p-2.5 rounded-lg bg-green-200">
+                  <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-green-600" />
                 </div>
                 <div className="text-center">
-                  <div className="text-lg sm:text-xl font-bold text-green-700">
+                  <div className="text-base sm:text-lg lg:text-xl font-bold text-green-700">
                     {recommendations.filter(r => r.status === 'in_progress').length}
                   </div>
                   <div className="text-xs sm:text-sm text-green-600 font-medium">En cours</div>
@@ -322,18 +322,18 @@ const RecommendationsPage: React.FC = () => {
                 setSelectedPriority('all');
                 setSelectedStatus('completed');
               }}
-              className={`bg-gradient-to-br from-purple-100 to-purple-50 border border-purple-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-purple-100 to-purple-50 border border-purple-500 rounded-lg p-4 sm:p-5 lg:p-6 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedPriority === 'all' && selectedStatus === 'completed'
                   ? 'ring-2 ring-purple-500 ring-offset-2'
                   : 'hover:scale-105'
               }`}
             >
-              <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-purple-200">
-                  <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
+              <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="p-2 sm:p-2.5 rounded-lg bg-purple-200">
+                  <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-purple-600" />
                 </div>
                 <div className="text-center">
-                  <div className="text-lg sm:text-xl font-bold text-purple-700">
+                  <div className="text-base sm:text-lg lg:text-xl font-bold text-purple-700">
                     {recommendations.filter(r => r.status === 'completed').length}
                   </div>
                   <div className="text-xs sm:text-sm text-purple-600 font-medium">Terminées</div>
@@ -344,16 +344,16 @@ const RecommendationsPage: React.FC = () => {
         </div>
 
         {/* Filtres */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
-          <div className="flex items-center gap-4">
-            <Filter className="h-5 w-5 text-gray-400" />
-            <div className="flex items-center gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Priorité</label>
+        <div className="bg-white rounded-lg border border-gray-200 p-5 sm:p-6 mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
+            <Filter className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 w-full">
+              <div className="w-full sm:w-auto">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Priorité</label>
                 <select
                   value={selectedPriority}
                   onChange={(e) => setSelectedPriority(e.target.value)}
-                  className="border border-gray-300 rounded-md px-3 py-1 text-sm"
+                  className="w-full sm:w-auto border border-gray-300 rounded-md px-3 sm:px-4 py-2 sm:py-2.5 text-sm"
                 >
                   <option value="all">Toutes</option>
                   <option value="high">Haute</option>
@@ -361,12 +361,12 @@ const RecommendationsPage: React.FC = () => {
                   <option value="low">Faible</option>
                 </select>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
+              <div className="w-full sm:w-auto">
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Statut</label>
                 <select
                   value={selectedStatus}
                   onChange={(e) => setSelectedStatus(e.target.value)}
-                  className="border border-gray-300 rounded-md px-3 py-1 text-sm"
+                  className="w-full sm:w-auto border border-gray-300 rounded-md px-3 sm:px-4 py-2 sm:py-2.5 text-sm"
                 >
                   <option value="all">Tous</option>
                   <option value="pending">À faire</option>
@@ -379,54 +379,54 @@ const RecommendationsPage: React.FC = () => {
         </div>
 
         {/* Liste des recommandations */}
-        <div className="space-y-4">
+        <div className="space-y-5 sm:space-y-6">
           {filteredRecommendations.map((recommendation) => (
-            <div key={recommendation.id} className="bg-white rounded-lg border border-gray-200 p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-4">
-                  <span className="text-2xl">{getCategoryIcon(recommendation.category)}</span>
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-1">
+            <div key={recommendation.id} className="bg-white rounded-lg border border-gray-200 p-6 sm:p-8">
+              <div className="flex flex-col sm:flex-row items-start justify-between mb-5 gap-4 sm:gap-5">
+                <div className="flex items-start gap-4 sm:gap-5 min-w-0 flex-1">
+                  <span className="text-xl sm:text-2xl flex-shrink-0">{getCategoryIcon(recommendation.category)}</span>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-3 leading-tight">
                       {recommendation.title}
                     </h3>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2.5">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(recommendation.priority)}`}>
                         {getPriorityText(recommendation.priority)}
                       </span>
                       <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(recommendation.status)}`}>
                         {getStatusText(recommendation.status)}
                       </span>
-                      <span className="text-sm text-gray-500">{recommendation.category}</span>
+                      <span className="text-xs sm:text-sm text-gray-500 capitalize">{recommendation.category}</span>
                     </div>
                   </div>
                 </div>
-                <div className="text-right">
+                <div className="flex flex-col sm:text-right gap-1 w-full sm:w-auto flex-shrink-0">
                   {recommendation.deadline && (
-                    <div className="flex items-center gap-1 text-sm text-gray-500 mb-1">
-                      <Clock className="h-4 w-4" />
-                      {new Date(recommendation.deadline).toLocaleDateString('fr-FR')}
+                    <div className="flex items-center gap-1 text-xs sm:text-sm text-gray-500">
+                      <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
+                      <span className="truncate">{new Date(recommendation.deadline).toLocaleDateString('fr-FR')}</span>
                     </div>
                   )}
                   {recommendation.assigned_to && (
-                    <div className="flex items-center gap-1 text-sm text-gray-500">
-                      <User className="h-4 w-4" />
-                      {recommendation.assigned_to}
+                    <div className="flex items-center gap-1 text-xs sm:text-sm text-gray-500">
+                      <User className="h-3 w-3 sm:h-4 sm:w-4" />
+                      <span className="truncate">{recommendation.assigned_to}</span>
                     </div>
                   )}
                 </div>
               </div>
 
-              <p className="text-gray-600 mb-4">{recommendation.description}</p>
+              <p className="text-sm sm:text-base text-gray-600 mb-5 leading-relaxed">{recommendation.description}</p>
 
               {/* Barre de progression */}
-              <div className="mb-4">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-medium text-gray-700">Progression</span>
-                  <span className="text-sm text-gray-500">{recommendation.progress}%</span>
+              <div className="mb-5">
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-xs sm:text-sm font-medium text-gray-700">Progression</span>
+                  <span className="text-xs sm:text-sm text-gray-500 font-medium">{recommendation.progress}%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="w-full bg-gray-200 rounded-full h-2 sm:h-2.5">
                   <div 
-                    className="bg-gradient-to-r from-violet-600 to-orange-500 h-2 rounded-full transition-all duration-300" 
+                    className="bg-gradient-to-r from-violet-600 to-orange-500 h-2 sm:h-2.5 rounded-full transition-all duration-300" 
                     style={{ width: `${recommendation.progress}%` }}
                   ></div>
                 </div>
@@ -434,19 +434,19 @@ const RecommendationsPage: React.FC = () => {
 
               {/* Actions */}
               {recommendation.status !== 'completed' && (
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
                   <button
                     onClick={() => updateProgress(recommendation.id, Math.min(100, recommendation.progress + 25))}
-                    className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition-colors"
+                    className="bg-blue-600 text-white px-4 py-2.5 sm:py-2 rounded text-sm font-medium hover:bg-blue-700 transition-colors flex-1 sm:flex-initial"
                   >
                     +25%
                   </button>
                   <button
                     onClick={() => updateProgress(recommendation.id, 100)}
-                    className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 transition-colors flex items-center gap-1"
+                    className="bg-green-600 text-white px-4 py-2.5 sm:py-2 rounded text-sm font-medium hover:bg-green-700 transition-colors flex items-center justify-center gap-2 flex-1 sm:flex-initial"
                   >
                     <CheckCircle className="h-4 w-4" />
-                    Marquer terminée
+                    <span>Marquer terminée</span>
                   </button>
                 </div>
               )}
@@ -455,10 +455,10 @@ const RecommendationsPage: React.FC = () => {
         </div>
 
         {filteredRecommendations.length === 0 && (
-          <div className="bg-white rounded-xl p-12 border border-gray-200 text-center">
-            <Lightbulb className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-medium text-gray-900 mb-2">Aucune recommandation</h3>
-            <p className="text-gray-600">
+          <div className="bg-white rounded-xl p-12 sm:p-16 border border-gray-200 text-center">
+            <Lightbulb className="h-14 w-14 sm:h-18 sm:w-18 text-gray-400 mx-auto mb-5" />
+            <h3 className="text-lg sm:text-xl font-medium text-gray-900 mb-3">Aucune recommandation</h3>
+            <p className="text-sm sm:text-base text-gray-600 max-w-lg mx-auto leading-relaxed">
               {recommendations.length === 0 
                 ? "Lancez un diagnostic pour obtenir des recommandations personnalisées."
                 : "Aucune recommandation ne correspond aux filtres sélectionnés."
@@ -468,16 +468,16 @@ const RecommendationsPage: React.FC = () => {
         )}
 
         {/* Bouton flottant avec menu d'actions */}
-        <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
+        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 floating-menu-container">
           {/* Menu d'actions (visible quand showFloatingMenu est true) */}
           {showFloatingMenu && (
-            <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] animate-fadeIn">
+            <div className="absolute bottom-14 sm:bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[180px] sm:min-w-[200px] animate-fadeIn">
               <button
                 onClick={() => {
                   navigate('/guidance/diagnostic');
                   setShowFloatingMenu(false);
                 }}
-                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-left hover:bg-gray-50 flex items-center space-x-2 sm:space-x-3 text-sm"
               >
                 <TrendingUp className="h-4 w-4 text-blue-600" />
                 <span>Nouveau Diagnostic</span>
@@ -488,7 +488,7 @@ const RecommendationsPage: React.FC = () => {
                   navigate('/guidance/action-plan');
                   setShowFloatingMenu(false);
                 }}
-                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-left hover:bg-gray-50 flex items-center space-x-2 sm:space-x-3 text-sm"
               >
                 <Target className="h-4 w-4 text-orange-600" />
                 <span>Plan d'Action</span>
@@ -499,7 +499,7 @@ const RecommendationsPage: React.FC = () => {
                   navigate('/guidance/compliance');
                   setShowFloatingMenu(false);
                 }}
-                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-left hover:bg-gray-50 flex items-center space-x-2 sm:space-x-3 text-sm"
               >
                 <CheckCircle className="h-4 w-4 text-green-600" />
                 <span>État Conformité</span>
@@ -513,7 +513,7 @@ const RecommendationsPage: React.FC = () => {
                   console.log('Export des recommandations');
                   setShowFloatingMenu(false);
                 }}
-                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-left hover:bg-gray-50 flex items-center space-x-2 sm:space-x-3 text-sm"
               >
                 <Download className="h-4 w-4 text-purple-600" />
                 <span>Exporter PDF</span>
@@ -524,13 +524,13 @@ const RecommendationsPage: React.FC = () => {
           {/* Bouton principal flottant */}
           <button
             onClick={() => setShowFloatingMenu(!showFloatingMenu)}
-            className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
+            className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
               showFloatingMenu 
                 ? 'bg-gray-600 hover:bg-gray-700 transform rotate-45' 
                 : 'bg-orange-500 hover:bg-orange-600 hover:scale-110'
             }`}
           >
-            <Plus className="h-6 w-6 text-white" />
+            <Plus className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
           </button>
         </div>
       </div>
