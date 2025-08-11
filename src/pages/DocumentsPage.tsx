@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Upload,
-  File,
   Download,
   Trash2,
   Search,
@@ -266,24 +265,25 @@ const DocumentsPage: React.FC = () => {
     <div className="min-h-screen bg-purple-900 p-0">
       <div className="px-1 sm:px-2 lg:px-3 py-6">
       {/* Header décoré avec couleur orange */}
-      <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-4 sm:p-5 lg:p-6 border-l-4 border-orange-500 shadow-sm max-w-4xl mx-auto">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+      <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-4 sm:p-5 lg:p-6 border-l-4 border-orange-500 shadow-sm">
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div className="flex items-center space-x-3 min-w-0 flex-1">
             <div className="flex-shrink-0">
               <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
                 <FileText className="h-6 w-6 text-white" />
               </div>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-orange-500">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-orange-500 truncate">
               Gestion des Documents
             </h1>
           </div>
           <button 
             onClick={openAddModal}
-            className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center space-x-2"
+            className="bg-orange-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center space-x-2 flex-shrink-0"
           >
-            <Upload className="w-5 h-5" />
-            <span>Nouveau document</span>
+            <Upload className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="hidden sm:inline">Nouveau document</span>
+            <span className="sm:hidden">Nouveau</span>
           </button>
         </div>
         <div className="mt-4 space-y-2 sm:space-y-3">
@@ -313,7 +313,7 @@ const DocumentsPage: React.FC = () => {
       )}
 
       {/* Tableau de bord des statistiques */}
-      <div className={`grid gap-4 mb-6 max-w-4xl mx-auto ${
+      <div className={`grid gap-4 mb-6 ${
         isMobile ? 'grid-cols-2' : 'grid-cols-2 lg:grid-cols-4'
       }`}>
         <button 
@@ -359,7 +359,7 @@ const DocumentsPage: React.FC = () => {
       </div>
 
       {/* Liste des documents */}
-      <div className={`bg-white rounded-lg shadow max-w-4xl mx-auto ${isMobile ? 'p-2' : 'p-4 sm:p-5 lg:p-6'}`}>
+      <div className={`bg-white rounded-lg shadow ${isMobile ? 'p-2' : 'p-4 sm:p-5 lg:p-6'}`}>
         {/* Barre de recherche */}
         <div className={`relative mb-4 ${isMobile ? 'mb-3' : ''}`}>
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -402,7 +402,7 @@ const DocumentsPage: React.FC = () => {
           <>
           {isMobile ? (
             // Vue mobile - Liste de cartes
-            <div className="space-y-3 max-w-3xl mx-auto">
+            <div className="space-y-3">
               {filteredDocuments.map((document) => (
                 <div key={document.id} className="border border-gray-200 rounded-lg p-3 bg-gray-50">
                   <div className="flex items-start justify-between space-y-2 sm:space-y-3">
@@ -411,16 +411,16 @@ const DocumentsPage: React.FC = () => {
                         {getFileIcon(document.name)}
                         <div className="font-medium text-gray-900 text-sm truncate">{document.name}</div>
                       </div>
-                      <div className="flex items-center space-x-4 text-xs text-gray-500">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getTypeBadgeColor(document.type)}`}>
+                    <div className="flex items-center space-x-4 text-xs text-gray-500 overflow-hidden">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${getTypeBadgeColor(document.type)}`}>
                           {getTypeLabel(document.type)}
                         </span>
-                        <span>{formatFileSize(document.size)}</span>
-                        <span>{formatDate(document.uploadDate)}</span>
+                        <span className="flex-shrink-0">{formatFileSize(document.size)}</span>
+                        <span className="truncate">{formatDate(document.uploadDate)}</span>
                       </div>
-                      <div className="text-xs text-gray-400 mt-1">Par {document.uploadedBy}</div>
+                      <div className="text-xs text-gray-400 mt-1 truncate">Par {document.uploadedBy}</div>
                     </div>
-                    <div className="flex space-x-1 ml-2">
+                    <div className="flex space-x-1 ml-2 flex-shrink-0">
                       <button 
                         className="inline-flex items-center justify-center w-8 h-8 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-full transition-colors" 
                         onClick={() => openDetailModal(document)} 
@@ -437,7 +437,7 @@ const DocumentsPage: React.FC = () => {
                       </button>
                       <button 
                         className="inline-flex items-center justify-center w-8 h-8 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors" 
-                        onClick={() => handleDelete(document.id)}
+                        onClick={() => handleDeleteDocument(document.id)}
                         aria-label="Supprimer"
                       >
                         <Trash2 size={14} />
@@ -449,7 +449,7 @@ const DocumentsPage: React.FC = () => {
             </div>
           ) : (
             // Vue desktop - Tableau
-            <div className="overflow-x-auto max-w-5xl mx-auto">
+            <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50 sticky top-0">
                   <tr>
@@ -535,7 +535,7 @@ const DocumentsPage: React.FC = () => {
 
       {/* Résumé en bas de page */}
       {localDocuments.length > 0 && (
-        <div className="bg-white rounded-lg shadow p-4 sm:p-5 lg:p-6 mt-4 max-w-4xl mx-auto">
+        <div className="bg-white rounded-lg shadow p-4 sm:p-5 lg:p-6 mt-4">
           <div className="text-sm text-gray-600 space-y-2 sm:space-y-3">
             Affichage de {filteredDocuments.length} document{filteredDocuments.length > 1 ? 's' : ''} sur {totalDocuments} au total
             {filteredDocuments.length !== totalDocuments && (
