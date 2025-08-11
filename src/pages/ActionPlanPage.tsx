@@ -250,20 +250,20 @@ const ActionPlanPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="px-1 sm:px-2 lg:px-3">
+      <div className="px-1 sm:px-2 lg:px-3 py-6">
         {/* Statistiques - Mobile First avec 4 tickets-boutons de filtre */}
-        <div className="bg-white px-1 py-4 sm:px-2 lg:px-3 mb-6">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="bg-white px-6 py-6 sm:px-6 sm:py-6 lg:px-6 mb-6 rounded-lg shadow-sm">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
             <button
               onClick={() => setSelectedFilter('progress')}
-              className={`bg-gradient-to-br from-purple-100 to-purple-50 border border-purple-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-purple-100 to-purple-50 border border-purple-500 rounded-lg p-4 sm:p-5 lg:p-6 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedFilter === 'progress'
                   ? 'ring-2 ring-purple-500 ring-offset-2'
                   : 'hover:scale-105'
               }`}
             >
-              <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-purple-200">
+              <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="p-2 sm:p-2.5 rounded-lg bg-purple-200">
                   <Target className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
                 </div>
                 <div className="text-center">
@@ -275,14 +275,14 @@ const ActionPlanPage: React.FC = () => {
 
             <button
               onClick={() => setSelectedFilter('completed')}
-              className={`bg-gradient-to-br from-green-100 to-green-50 border border-green-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-green-100 to-green-50 border border-green-500 rounded-lg p-4 sm:p-5 lg:p-6 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedFilter === 'completed'
                   ? 'ring-2 ring-green-500 ring-offset-2'
                   : 'hover:scale-105'
               }`}
             >
-              <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-green-200">
+              <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="p-2 sm:p-2.5 rounded-lg bg-green-200">
                   <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
                 </div>
                 <div className="text-center">
@@ -294,14 +294,14 @@ const ActionPlanPage: React.FC = () => {
 
             <button
               onClick={() => setSelectedFilter('remaining')}
-              className={`bg-gradient-to-br from-orange-100 to-orange-50 border border-orange-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-orange-100 to-orange-50 border border-orange-500 rounded-lg p-4 sm:p-5 lg:p-6 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedFilter === 'remaining'
                   ? 'ring-2 ring-orange-500 ring-offset-2'
                   : 'hover:scale-105'
               }`}
             >
-              <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-orange-200">
+              <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="p-2 sm:p-2.5 rounded-lg bg-orange-200">
                   <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-orange-600" />
                 </div>
                 <div className="text-center">
@@ -313,14 +313,14 @@ const ActionPlanPage: React.FC = () => {
 
             <button
               onClick={() => setSelectedFilter('all')}
-              className={`bg-gradient-to-br from-blue-100 to-blue-50 border border-blue-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-blue-100 to-blue-50 border border-blue-500 rounded-lg p-4 sm:p-5 lg:p-6 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedFilter === 'all'
                   ? 'ring-2 ring-blue-500 ring-offset-2'
                   : 'hover:scale-105'
               }`}
             >
-              <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-blue-200">
+              <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="p-2 sm:p-2.5 rounded-lg bg-blue-200">
                   <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                 </div>
                 <div className="text-center">
@@ -456,15 +456,15 @@ const ActionPlanPage: React.FC = () => {
         {/* Description et prérequis */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           {/* Description */}
-          <div className="bg-white rounded-xl p-6 border border-gray-500">
-            <h3 className="text-xl font-montserrat font-semibold mb-3">Description</h3>
-            <p className="text-gray-600">{actionPlan.description}</p>
+          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-lg">
+            <h3 className="text-xl font-montserrat font-semibold mb-4">Description</h3>
+            <p className="text-gray-600 leading-relaxed">{actionPlan.description}</p>
           </div>
 
           {/* Prérequis */}
-          <div className="bg-white rounded-xl p-6 border border-gray-500">
-            <h3 className="text-xl font-montserrat font-semibold mb-3">Prérequis</h3>
-            <div className="space-y-2">
+          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-lg">
+            <h3 className="text-xl font-montserrat font-semibold mb-4">Prérequis</h3>
+            <div className="space-y-3">
               {actionPlan.prerequisites.map((prerequisite, index) => (
                 <div key={index} className="flex items-start gap-2">
                   <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
@@ -476,23 +476,23 @@ const ActionPlanPage: React.FC = () => {
         </div>
 
         {/* Actions à réaliser */}
-        <div className="bg-white rounded-xl p-6 border border-gray-500">
-          <div className="flex items-center justify-between mb-6">
+        <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-lg">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
             <h3 className="text-xl font-montserrat font-semibold">Actions à Réaliser</h3>
             <div className="text-sm text-gray-500">
               {completedActions} sur {totalActions} terminées
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
             {actionPlan.actions.map((action, index) => (
-              <div key={action.id} className={`border rounded-lg p-4 transition-colors ${
+              <div key={action.id} className={`border rounded-lg p-6 transition-colors ${
                 action.completed 
                   ? 'bg-green-50 border-green-200' 
-                  : 'bg-white border-gray-500 hover:border-violet-300'
+                  : 'bg-white border-gray-200 hover:border-violet-300 shadow-sm'
               }`}>
-                <div className="flex items-start gap-4">
-                  <div className="flex items-center mt-1">
+                <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5">
+                  <div className="flex items-center mt-1 flex-shrink-0">
                     <button
                       onClick={() => toggleActionCompletion(action.id)}
                       className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
@@ -505,21 +505,21 @@ const ActionPlanPage: React.FC = () => {
                     </button>
                   </div>
 
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <h4 className={`font-medium mb-1 ${
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col sm:flex-row items-start justify-between mb-3 gap-3">
+                      <div className="min-w-0 flex-1">
+                        <h4 className={`font-medium mb-2 leading-tight ${
                           action.completed ? 'text-green-800 line-through' : 'text-gray-900'
                         }`}>
                           {index + 1}. {action.title}
                         </h4>
-                        <p className={`text-sm mb-2 ${
+                        <p className={`text-sm mb-3 leading-relaxed ${
                           action.completed ? 'text-green-700' : 'text-gray-600'
                         }`}>
                           {action.description}
                         </p>
                       </div>
-                      <div className="flex items-center gap-2 ml-4">
+                      <div className="flex items-center gap-2 flex-shrink-0">
                         <span className="text-xl">{getCategoryIcon(action.category)}</span>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(action.category)}`}>
                           {action.category}
@@ -527,7 +527,7 @@ const ActionPlanPage: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
                       <div className="flex items-center gap-1">
                         <Clock className="h-4 w-4" />
                         {action.estimatedTime}
@@ -553,31 +553,31 @@ const ActionPlanPage: React.FC = () => {
         </div>
 
         {/* Actions rapides */}
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
           <button
             onClick={() => navigate('/guidance/recommendations')}
-            className="bg-violet-600 text-white p-4 rounded-lg hover:bg-violet-700 transition-colors text-left"
+            className="bg-violet-600 text-white p-6 rounded-lg hover:bg-violet-700 transition-colors text-left shadow-lg"
           >
-            <TrendingUp className="h-6 w-6 mb-2" />
-            <div className="font-medium mb-1">Voir les Recommandations</div>
+            <TrendingUp className="h-6 w-6 mb-3" />
+            <div className="font-medium mb-2">Voir les Recommandations</div>
             <div className="text-sm text-violet-100">Détails des actions suggérées</div>
           </button>
 
           <button
             onClick={() => navigate('/guidance/compliance')}
-            className="bg-green-600 text-white p-4 rounded-lg hover:bg-green-700 transition-colors text-left"
+            className="bg-green-600 text-white p-6 rounded-lg hover:bg-green-700 transition-colors text-left shadow-lg"
           >
-            <CheckCircle className="h-6 w-6 mb-2" />
-            <div className="font-medium mb-1">État de Conformité</div>
+            <CheckCircle className="h-6 w-6 mb-3" />
+            <div className="font-medium mb-2">État de Conformité</div>
             <div className="text-sm text-green-100">Vérifier votre progression</div>
           </button>
 
           <button
             onClick={() => navigate('/guidance/diagnostic')}
-            className="bg-blue-600 text-white p-4 rounded-lg hover:bg-blue-700 transition-colors text-left"
+            className="bg-blue-600 text-white p-6 rounded-lg hover:bg-blue-700 transition-colors text-left shadow-lg"
           >
-            <Star className="h-6 w-6 mb-2" />
-            <div className="font-medium mb-1">Nouveau Diagnostic</div>
+            <Star className="h-6 w-6 mb-3" />
+            <div className="font-medium mb-2">Nouveau Diagnostic</div>
             <div className="text-sm text-blue-100">Réévaluer votre niveau</div>
           </button>
         </div>

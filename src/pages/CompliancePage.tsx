@@ -324,20 +324,20 @@ const CompliancePage: React.FC = () => {
         </div>
       </div>
 
-      <div className="px-1 sm:px-2 lg:px-3">
+      <div className="px-1 sm:px-2 lg:px-3 py-6">
         {/* Statistiques - Mobile First avec 4 tickets-boutons de filtre */}
-        <div className="bg-white px-1 py-4 sm:px-2 lg:px-3 mb-6">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="bg-white px-6 py-6 sm:px-6 sm:py-6 lg:px-6 mb-6 rounded-lg shadow-sm">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
             <button
               onClick={() => setSelectedCategory('all')}
-              className={`bg-gradient-to-br from-green-100 to-green-50 border border-green-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-green-100 to-green-50 border border-green-500 rounded-lg p-4 sm:p-5 lg:p-6 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedCategory === 'all'
                   ? 'ring-2 ring-green-500 ring-offset-2'
                   : 'hover:scale-105'
               }`}
             >
-              <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-green-200">
+              <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="p-2 sm:p-2.5 rounded-lg bg-green-200">
                   <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
                 </div>
                 <div className="text-center">
@@ -349,10 +349,10 @@ const CompliancePage: React.FC = () => {
 
             <button
               onClick={() => setSelectedCategory('all')}
-              className={`bg-gradient-to-br from-orange-100 to-orange-50 border border-orange-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left hover:scale-105`}
+              className={`bg-gradient-to-br from-orange-100 to-orange-50 border border-orange-500 rounded-lg p-4 sm:p-5 lg:p-6 shadow hover:shadow-md transition-all duration-200 text-left hover:scale-105`}
             >
-              <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-orange-200">
+              <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="p-2 sm:p-2.5 rounded-lg bg-orange-200">
                   <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-orange-600" />
                 </div>
                 <div className="text-center">
@@ -364,10 +364,10 @@ const CompliancePage: React.FC = () => {
 
             <button
               onClick={() => setSelectedCategory('all')}
-              className={`bg-gradient-to-br from-red-100 to-red-50 border border-red-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left hover:scale-105`}
+              className={`bg-gradient-to-br from-red-100 to-red-50 border border-red-500 rounded-lg p-4 sm:p-5 lg:p-6 shadow hover:shadow-md transition-all duration-200 text-left hover:scale-105`}
             >
-              <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-red-200">
+              <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="p-2 sm:p-2.5 rounded-lg bg-red-200">
                   <XCircle className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
                 </div>
                 <div className="text-center">
@@ -379,14 +379,14 @@ const CompliancePage: React.FC = () => {
 
             <button
               onClick={() => setSelectedCategory('all')}
-              className={`bg-gradient-to-br from-blue-100 to-blue-50 border border-blue-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-blue-100 to-blue-50 border border-blue-500 rounded-lg p-4 sm:p-5 lg:p-6 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedCategory === 'all'
                   ? 'ring-2 ring-blue-500 ring-offset-2'
                   : 'hover:scale-105'
               }`}
             >
-              <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-blue-200">
+              <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="p-2 sm:p-2.5 rounded-lg bg-blue-200">
                   <Scale className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                 </div>
                 <div className="text-center">
@@ -399,8 +399,8 @@ const CompliancePage: React.FC = () => {
         </div>
 
         {/* Filtres par catégorie */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
-          <div className="flex items-center gap-4">
+        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
             <span className="font-medium text-gray-700">Catégories :</span>
             <div className="flex gap-2 flex-wrap">
               <button
@@ -435,24 +435,24 @@ const CompliancePage: React.FC = () => {
         </div>
 
         {/* Liste des vérifications */}
-        <div className="space-y-4">
+        <div className="space-y-6">
           {filteredChecks.map((check) => {
             const StatusIcon = getStatusIcon(check.status);
             const CategoryIcon = getCategoryIcon(check.category);
             
             return (
-              <div key={check.id} className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-start gap-4">
-                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${getCategoryColor(check.category)}`}>
+              <div key={check.id} className="bg-white rounded-xl p-6 border border-gray-200 shadow-lg">
+                <div className="flex flex-col sm:flex-row items-start justify-between mb-4 gap-4 sm:gap-5">
+                  <div className="flex items-start gap-4 sm:gap-5 min-w-0 flex-1">
+                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${getCategoryColor(check.category)}`}>
                       <CategoryIcon className="h-6 w-6" />
                     </div>
-                    <div>
-                      <h3 className="text-lg font-medium text-gray-900 mb-1">
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2 leading-tight">
                         {check.title}
                       </h3>
-                      <p className="text-gray-600 mb-2">{check.description}</p>
-                      <div className="flex items-center gap-2">
+                      <p className="text-sm sm:text-base text-gray-600 mb-3 leading-relaxed">{check.description}</p>
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className="text-sm text-gray-500">{getCategoryName(check.category)}</span>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                           check.priority === 'high' ? 'bg-red-100 text-red-800' :
@@ -466,7 +466,7 @@ const CompliancePage: React.FC = () => {
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 w-full sm:w-auto flex-shrink-0">
                     <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${getStatusColor(check.status)}`}>
                       <StatusIcon className="h-5 w-5" />
                       <span className="font-medium">{getStatusText(check.status)}</span>
@@ -475,13 +475,13 @@ const CompliancePage: React.FC = () => {
                 </div>
 
                 {check.next_check_date && (
-                  <div className="text-sm text-gray-500 mb-3">
+                  <div className="text-xs sm:text-sm text-gray-500 mb-4">
                     Prochaine vérification : {new Date(check.next_check_date).toLocaleDateString('fr-FR')}
                   </div>
                 )}
 
                 {check.status !== 'compliant' && (
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
                     {check.auto_fix_available ? (
                       <button
                         onClick={() => autoFix(check.id)}

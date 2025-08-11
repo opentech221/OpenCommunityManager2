@@ -268,18 +268,18 @@ const AnalyticsPage: React.FC = () => {
 
       <div className="px-1 sm:px-2 lg:px-3 py-6">
         {/* Statistiques - Mobile First avec 4 tickets-boutons de filtre */}
-        <div className="bg-white px-1 py-4 sm:px-2 lg:px-3 mb-6">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="bg-white px-6 py-6 sm:px-6 sm:py-6 lg:px-6 mb-6 rounded-lg shadow-sm">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
             <button
               onClick={() => setSelectedMetric('diagnostics')}
-              className={`bg-gradient-to-br from-blue-100 to-blue-50 border border-blue-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-blue-100 to-blue-50 border border-blue-500 rounded-lg p-4 sm:p-5 lg:p-6 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedMetric === 'diagnostics'
                   ? 'ring-2 ring-blue-500 ring-offset-2'
                   : 'hover:scale-105'
               }`}
             >
-              <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-blue-200">
+              <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="p-2 sm:p-2.5 rounded-lg bg-blue-200">
                   <Activity className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                 </div>
                 <div className="text-center">
@@ -291,14 +291,14 @@ const AnalyticsPage: React.FC = () => {
 
             <button
               onClick={() => setSelectedMetric('maturity')}
-              className={`bg-gradient-to-br from-orange-100 to-orange-50 border border-orange-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-orange-100 to-orange-50 border border-orange-500 rounded-lg p-4 sm:p-5 lg:p-6 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedMetric === 'maturity'
                   ? 'ring-2 ring-orange-500 ring-offset-2'
                   : 'hover:scale-105'
               }`}
             >
-              <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-orange-200">
+              <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="p-2 sm:p-2.5 rounded-lg bg-orange-200">
                   <Target className="h-5 w-5 sm:h-6 sm:w-6 text-orange-600" />
                 </div>
                 <div className="text-center">
@@ -310,14 +310,14 @@ const AnalyticsPage: React.FC = () => {
 
             <button
               onClick={() => setSelectedMetric('actions')}
-              className={`bg-gradient-to-br from-green-100 to-green-50 border border-green-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-green-100 to-green-50 border border-green-500 rounded-lg p-4 sm:p-5 lg:p-6 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedMetric === 'actions'
                   ? 'ring-2 ring-green-500 ring-offset-2'
                   : 'hover:scale-105'
               }`}
             >
-              <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-green-200">
+              <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="p-2 sm:p-2.5 rounded-lg bg-green-200">
                   <Users className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
                 </div>
                 <div className="text-center">
@@ -329,14 +329,14 @@ const AnalyticsPage: React.FC = () => {
 
             <button
               onClick={() => setSelectedMetric('all')}
-              className={`bg-gradient-to-br from-violet-100 to-violet-50 border border-violet-500 rounded-lg p-3 sm:p-4 shadow hover:shadow-md transition-all duration-200 text-left ${
+              className={`bg-gradient-to-br from-violet-100 to-violet-50 border border-violet-500 rounded-lg p-4 sm:p-5 lg:p-6 shadow hover:shadow-md transition-all duration-200 text-left ${
                 selectedMetric === 'all'
                   ? 'ring-2 ring-violet-500 ring-offset-2'
                   : 'hover:scale-105'
               }`}
             >
-              <div className="flex flex-col items-center space-y-2">
-                <div className="p-2 rounded-lg bg-violet-200">
+              <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="p-2 sm:p-2.5 rounded-lg bg-violet-200">
                   <BarChart3 className="h-5 w-5 sm:h-6 sm:w-6 text-violet-600" />
                 </div>
                 <div className="text-center">
@@ -349,8 +349,8 @@ const AnalyticsPage: React.FC = () => {
         </div>
 
         {/* Indicateur de tendance */}
-        <div className="bg-white rounded-lg p-1 mb-6 border border-gray-200 sm:p-2 lg:p-3">
-          <div className="flex items-center justify-center">
+        <div className="bg-white rounded-lg p-4 sm:p-5 lg:p-6 mb-6 border border-gray-200">
+          <div className="flex items-center justify-center space-y-2 sm:space-y-3">
             <TrendingUp className={`h-4 w-4 ${analyticsData.overview.trend === 'up' ? 'text-green-600' : 'text-red-600'}`} />
             <span className={`text-sm ml-1 ${analyticsData.overview.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
               +{analyticsData.overview.trendPercentage}% ce mois
@@ -358,13 +358,13 @@ const AnalyticsPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
           {/* Évolution de la maturité */}
-          <div className="bg-white rounded-xl p-1 border border-gray-200 sm:p-2 lg:p-3">
+          <div className="bg-white rounded-xl p-4 sm:p-5 lg:p-6 border border-gray-200">
             <h3 className="text-xl font-montserrat font-semibold mb-4">Évolution de la Maturité</h3>
             <div className="space-y-3">
               {analyticsData.maturityEvolution.map((item, index) => (
-                <div key={index} className="flex items-center justify-between">
+                <div key={index} className="flex items-center justify-between space-y-2 sm:space-y-3">
                   <div className="flex items-center gap-3">
                     <span className="text-sm text-gray-600 w-20">{item.month}</span>
                     <div className="flex items-center gap-2">
@@ -384,11 +384,11 @@ const AnalyticsPage: React.FC = () => {
           </div>
 
           {/* Scores par catégorie */}
-          <div className="bg-white rounded-xl p-1 border border-gray-200 sm:p-2 lg:p-3">
+          <div className="bg-white rounded-xl p-4 sm:p-5 lg:p-6 border border-gray-200">
             <h3 className="text-xl font-montserrat font-semibold mb-4">Performance par Catégorie</h3>
             <div className="space-y-4">
               {analyticsData.categoryScores.map((category, index) => (
-                <div key={index}>
+                <div key={index} className="space-y-2 sm:space-y-3">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium text-gray-900">{category.category}</span>
                     <div className="flex items-center gap-2">
@@ -416,7 +416,7 @@ const AnalyticsPage: React.FC = () => {
         </div>
 
         {/* Activités récentes */}
-        <div className="bg-white rounded-xl p-1 border border-gray-200 sm:p-2 lg:p-3">
+        <div className="bg-white rounded-xl p-4 sm:p-5 lg:p-6 border border-gray-200">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xl font-montserrat font-semibold">Activités Récentes</h3>
             <button className="flex items-center gap-2 text-violet-600 hover:text-violet-700 transition-colors">
@@ -427,11 +427,11 @@ const AnalyticsPage: React.FC = () => {
 
           <div className="space-y-4">
             {analyticsData.recentActivities.map((activity) => (
-              <div key={activity.id} className="flex items-center gap-4 p-1 border border-gray-500 rounded-lg hover:bg-gray-50 transition-colors sm:p-2 lg:p-3">
+              <div key={activity.id} className="flex items-center gap-4 p-4 sm:p-5 lg:p-6 border border-gray-500 rounded-lg hover:bg-gray-50 transition-colors">
                 <div className="flex-shrink-0">
                   {getActivityIcon(activity.type)}
                 </div>
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-0 space-y-2 sm:space-y-3">
                   <h4 className="text-sm font-medium text-gray-900 truncate">{activity.title}</h4>
                   <div className="flex items-center gap-2 mt-1">
                     <Calendar className="h-3 w-3 text-gray-400" />

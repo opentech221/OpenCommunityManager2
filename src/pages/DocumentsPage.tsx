@@ -266,7 +266,7 @@ const DocumentsPage: React.FC = () => {
     <div className="min-h-screen bg-purple-900 p-0">
       <div className="px-1 sm:px-2 lg:px-3 py-6">
       {/* Header décoré avec couleur orange */}
-      <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 border-l-4 border-orange-500 shadow-sm">
+      <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-4 sm:p-5 lg:p-6 border-l-4 border-orange-500 shadow-sm max-w-4xl mx-auto">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="flex-shrink-0">
@@ -286,7 +286,7 @@ const DocumentsPage: React.FC = () => {
             <span>Nouveau document</span>
           </button>
         </div>
-        <div className="mt-4">
+        <div className="mt-4 space-y-2 sm:space-y-3">
           <p className="text-gray-700 font-medium">
             Centralisez et organisez tous vos documents associatifs
           </p>
@@ -313,12 +313,12 @@ const DocumentsPage: React.FC = () => {
       )}
 
       {/* Tableau de bord des statistiques */}
-      <div className={`grid gap-4 mb-6 ${
+      <div className={`grid gap-4 mb-6 max-w-4xl mx-auto ${
         isMobile ? 'grid-cols-2' : 'grid-cols-2 lg:grid-cols-4'
       }`}>
         <button 
           className={`bg-white rounded-lg shadow hover:shadow-md transition-shadow border ${
-            isMobile ? 'p-2' : 'p-4'
+            isMobile ? 'p-2' : 'p-4 sm:p-5 lg:p-6'
           } ${filterType === 'all' ? 'ring-2 ring-purple-500 ring-offset-2' : ''}`} 
           onClick={() => setFilterType('all')} 
           aria-label="Afficher tous les documents"
@@ -329,7 +329,7 @@ const DocumentsPage: React.FC = () => {
         
         <button 
           className={`bg-white rounded-lg shadow hover:shadow-md transition-shadow border ${
-            isMobile ? 'p-2' : 'p-4'
+            isMobile ? 'p-2' : 'p-4 sm:p-5 lg:p-6'
           } ${filterType === DocumentTypeEnum.PV ? 'ring-2 ring-blue-500 ring-offset-2' : ''}`}
           onClick={() => setFilterType(filterType === DocumentTypeEnum.PV ? 'all' : DocumentTypeEnum.PV)}
         >
@@ -339,7 +339,7 @@ const DocumentsPage: React.FC = () => {
         
         <button 
           className={`bg-white rounded-lg shadow hover:shadow-md transition-shadow border ${
-            isMobile ? 'p-2' : 'p-4'
+            isMobile ? 'p-2' : 'p-4 sm:p-5 lg:p-6'
           } ${filterType === DocumentTypeEnum.FINANCIAL_REPORT ? 'ring-2 ring-green-500 ring-offset-2' : ''}`}
           onClick={() => setFilterType(filterType === DocumentTypeEnum.FINANCIAL_REPORT ? 'all' : DocumentTypeEnum.FINANCIAL_REPORT)}
         >
@@ -349,7 +349,7 @@ const DocumentsPage: React.FC = () => {
         
         <button 
           className={`bg-white rounded-lg shadow hover:shadow-md transition-shadow border ${
-            isMobile ? 'p-2' : 'p-4'
+            isMobile ? 'p-2' : 'p-4 sm:p-5 lg:p-6'
           } ${filterType === DocumentTypeEnum.STATUTES ? 'ring-2 ring-purple-500 ring-offset-2' : ''}`} 
           onClick={() => setFilterType(filterType === DocumentTypeEnum.STATUTES ? 'all' : DocumentTypeEnum.STATUTES)}
         >
@@ -359,7 +359,7 @@ const DocumentsPage: React.FC = () => {
       </div>
 
       {/* Liste des documents */}
-      <div className={`bg-white rounded-lg shadow ${isMobile ? 'p-2' : 'p-4'}`}>
+      <div className={`bg-white rounded-lg shadow max-w-4xl mx-auto ${isMobile ? 'p-2' : 'p-4 sm:p-5 lg:p-6'}`}>
         {/* Barre de recherche */}
         <div className={`relative mb-4 ${isMobile ? 'mb-3' : ''}`}>
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -402,10 +402,10 @@ const DocumentsPage: React.FC = () => {
           <>
           {isMobile ? (
             // Vue mobile - Liste de cartes
-            <div className="space-y-3">
+            <div className="space-y-3 max-w-3xl mx-auto">
               {filteredDocuments.map((document) => (
                 <div key={document.id} className="border border-gray-200 rounded-lg p-3 bg-gray-50">
-                  <div className="flex items-start justify-between">
+                  <div className="flex items-start justify-between space-y-2 sm:space-y-3">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center space-x-2 mb-2">
                         {getFileIcon(document.name)}
@@ -449,7 +449,7 @@ const DocumentsPage: React.FC = () => {
             </div>
           ) : (
             // Vue desktop - Tableau
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto max-w-5xl mx-auto">
               <table className="w-full">
                 <thead className="bg-gray-50 sticky top-0">
                   <tr>
@@ -535,8 +535,8 @@ const DocumentsPage: React.FC = () => {
 
       {/* Résumé en bas de page */}
       {localDocuments.length > 0 && (
-        <div className="bg-white rounded-lg shadow p-4 mt-4">
-          <div className="text-sm text-gray-600">
+        <div className="bg-white rounded-lg shadow p-4 sm:p-5 lg:p-6 mt-4 max-w-4xl mx-auto">
+          <div className="text-sm text-gray-600 space-y-2 sm:space-y-3">
             Affichage de {filteredDocuments.length} document{filteredDocuments.length > 1 ? 's' : ''} sur {totalDocuments} au total
             {filteredDocuments.length !== totalDocuments && (
               <span className="ml-2 text-blue-600">

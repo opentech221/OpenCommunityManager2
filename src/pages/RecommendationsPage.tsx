@@ -206,9 +206,9 @@ const RecommendationsPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-purple-900 p-4 sm:p-6 md:p-8 lg:p-10">
+    <div className="min-h-screen bg-purple-900 p-0">
       {/* En-tête Mobile-First */}
-      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-5 py-6 sm:px-6 sm:py-7 lg:px-8 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6 sm:mb-8">
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-1 py-6 sm:px-2 lg:px-3 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
         <div className="flex items-center space-x-2 sm:space-x-3">
           <button
             onClick={() => navigate('/guidance')}
@@ -243,9 +243,9 @@ const RecommendationsPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="px-4 sm:px-6 md:px-8 lg:px-10 max-w-7xl mx-auto">
+      <div className="px-1 sm:px-2 lg:px-3 py-6">
         {/* Statistiques - Mobile First avec 4 tickets-boutons de filtre */}
-        <div className="bg-white px-5 py-6 sm:px-6 sm:py-7 lg:px-8 mb-6 sm:mb-8 rounded-lg shadow-sm">
+        <div className="bg-white px-6 py-6 sm:px-6 sm:py-6 lg:px-6 mb-6 rounded-lg shadow-sm max-w-4xl mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
             <button
               onClick={() => {
@@ -344,7 +344,7 @@ const RecommendationsPage: React.FC = () => {
         </div>
 
         {/* Filtres */}
-        <div className="bg-white rounded-lg border border-gray-200 p-5 sm:p-6 mb-6 sm:mb-8">
+        <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-5 lg:p-6 mb-6 max-w-4xl mx-auto">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
             <Filter className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 w-full">
@@ -379,17 +379,17 @@ const RecommendationsPage: React.FC = () => {
         </div>
 
         {/* Liste des recommandations */}
-        <div className="space-y-5 sm:space-y-6">
+        <div className="space-y-6 max-w-4xl mx-auto">
           {filteredRecommendations.map((recommendation) => (
-            <div key={recommendation.id} className="bg-white rounded-lg border border-gray-200 p-6 sm:p-8">
-              <div className="flex flex-col sm:flex-row items-start justify-between mb-5 gap-4 sm:gap-5">
+            <div key={recommendation.id} className="bg-white rounded-xl p-4 sm:p-5 lg:p-6 border border-gray-200 shadow-lg max-w-3xl mx-auto">
+              <div className="flex flex-col sm:flex-row items-start justify-between mb-4 gap-4 sm:gap-5">
                 <div className="flex items-start gap-4 sm:gap-5 min-w-0 flex-1">
                   <span className="text-xl sm:text-2xl flex-shrink-0">{getCategoryIcon(recommendation.category)}</span>
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-3 leading-tight">
+                    <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2 leading-tight">
                       {recommendation.title}
                     </h3>
-                    <div className="flex flex-wrap items-center gap-2.5">
+                    <div className="flex flex-wrap items-center gap-2">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(recommendation.priority)}`}>
                         {getPriorityText(recommendation.priority)}
                       </span>
@@ -416,11 +416,11 @@ const RecommendationsPage: React.FC = () => {
                 </div>
               </div>
 
-              <p className="text-sm sm:text-base text-gray-600 mb-5 leading-relaxed">{recommendation.description}</p>
+              <p className="text-sm sm:text-base text-gray-600 mb-4 leading-relaxed">{recommendation.description}</p>
 
               {/* Barre de progression */}
-              <div className="mb-5">
-                <div className="flex justify-between items-center mb-3">
+              <div className="mb-4">
+                <div className="flex justify-between items-center mb-2">
                   <span className="text-xs sm:text-sm font-medium text-gray-700">Progression</span>
                   <span className="text-xs sm:text-sm text-gray-500 font-medium">{recommendation.progress}%</span>
                 </div>
@@ -434,16 +434,16 @@ const RecommendationsPage: React.FC = () => {
 
               {/* Actions */}
               {recommendation.status !== 'completed' && (
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
                   <button
                     onClick={() => updateProgress(recommendation.id, Math.min(100, recommendation.progress + 25))}
-                    className="bg-blue-600 text-white px-4 py-2.5 sm:py-2 rounded text-sm font-medium hover:bg-blue-700 transition-colors flex-1 sm:flex-initial"
+                    className="bg-blue-600 text-white px-3 py-2 rounded text-sm font-medium hover:bg-blue-700 transition-colors flex-1 sm:flex-initial"
                   >
                     +25%
                   </button>
                   <button
                     onClick={() => updateProgress(recommendation.id, 100)}
-                    className="bg-green-600 text-white px-4 py-2.5 sm:py-2 rounded text-sm font-medium hover:bg-green-700 transition-colors flex items-center justify-center gap-2 flex-1 sm:flex-initial"
+                    className="bg-green-600 text-white px-3 py-2 rounded text-sm font-medium hover:bg-green-700 transition-colors flex items-center justify-center gap-1 flex-1 sm:flex-initial"
                   >
                     <CheckCircle className="h-4 w-4" />
                     <span>Marquer terminée</span>
@@ -455,10 +455,10 @@ const RecommendationsPage: React.FC = () => {
         </div>
 
         {filteredRecommendations.length === 0 && (
-          <div className="bg-white rounded-xl p-12 sm:p-16 border border-gray-200 text-center">
-            <Lightbulb className="h-14 w-14 sm:h-18 sm:w-18 text-gray-400 mx-auto mb-5" />
-            <h3 className="text-lg sm:text-xl font-medium text-gray-900 mb-3">Aucune recommandation</h3>
-            <p className="text-sm sm:text-base text-gray-600 max-w-lg mx-auto leading-relaxed">
+          <div className="bg-white rounded-xl p-8 sm:p-10 lg:p-12 border border-gray-200 text-center max-w-3xl mx-auto">
+            <Lightbulb className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-xl font-medium text-gray-900 mb-2">Aucune recommandation</h3>
+            <p className="text-gray-600">
               {recommendations.length === 0 
                 ? "Lancez un diagnostic pour obtenir des recommandations personnalisées."
                 : "Aucune recommandation ne correspond aux filtres sélectionnés."
@@ -468,16 +468,16 @@ const RecommendationsPage: React.FC = () => {
         )}
 
         {/* Bouton flottant avec menu d'actions */}
-        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 floating-menu-container">
+        <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
           {/* Menu d'actions (visible quand showFloatingMenu est true) */}
           {showFloatingMenu && (
-            <div className="absolute bottom-14 sm:bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[180px] sm:min-w-[200px] animate-fadeIn">
+            <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] animate-fadeIn">
               <button
                 onClick={() => {
                   navigate('/guidance/diagnostic');
                   setShowFloatingMenu(false);
                 }}
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-left hover:bg-gray-50 flex items-center space-x-2 sm:space-x-3 text-sm"
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
               >
                 <TrendingUp className="h-4 w-4 text-blue-600" />
                 <span>Nouveau Diagnostic</span>
@@ -488,7 +488,7 @@ const RecommendationsPage: React.FC = () => {
                   navigate('/guidance/action-plan');
                   setShowFloatingMenu(false);
                 }}
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-left hover:bg-gray-50 flex items-center space-x-2 sm:space-x-3 text-sm"
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
               >
                 <Target className="h-4 w-4 text-orange-600" />
                 <span>Plan d'Action</span>
@@ -499,7 +499,7 @@ const RecommendationsPage: React.FC = () => {
                   navigate('/guidance/compliance');
                   setShowFloatingMenu(false);
                 }}
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-left hover:bg-gray-50 flex items-center space-x-2 sm:space-x-3 text-sm"
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
               >
                 <CheckCircle className="h-4 w-4 text-green-600" />
                 <span>État Conformité</span>
@@ -513,7 +513,7 @@ const RecommendationsPage: React.FC = () => {
                   console.log('Export des recommandations');
                   setShowFloatingMenu(false);
                 }}
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-left hover:bg-gray-50 flex items-center space-x-2 sm:space-x-3 text-sm"
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
               >
                 <Download className="h-4 w-4 text-purple-600" />
                 <span>Exporter PDF</span>
@@ -524,13 +524,13 @@ const RecommendationsPage: React.FC = () => {
           {/* Bouton principal flottant */}
           <button
             onClick={() => setShowFloatingMenu(!showFloatingMenu)}
-            className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
+            className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
               showFloatingMenu 
                 ? 'bg-gray-600 hover:bg-gray-700 transform rotate-45' 
                 : 'bg-orange-500 hover:bg-orange-600 hover:scale-110'
             }`}
           >
-            <Plus className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+            <Plus className="h-6 w-6 text-white" />
           </button>
         </div>
       </div>
