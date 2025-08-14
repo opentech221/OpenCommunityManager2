@@ -361,42 +361,55 @@ def get_document_templates():
 @guidance_bp.route('/ai/query', methods=['POST'])
 @jwt_required()
 def ai_query():
-    """Soumettre une requête à l'assistant IA"""
+    """Soumettre une requête à l'assistant IA avec Ollama"""
     try:
+        from app.services.ollama_service import OllamaService
+        
         association_id = get_jwt_identity()
         data = request.get_json()
         
         if 'query' not in data:
             return jsonify({'error': 'Champ query manquant'}), 400
         
-        # TODO: Intégrer service IA externe (OpenAI, Claude, etc.)
-        # Pour l'instant, réponse simulée
-        response_text = f"Réponse simulée pour: {data['query']}"
-        suggestions = ["Suggestion 1", "Suggestion 2"]
+        # Initialiser le service Ollama
+        ollama_service = OllamaService()
         
-        # Enregistrer la requête
+        # Contexte enrichi pour l'IA
+        context = data.get('context', {})
+        context['associationId'] = association_id
+        
+        # Générer la réponse IA
+        ai_result = ollama_service.generate_response(
+            query=data['query'],
+            context=context,
+            model=data.get('model', 'llama2')
+        )
+        
+        # Enregistrer la requête et la réponse
         ai_query_record = AIQuery(
             id=str(uuid.uuid4()),
             association_id=association_id,
             diagnostic_id=data.get('diagnostic_id'),
             query=data['query'],
-            context=data.get('context', {}),
-            response=response_text,
-            suggestions=suggestions,
-            related_resources=[],
-            follow_up_questions=[],
-            confidence=0.8
+            context=context,
+            response=ai_result['response'],
+            suggestions=ai_result['suggestions'],
+            related_resources=ai_result['related_resources'],
+            follow_up_questions=ai_result['follow_up_questions'],
+            confidence=ai_result['confidence']
         )
         
         db.session.add(ai_query_record)
         db.session.commit()
         
         return jsonify({
-            'response': response_text,
-            'suggestions': suggestions,
-            'related_resources': [],
-            'follow_up_questions': [],
-            'confidence': 0.8
+            'response': ai_result['response'],
+            'suggestions': ai_result['suggestions'],
+            'related_resources': ai_result['related_resources'],
+            'follow_up_questions': ai_result['follow_up_questions'],
+            'confidence': ai_result['confidence'],
+            'model_used': ai_result.get('model_used', 'llama2'),
+            'timestamp': ai_result.get('timestamp')
         }), 200
         
     except Exception as e:

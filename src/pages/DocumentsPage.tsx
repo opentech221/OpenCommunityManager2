@@ -9,8 +9,7 @@ import {
   Plus,
   FileText,
   FileSpreadsheet,
-  FileImage,
-  Share
+  FileImage
 } from 'lucide-react';
 import { DocumentTypeEnum, type DocumentType } from '../types';
 import { formatDate } from '../utils';
@@ -21,19 +20,6 @@ import {
 } from '../components';
 
 const DocumentsPage: React.FC = () => {
-  // Détection mobile
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
   // États locaux
   const [search, setSearch] = useState('');
   const [filterType, setFilterType] = useState<DocumentTypeEnum | 'all'>('all');
@@ -263,202 +249,351 @@ const DocumentsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-purple-900 p-0">
-      <div className="px-1 sm:px-2 lg:px-3 py-6">
-      {/* Header décoré avec couleur orange */}
-      <div className="mb-6 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-4 sm:p-5 lg:p-6 border-l-4 border-orange-500 shadow-sm">
-        <div className="flex items-center justify-between flex-wrap gap-3">
-          <div className="flex items-center space-x-3 min-w-0 flex-1">
+      {/* En-tête identique à la page Diagnostics */}
+      <div className="bg-gradient-to-r from-orange-50 to-orange-100 px-1 py-6 sm:px-2 lg:px-3 border-l-4 border-orange-500 rounded-lg shadow-sm mb-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
             <div className="flex-shrink-0">
               <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
                 <FileText className="h-6 w-6 text-white" />
               </div>
             </div>
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-orange-500 truncate">
-              Gestion des Documents
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-500">
+              Documents
             </h1>
           </div>
           <button 
             onClick={openAddModal}
-            className="bg-orange-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center space-x-2 flex-shrink-0"
+            className="bg-orange-500 text-white px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-orange-600 transition-colors flex items-center space-x-2 text-sm sm:text-base"
           >
-            <Upload className="w-4 h-4 sm:w-5 sm:h-5" />
+            <Upload className="h-4 w-4" />
             <span className="hidden sm:inline">Nouveau document</span>
             <span className="sm:hidden">Nouveau</span>
           </button>
         </div>
-        <div className="mt-4 space-y-2 sm:space-y-3">
-          <p className="text-gray-700 font-medium">
-            Centralisez et organisez tous vos documents associatifs
+        <div className="mt-4 hidden md:block">
+          <p className="text-sm sm:text-base text-gray-700 font-medium">
+            Centralisez et organisez vos documents administratifs
           </p>
-          <div className="text-sm text-gray-600 space-y-1 mt-2">
+          <div className="text-xs text-gray-600 space-y-1 mt-2">
             <p className="flex items-center">
               <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-              <strong>Stockage sécurisé :</strong> Vos documents protégés et toujours accessibles
+              <strong>Gestion centralisée :</strong> Tous vos documents importants en un seul endroit
             </p>
             <p className="flex items-center">
               <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
-              <strong>Organisation intelligente :</strong> Classement par type et recherche avancée
+              <strong>Organisation intelligente :</strong> Classement automatique par type et recherche avancée
             </p>
           </div>
         </div>
       </div>
 
+      <div className="px-1 sm:px-2 lg:px-3 py-6">
+
       {/* Message de feedback */}
       {feedback && (
-        <div className={`mb-4 p-3 rounded-lg ${
+        <div className={`mb-1 sm:mb-2 p-1 sm:p-2 rounded-lg text-xs sm:text-sm ${
           feedback.includes('succès') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
         }`}>
           {feedback}
         </div>
       )}
 
-      {/* Tableau de bord des statistiques */}
-      <div className={`grid gap-4 mb-6 ${
-        isMobile ? 'grid-cols-2' : 'grid-cols-2 lg:grid-cols-4'
-      }`}>
-        <button 
-          className={`bg-white rounded-lg shadow hover:shadow-md transition-shadow border ${
-            isMobile ? 'p-2' : 'p-4 sm:p-5 lg:p-6'
-          } ${filterType === 'all' ? 'ring-2 ring-purple-500 ring-offset-2' : ''}`} 
-          onClick={() => setFilterType('all')} 
-          aria-label="Afficher tous les documents"
-        >
-          <div className={`font-bold text-purple-600 ${isMobile ? 'text-lg' : 'text-2xl'}`}>{totalDocuments}</div>
-          <div className={`text-purple-600 ${isMobile ? 'text-xs' : 'text-sm'}`}>Total</div>
-        </button>
-        
-        <button 
-          className={`bg-white rounded-lg shadow hover:shadow-md transition-shadow border ${
-            isMobile ? 'p-2' : 'p-4 sm:p-5 lg:p-6'
-          } ${filterType === DocumentTypeEnum.PV ? 'ring-2 ring-blue-500 ring-offset-2' : ''}`}
-          onClick={() => setFilterType(filterType === DocumentTypeEnum.PV ? 'all' : DocumentTypeEnum.PV)}
-        >
-          <div className={`font-bold text-blue-600 ${isMobile ? 'text-lg' : 'text-2xl'}`}>{pvCount}</div>
-          <div className={`text-blue-600 ${isMobile ? 'text-xs' : 'text-sm'}`}>PV</div>
-        </button>
-        
-        <button 
-          className={`bg-white rounded-lg shadow hover:shadow-md transition-shadow border ${
-            isMobile ? 'p-2' : 'p-4 sm:p-5 lg:p-6'
-          } ${filterType === DocumentTypeEnum.FINANCIAL_REPORT ? 'ring-2 ring-green-500 ring-offset-2' : ''}`}
-          onClick={() => setFilterType(filterType === DocumentTypeEnum.FINANCIAL_REPORT ? 'all' : DocumentTypeEnum.FINANCIAL_REPORT)}
-        >
-          <div className={`font-bold text-green-600 ${isMobile ? 'text-lg' : 'text-2xl'}`}>{financialReportCount}</div>
-          <div className={`text-green-600 ${isMobile ? 'text-xs' : 'text-sm'}`}>Financiers</div>
-        </button>
-        
-        <button 
-          className={`bg-white rounded-lg shadow hover:shadow-md transition-shadow border ${
-            isMobile ? 'p-2' : 'p-4 sm:p-5 lg:p-6'
-          } ${filterType === DocumentTypeEnum.STATUTES ? 'ring-2 ring-purple-500 ring-offset-2' : ''}`} 
-          onClick={() => setFilterType(filterType === DocumentTypeEnum.STATUTES ? 'all' : DocumentTypeEnum.STATUTES)}
-        >
-          <div className={`font-bold text-purple-600 ${isMobile ? 'text-lg' : 'text-2xl'}`}>{statutesCount}</div>
-          <div className={`text-purple-600 ${isMobile ? 'text-xs' : 'text-sm'}`}>Statuts</div>
-        </button>
+      {/* Vue d'ensemble - Style identique à Diagnostics */}
+      <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-lg mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Total des documents */}
+          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50 p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-violet-500">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-violet-500/10 to-purple-500/10 rounded-full -mr-10 -mt-10"></div>
+            <div className="relative">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-800">Total Documents</h3>
+                <div className="w-10 h-10 bg-violet-100 rounded-full flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-violet-600" />
+                </div>
+              </div>
+              <div className="flex items-baseline space-x-2">
+                <div className="text-4xl font-bold text-violet-600">
+                  {totalDocuments}
+                </div>
+                <div className="text-xl text-violet-500 font-medium">docs</div>
+              </div>
+              <div className="text-sm text-gray-600 mt-1">Documents stockés</div>
+              <div className="mt-4 w-full bg-gray-200 rounded-full h-2">
+                <div 
+                  className="bg-gradient-to-r from-violet-500 to-purple-500 h-2 rounded-full transition-all duration-1000" 
+                  style={{ width: `${Math.min(100, (totalDocuments / 50) * 100)}%` }}
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Types de documents */}
+          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-orange-500">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-orange-500/10 to-amber-500/10 rounded-full -mr-10 -mt-10"></div>
+            <div className="relative">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-800">Répartition</h3>
+                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                  <FileSpreadsheet className="w-5 h-5 text-orange-600" />
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-700">PV</span>
+                  <span className="text-lg font-bold text-orange-600">{pvCount}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-700">Finance</span>
+                  <span className="text-lg font-bold text-orange-600">{financialReportCount}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-700">Statuts</span>
+                  <span className="text-lg font-bold text-orange-600">{statutesCount}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Dernière activité */}
+          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-emerald-500">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-full -mr-10 -mt-10"></div>
+            <div className="relative">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-800">Dernier ajout</h3>
+                <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
+                  <Upload className="w-5 h-5 text-emerald-600" />
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="bg-white/60 backdrop-blur-sm rounded-lg p-3 border border-emerald-100">
+                  <div className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">Document</div>
+                  <div className="text-sm font-semibold text-gray-800 truncate">
+                    {localDocuments.length > 0 ? localDocuments[localDocuments.length - 1].name : 'Aucun document'}
+                  </div>
+                </div>
+                <div className="bg-white/60 backdrop-blur-sm rounded-lg p-3 border border-emerald-100">
+                  <div className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">Ajouté le</div>
+                  <div className="text-sm font-medium text-emerald-700">
+                    {localDocuments.length > 0 ? formatDate(localDocuments[localDocuments.length - 1].uploadDate) : 'N/A'}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Filtres par type - Style identique à Diagnostics */}
+      <div className="bg-white rounded-xl p-6 border border-gray-200 mb-6">
+        <h3 className="text-xl font-montserrat font-semibold mb-6">Filtres par Type</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <button 
+            className={`space-y-3 p-4 rounded-xl border-2 transition-all duration-300 hover:shadow-md ${
+              filterType === 'all' 
+                ? 'border-purple-500 bg-purple-50 shadow-md' 
+                : 'border-gray-200 hover:border-purple-300'
+            }`} 
+            onClick={() => setFilterType('all')} 
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">📚</span>
+              <div className="flex-1">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="font-medium text-gray-900">Tous</span>
+                  <span className="font-semibold text-purple-600">{totalDocuments}</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-gradient-to-r from-purple-600 to-violet-500 h-2 rounded-full transition-all duration-500" 
+                    style={{ width: '100%' }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </button>
+
+          <button 
+            className={`space-y-3 p-4 rounded-xl border-2 transition-all duration-300 hover:shadow-md ${
+              filterType === DocumentTypeEnum.PV 
+                ? 'border-blue-500 bg-blue-50 shadow-md' 
+                : 'border-gray-200 hover:border-blue-300'
+            }`}
+            onClick={() => setFilterType(filterType === DocumentTypeEnum.PV ? 'all' : DocumentTypeEnum.PV)}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">📝</span>
+              <div className="flex-1">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="font-medium text-gray-900">Procès-verbaux</span>
+                  <span className="font-semibold text-blue-600">{pvCount}</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-gradient-to-r from-blue-600 to-blue-400 h-2 rounded-full transition-all duration-500" 
+                    style={{ width: `${totalDocuments > 0 ? (pvCount / totalDocuments) * 100 : 0}%` }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </button>
+
+          <button 
+            className={`space-y-3 p-4 rounded-xl border-2 transition-all duration-300 hover:shadow-md ${
+              filterType === DocumentTypeEnum.FINANCIAL_REPORT 
+                ? 'border-green-500 bg-green-50 shadow-md' 
+                : 'border-gray-200 hover:border-green-300'
+            }`}
+            onClick={() => setFilterType(filterType === DocumentTypeEnum.FINANCIAL_REPORT ? 'all' : DocumentTypeEnum.FINANCIAL_REPORT)}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">💰</span>
+              <div className="flex-1">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="font-medium text-gray-900">Finances</span>
+                  <span className="font-semibold text-green-600">{financialReportCount}</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-gradient-to-r from-green-600 to-green-400 h-2 rounded-full transition-all duration-500" 
+                    style={{ width: `${totalDocuments > 0 ? (financialReportCount / totalDocuments) * 100 : 0}%` }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </button>
+
+          <button 
+            className={`space-y-3 p-4 rounded-xl border-2 transition-all duration-300 hover:shadow-md ${
+              filterType === DocumentTypeEnum.STATUTES 
+                ? 'border-purple-500 bg-purple-50 shadow-md' 
+                : 'border-gray-200 hover:border-purple-300'
+            }`} 
+            onClick={() => setFilterType(filterType === DocumentTypeEnum.STATUTES ? 'all' : DocumentTypeEnum.STATUTES)}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">⚖️</span>
+              <div className="flex-1">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="font-medium text-gray-900">Statuts</span>
+                  <span className="font-semibold text-purple-600">{statutesCount}</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-gradient-to-r from-purple-600 to-violet-500 h-2 rounded-full transition-all duration-500" 
+                    style={{ width: `${totalDocuments > 0 ? (statutesCount / totalDocuments) * 100 : 0}%` }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </button>
+        </div>
       </div>
 
       {/* Liste des documents */}
-      <div className={`bg-white rounded-lg shadow ${isMobile ? 'p-2' : 'p-4 sm:p-5 lg:p-6'}`}>
+      <div className="bg-white rounded-xl p-6 border border-gray-200">
         {/* Barre de recherche */}
-        <div className={`relative mb-4 ${isMobile ? 'mb-3' : ''}`}>
+        <div className="relative mb-4">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className={`text-gray-400 ${isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
+            <Search className="h-3 w-3 sm:h-4 sm:w-4 text-gray-400" />
           </div>
           <input
             type="text"
-            placeholder={isMobile ? 'Rechercher...' : 'Rechercher un document...'}
+            placeholder="Rechercher..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className={`block flex-1 w-full border border-gray-300 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
-              isMobile ? 'pl-8 pr-2 py-2 text-sm' : 'pl-10 pr-3 py-2 text-sm sm:text-base'
-            }`}
+            className="block w-full border border-gray-300 bg-gray-50 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-transparent pl-6 sm:pl-8 pr-1 sm:pr-2 py-1 sm:py-1.5 text-xs sm:text-sm"
           />
         </div>
 
         {localDocuments.length === 0 ? (
-          <div className={`text-center ${isMobile ? 'py-6' : 'py-8'}`}>
-            <div className="text-gray-400 mb-4">
-              <FileText className={`mx-auto mb-4 ${isMobile ? 'w-12 h-12' : 'w-16 h-16'}`} />
+          <div className="text-center py-4 sm:py-6">
+            <div className="text-gray-400 mb-2 sm:mb-4">
+              <FileText className="mx-auto mb-2 sm:mb-4 w-8 h-8 sm:w-12 sm:h-12" />
             </div>
-            <p className={`font-medium text-gray-900 mb-2 ${isMobile ? 'text-base' : 'text-lg'}`}>Aucun document enregistré</p>
-            <p className={`text-gray-500 mb-4 ${isMobile ? 'text-sm' : ''}`}>
-              {isMobile ? 'Ajoutez votre premier document' : 'Commencez par télécharger votre premier document'}
+            <p className="text-sm sm:text-base font-medium text-gray-900 mb-1 sm:mb-2">Aucun document</p>
+            <p className="text-xs sm:text-sm text-gray-500 mb-2 sm:mb-4">
+              Ajoutez votre premier document
             </p>
             <button 
               onClick={openAddModal}
-              className={`bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 transition-colors ${
-                isMobile ? 'px-4 py-2 text-sm' : 'px-6 py-3'
-              }`}
+              className="bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 transition-colors px-3 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm"
             >
-              {isMobile ? 'Ajouter' : 'Télécharger un document'}
+              Ajouter
             </button>
           </div>
         ) : filteredDocuments.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-gray-500">Aucun document trouvé pour votre recherche</p>
+          <div className="text-center py-4 sm:py-6">
+            <p className="text-gray-500 text-xs sm:text-sm">Aucun document trouvé</p>
           </div>
         ) : (
           <>
-          {isMobile ? (
-            // Vue mobile - Liste de cartes
-            <div className="space-y-3">
+          {/* Vue mobile et desktop unifiée */}
+          <div className="block sm:hidden">
+            {/* Vue mobile - Liste de cartes */}
+            <div className="space-y-1 sm:space-y-2">
               {filteredDocuments.map((document) => (
-                <div key={document.id} className="border border-gray-200 rounded-lg p-3 bg-gray-50">
-                  <div className="flex items-start justify-between space-y-2 sm:space-y-3">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-2 mb-2">
+                <div key={document.id} className="border border-gray-200 rounded-lg p-1 sm:p-2 bg-gray-50">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1 min-w-0 pr-1">
+                      <div className="flex items-center space-x-1 mb-1">
                         {getFileIcon(document.name)}
-                        <div className="font-medium text-gray-900 text-sm truncate">{document.name}</div>
+                        <div className="font-medium text-gray-900 text-xs truncate">{document.name}</div>
                       </div>
-                    <div className="flex items-center space-x-4 text-xs text-gray-500 overflow-hidden">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${getTypeBadgeColor(document.type)}`}>
-                          {getTypeLabel(document.type)}
-                        </span>
-                        <span className="flex-shrink-0">{formatFileSize(document.size)}</span>
-                        <span className="truncate">{formatDate(document.uploadDate)}</span>
+                      <div className="flex flex-col space-y-0.5 text-xs text-gray-500">
+                        <div className="flex items-center space-x-1">
+                          <span className={`inline-flex items-center px-1 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${getTypeBadgeColor(document.type)}`}>
+                            {getTypeLabel(document.type)}
+                          </span>
+                          <span className="flex-shrink-0 text-xs">{formatFileSize(document.size)}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="truncate text-xs">Par {document.uploadedBy}</span>
+                          <span className="flex-shrink-0 ml-1 text-xs">{formatDate(document.uploadDate)}</span>
+                        </div>
                       </div>
-                      <div className="text-xs text-gray-400 mt-1 truncate">Par {document.uploadedBy}</div>
                     </div>
-                    <div className="flex space-x-1 ml-2 flex-shrink-0">
+                    <div className="flex space-x-0.5 ml-1 flex-shrink-0">
                       <button 
-                        className="inline-flex items-center justify-center w-8 h-8 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-full transition-colors" 
+                        className="inline-flex items-center justify-center w-6 h-6 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-full transition-colors" 
                         onClick={() => openDetailModal(document)} 
                         aria-label="Voir détails"
                       >
-                        <Eye size={14} />
+                        <Eye size={10} />
                       </button>
                       <button 
-                        className="inline-flex items-center justify-center w-8 h-8 text-orange-500 hover:text-orange-700 hover:bg-orange-50 rounded-full transition-colors" 
+                        className="inline-flex items-center justify-center w-6 h-6 text-orange-500 hover:text-orange-700 hover:bg-orange-50 rounded-full transition-colors" 
                         onClick={() => openEditModal(document)}
                         aria-label="Modifier"
                       >
-                        <Edit size={14} />
+                        <Edit size={10} />
                       </button>
                       <button 
-                        className="inline-flex items-center justify-center w-8 h-8 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors" 
+                        className="inline-flex items-center justify-center w-6 h-6 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors" 
                         onClick={() => handleDeleteDocument(document.id)}
                         aria-label="Supprimer"
                       >
-                        <Trash2 size={14} />
+                        <Trash2 size={10} />
                       </button>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-          ) : (
-            // Vue desktop - Tableau
+          </div>
+          
+          <div className="hidden sm:block">
+            {/* Vue desktop - Tableau */}
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50 sticky top-0">
                   <tr>
-                    <th className="text-left p-3 font-medium text-gray-700">Document</th>
-                    <th className="text-left p-3 font-medium text-gray-700">Type</th>
-                    <th className="text-left p-3 font-medium text-gray-700">Taille</th>
-                    <th className="text-left p-3 font-medium text-gray-700">Auteur</th>
-                    <th className="text-left p-3 font-medium text-gray-700">Date</th>
-                    <th className="text-left p-3 font-medium text-gray-700">Actions</th>
+                    <th className="text-left p-3 font-medium text-gray-700 text-sm">Document</th>
+                    <th className="text-left p-3 font-medium text-gray-700 text-sm">Type</th>
+                    <th className="text-left p-3 font-medium text-gray-700 text-sm">Taille</th>
+                    <th className="text-left p-3 font-medium text-gray-700 text-sm">Auteur</th>
+                    <th className="text-left p-3 font-medium text-gray-700 text-sm">Date</th>
+                    <th className="text-left p-3 font-medium text-gray-700 text-sm">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -468,8 +603,8 @@ const DocumentsPage: React.FC = () => {
                       <div className="flex items-center space-x-3">
                         {getFileIcon(document.name)}
                         <div>
-                          <div className="font-medium text-gray-900">{document.name}</div>
-                          <div className="text-sm text-gray-500">{formatFileSize(document.size)}</div>
+                          <div className="font-medium text-gray-900 text-sm">{document.name}</div>
+                          <div className="text-xs text-gray-500">{formatFileSize(document.size)}</div>
                         </div>
                       </div>
                     </td>
@@ -528,20 +663,18 @@ const DocumentsPage: React.FC = () => {
               </tbody>
             </table>
             </div>
-          )}
+          </div>
           </>
         )}
       </div>
 
       {/* Résumé en bas de page */}
       {localDocuments.length > 0 && (
-        <div className="bg-white rounded-lg shadow p-4 sm:p-5 lg:p-6 mt-4">
-          <div className="text-sm text-gray-600 space-y-2 sm:space-y-3">
-            Affichage de {filteredDocuments.length} document{filteredDocuments.length > 1 ? 's' : ''} sur {totalDocuments} au total
+        <div className="bg-white rounded-lg shadow p-1 sm:p-2 lg:p-3 mt-1 sm:mt-2">
+          <div className="text-xs sm:text-sm text-gray-600">
+            {filteredDocuments.length}/{totalDocuments} documents
             {filteredDocuments.length !== totalDocuments && (
-              <span className="ml-2 text-blue-600">
-                • Filtres actifs
-              </span>
+              <span className="ml-1 text-blue-600">• Filtrés</span>
             )}
           </div>
         </div>
@@ -570,15 +703,15 @@ const DocumentsPage: React.FC = () => {
       />
 
       {/* Bouton flottant avec menu d'actions */}
-      <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
+      <div className="fixed bottom-3 right-3 sm:bottom-4 sm:right-4 lg:bottom-6 lg:right-6 z-50 floating-menu-container">
         {/* Menu d'actions (visible quand showFloatingMenu est true) */}
         {showFloatingMenu && (
-          <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] animate-fadeIn">
+          <div className="absolute bottom-10 right-0 sm:bottom-12 lg:bottom-16 bg-white rounded-lg shadow-lg border border-gray-200 py-1 sm:py-2 min-w-[160px] sm:min-w-[180px] lg:min-w-[200px] animate-fadeIn">
             <button
               onClick={openAddModal}
-              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              className="w-full px-2 py-1 sm:px-3 sm:py-2 text-left hover:bg-gray-50 flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm"
             >
-              <Upload className="h-4 w-4 text-orange-600" />
+              <Upload className="h-3 w-3 sm:h-4 sm:w-4 text-orange-600 flex-shrink-0" />
               <span>Nouveau Document</span>
             </button>
             
@@ -588,24 +721,10 @@ const DocumentsPage: React.FC = () => {
                 console.log('Export des documents');
                 setShowFloatingMenu(false);
               }}
-              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
+              className="w-full px-2 py-1 sm:px-3 sm:py-2 text-left hover:bg-gray-50 flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm"
             >
-              <Download className="h-4 w-4 text-green-600" />
-              <span>Exporter la liste</span>
-            </button>
-            
-            <div className="border-t border-gray-100 my-1"></div>
-            
-            <button
-              onClick={() => {
-                // Fonction de partage à implémenter
-                console.log('Partage des documents');
-                setShowFloatingMenu(false);
-              }}
-              className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 text-sm"
-            >
-              <Share className="h-4 w-4 text-blue-600" />
-              <span>Partager</span>
+              <Download className="h-3 w-3 sm:h-4 sm:w-4 text-green-600 flex-shrink-0" />
+              <span>Exporter</span>
             </button>
           </div>
         )}
@@ -613,13 +732,13 @@ const DocumentsPage: React.FC = () => {
         {/* Bouton principal flottant */}
         <button
           onClick={() => setShowFloatingMenu(!showFloatingMenu)}
-          className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
+          className={`w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
             showFloatingMenu 
               ? 'bg-gray-600 hover:bg-gray-700 transform rotate-45' 
               : 'bg-orange-500 hover:bg-orange-600 hover:scale-110'
           }`}
         >
-          <Plus className="h-6 w-6 text-white" />
+          <Plus className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-white" />
         </button>
       </div>
       </div>

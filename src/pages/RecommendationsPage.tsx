@@ -243,9 +243,10 @@ const RecommendationsPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="px-1 sm:px-2 lg:px-3 py-6">
+      {/* Contenu principal */}
+      <div className="px-1 sm:px-2 lg:px-3">
         {/* Statistiques - Mobile First avec 4 tickets-boutons de filtre */}
-        <div className="bg-white px-6 py-6 sm:px-6 sm:py-6 lg:px-6 mb-6 rounded-lg shadow-sm max-w-4xl mx-auto">
+        <div className="bg-white px-6 py-6 sm:px-6 sm:py-6 lg:px-6 mb-6 rounded-lg shadow-sm">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
             <button
               onClick={() => {
@@ -344,7 +345,7 @@ const RecommendationsPage: React.FC = () => {
         </div>
 
         {/* Filtres */}
-        <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-5 lg:p-6 mb-6 max-w-4xl mx-auto">
+        <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-5 lg:p-6 mb-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
             <Filter className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 w-full">
@@ -379,9 +380,9 @@ const RecommendationsPage: React.FC = () => {
         </div>
 
         {/* Liste des recommandations */}
-        <div className="space-y-6 max-w-4xl mx-auto">
+        <div className="space-y-6">
           {filteredRecommendations.map((recommendation) => (
-            <div key={recommendation.id} className="bg-white rounded-xl p-4 sm:p-5 lg:p-6 border border-gray-200 shadow-lg max-w-3xl mx-auto">
+            <div key={recommendation.id} className="bg-white rounded-xl p-4 sm:p-5 lg:p-6 border border-gray-200 shadow-lg">
               <div className="flex flex-col sm:flex-row items-start justify-between mb-4 gap-4 sm:gap-5">
                 <div className="flex items-start gap-4 sm:gap-5 min-w-0 flex-1">
                   <span className="text-xl sm:text-2xl flex-shrink-0">{getCategoryIcon(recommendation.category)}</span>
@@ -455,7 +456,7 @@ const RecommendationsPage: React.FC = () => {
         </div>
 
         {filteredRecommendations.length === 0 && (
-          <div className="bg-white rounded-xl p-8 sm:p-10 lg:p-12 border border-gray-200 text-center max-w-3xl mx-auto">
+          <div className="bg-white rounded-xl p-8 sm:p-10 lg:p-12 border border-gray-200 text-center">
             <Lightbulb className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-medium text-gray-900 mb-2">Aucune recommandation</h3>
             <p className="text-gray-600">
@@ -466,9 +467,10 @@ const RecommendationsPage: React.FC = () => {
             </p>
           </div>
         )}
+      </div>
 
-        {/* Bouton flottant avec menu d'actions */}
-        <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
+      {/* Bouton flottant avec menu d'actions */}
+      <div className="fixed bottom-6 right-6 z-50 floating-menu-container">
           {/* Menu d'actions (visible quand showFloatingMenu est true) */}
           {showFloatingMenu && (
             <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[200px] animate-fadeIn">
@@ -521,7 +523,6 @@ const RecommendationsPage: React.FC = () => {
             </div>
           )}
 
-          {/* Bouton principal flottant */}
           <button
             onClick={() => setShowFloatingMenu(!showFloatingMenu)}
             className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center ${
@@ -533,7 +534,6 @@ const RecommendationsPage: React.FC = () => {
             <Plus className="h-6 w-6 text-white" />
           </button>
         </div>
-      </div>
     </div>
   );
 };
