@@ -99,6 +99,18 @@ const DocumentsPage: React.FC = () => {
   const pvCount = localDocuments.filter(d => d.type === DocumentTypeEnum.PV).length;
   const financialReportCount = localDocuments.filter(d => d.type === DocumentTypeEnum.FINANCIAL_REPORT).length;
   const statutesCount = localDocuments.filter(d => d.type === DocumentTypeEnum.STATUTES).length;
+  const otherCount = localDocuments.filter(d => d.type === DocumentTypeEnum.OTHER).length;
+  
+  // Calculs de taille
+  const totalSize = localDocuments.reduce((sum, doc) => sum + doc.size, 0);
+  const averageSize = totalDocuments > 0 ? totalSize / totalDocuments : 0;
+  const largestDocument = localDocuments.reduce((max, doc) => doc.size > max.size ? doc : max, localDocuments[0] || { size: 0 });
+  
+  // Tailles par type
+  const pvTotalSize = localDocuments.filter(d => d.type === DocumentTypeEnum.PV).reduce((sum, doc) => sum + doc.size, 0);
+  const financeTotalSize = localDocuments.filter(d => d.type === DocumentTypeEnum.FINANCIAL_REPORT).reduce((sum, doc) => sum + doc.size, 0);
+  const statutesTotalSize = localDocuments.filter(d => d.type === DocumentTypeEnum.STATUTES).reduce((sum, doc) => sum + doc.size, 0);
+  const otherTotalSize = localDocuments.filter(d => d.type === DocumentTypeEnum.OTHER).reduce((sum, doc) => sum + doc.size, 0);
 
   // Documents filtrés
   const filteredDocuments = localDocuments.filter(doc => {
@@ -299,9 +311,12 @@ const DocumentsPage: React.FC = () => {
         </div>
       )}
 
-      {/* Vue d'ensemble - Style identique à Diagnostics */}
+      {/* Vue d'ensemble complète - avec informations de taille */}
       <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-lg mb-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <h3 className="text-xl font-montserrat font-semibold mb-6">Vue d'ensemble des Documents</h3>
+        
+        {/* Première rangée - Statistiques principales */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
           {/* Total des documents */}
           <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50 p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-violet-500">
             <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-violet-500/10 to-purple-500/10 rounded-full -mr-10 -mt-10"></div>
@@ -328,28 +343,53 @@ const DocumentsPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Types de documents */}
+          {/* Taille totale */}
+          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-blue-500">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-full -mr-10 -mt-10"></div>
+            <div className="relative">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-800">Espace Total</h3>
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <FileSpreadsheet className="w-5 h-5 text-blue-600" />
+                </div>
+              </div>
+              <div className="flex items-baseline space-x-2">
+                <div className="text-3xl font-bold text-blue-600">
+                  {formatFileSize(totalSize)}
+                </div>
+              </div>
+              <div className="text-sm text-gray-600 mt-1">Stockage utilisé</div>
+              <div className="text-xs text-blue-600 mt-2">
+                Moyenne: {formatFileSize(averageSize)}
+              </div>
+              <div className="mt-4 w-full bg-gray-200 rounded-full h-2">
+                <div 
+                  className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full transition-all duration-1000" 
+                  style={{ width: `${Math.min(100, (totalSize / 10485760) * 100)}%` }}
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Plus gros document */}
           <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-orange-500">
             <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-orange-500/10 to-amber-500/10 rounded-full -mr-10 -mt-10"></div>
             <div className="relative">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Répartition</h3>
+                <h3 className="text-lg font-semibold text-gray-800">Plus Volumineux</h3>
                 <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-                  <FileSpreadsheet className="w-5 h-5 text-orange-600" />
+                  <Upload className="w-5 h-5 text-orange-600" />
                 </div>
               </div>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-700">PV</span>
-                  <span className="text-lg font-bold text-orange-600">{pvCount}</span>
+              <div className="space-y-2">
+                <div className="text-2xl font-bold text-orange-600">
+                  {largestDocument ? formatFileSize(largestDocument.size) : '0 KB'}
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-700">Finance</span>
-                  <span className="text-lg font-bold text-orange-600">{financialReportCount}</span>
+                <div className="text-sm text-gray-600 truncate">
+                  {largestDocument ? largestDocument.name : 'Aucun document'}
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-700">Statuts</span>
-                  <span className="text-lg font-bold text-orange-600">{statutesCount}</span>
+                <div className="text-xs text-orange-600">
+                  {largestDocument ? getTypeLabel(largestDocument.type) : ''}
                 </div>
               </div>
             </div>
@@ -360,24 +400,108 @@ const DocumentsPage: React.FC = () => {
             <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-full -mr-10 -mt-10"></div>
             <div className="relative">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Dernier ajout</h3>
+                <h3 className="text-lg font-semibold text-gray-800">Dernier Ajout</h3>
                 <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
-                  <Upload className="w-5 h-5 text-emerald-600" />
+                  <FileText className="w-5 h-5 text-emerald-600" />
                 </div>
               </div>
-              <div className="space-y-3">
-                <div className="bg-white/60 backdrop-blur-sm rounded-lg p-3 border border-emerald-100">
-                  <div className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">Document</div>
-                  <div className="text-sm font-semibold text-gray-800 truncate">
-                    {localDocuments.length > 0 ? localDocuments[localDocuments.length - 1].name : 'Aucun document'}
-                  </div>
+              <div className="space-y-2">
+                <div className="text-sm font-semibold text-gray-800 truncate">
+                  {localDocuments.length > 0 ? localDocuments[localDocuments.length - 1].name : 'Aucun document'}
                 </div>
-                <div className="bg-white/60 backdrop-blur-sm rounded-lg p-3 border border-emerald-100">
-                  <div className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">Ajouté le</div>
-                  <div className="text-sm font-medium text-emerald-700">
-                    {localDocuments.length > 0 ? formatDate(localDocuments[localDocuments.length - 1].uploadDate) : 'N/A'}
-                  </div>
+                <div className="text-xs text-emerald-700">
+                  {localDocuments.length > 0 ? formatDate(localDocuments[localDocuments.length - 1].uploadDate) : 'N/A'}
                 </div>
+                <div className="text-xs text-gray-600">
+                  {localDocuments.length > 0 ? formatFileSize(localDocuments[localDocuments.length - 1].size) : ''}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Deuxième rangée - Répartition détaillée par type avec tailles */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
+                <span className="text-lg">📝</span>
+                <span className="font-semibold text-blue-800">Procès-verbaux</span>
+              </div>
+              <span className="text-xl font-bold text-blue-600">{pvCount}</span>
+            </div>
+            <div className="space-y-1">
+              <div className="text-sm font-medium text-blue-700">
+                Total: {formatFileSize(pvTotalSize)}
+              </div>
+              <div className="w-full bg-blue-200 rounded-full h-2">
+                <div 
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-500" 
+                  style={{ width: `${totalSize > 0 ? (pvTotalSize / totalSize) * 100 : 0}%` }}
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg border border-green-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
+                <span className="text-lg">💰</span>
+                <span className="font-semibold text-green-800">Finances</span>
+              </div>
+              <span className="text-xl font-bold text-green-600">{financialReportCount}</span>
+            </div>
+            <div className="space-y-1">
+              <div className="text-sm font-medium text-green-700">
+                Total: {formatFileSize(financeTotalSize)}
+              </div>
+              <div className="w-full bg-green-200 rounded-full h-2">
+                <div 
+                  className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full transition-all duration-500" 
+                  style={{ width: `${totalSize > 0 ? (financeTotalSize / totalSize) * 100 : 0}%` }}
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg border border-purple-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
+                <span className="text-lg">⚖️</span>
+                <span className="font-semibold text-purple-800">Statuts</span>
+              </div>
+              <span className="text-xl font-bold text-purple-600">{statutesCount}</span>
+            </div>
+            <div className="space-y-1">
+              <div className="text-sm font-medium text-purple-700">
+                Total: {formatFileSize(statutesTotalSize)}
+              </div>
+              <div className="w-full bg-purple-200 rounded-full h-2">
+                <div 
+                  className="bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full transition-all duration-500" 
+                  style={{ width: `${totalSize > 0 ? (statutesTotalSize / totalSize) * 100 : 0}%` }}
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-4 rounded-lg border border-gray-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
+                <span className="text-lg">📄</span>
+                <span className="font-semibold text-gray-800">Autres</span>
+              </div>
+              <span className="text-xl font-bold text-gray-600">{otherCount}</span>
+            </div>
+            <div className="space-y-1">
+              <div className="text-sm font-medium text-gray-700">
+                Total: {formatFileSize(otherTotalSize)}
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div 
+                  className="bg-gradient-to-r from-gray-500 to-gray-600 h-2 rounded-full transition-all duration-500" 
+                  style={{ width: `${totalSize > 0 ? (otherTotalSize / totalSize) * 100 : 0}%` }}
+                ></div>
               </div>
             </div>
           </div>
@@ -668,14 +792,75 @@ const DocumentsPage: React.FC = () => {
         )}
       </div>
 
-      {/* Résumé en bas de page */}
+      {/* Résumé complet en bas de page */}
       {localDocuments.length > 0 && (
-        <div className="bg-white rounded-lg shadow p-1 sm:p-2 lg:p-3 mt-1 sm:mt-2">
-          <div className="text-xs sm:text-sm text-gray-600">
-            {filteredDocuments.length}/{totalDocuments} documents
-            {filteredDocuments.length !== totalDocuments && (
-              <span className="ml-1 text-blue-600">• Filtrés</span>
-            )}
+        <div className="bg-white rounded-lg shadow p-3 lg:p-4 mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Statistiques de filtrage */}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-3 rounded-lg border border-blue-200">
+              <div className="text-sm font-semibold text-blue-800 mb-2">Documents affichés</div>
+              <div className="text-xl font-bold text-blue-600">
+                {filteredDocuments.length}/{totalDocuments}
+              </div>
+              {filteredDocuments.length !== totalDocuments && (
+                <div className="text-xs text-blue-600 mt-1">• Filtrés</div>
+              )}
+            </div>
+
+            {/* Espace utilisé */}
+            <div className="bg-gradient-to-r from-purple-50 to-violet-50 p-3 rounded-lg border border-purple-200">
+              <div className="text-sm font-semibold text-purple-800 mb-2">Espace utilisé</div>
+              <div className="text-lg font-bold text-purple-600">
+                {formatFileSize(totalSize)}
+              </div>
+              <div className="text-xs text-purple-600 mt-1">
+                Moyenne: {formatFileSize(averageSize)}
+              </div>
+            </div>
+
+            {/* Types de fichiers */}
+            <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-3 rounded-lg border border-green-200">
+              <div className="text-sm font-semibold text-green-800 mb-2">Types différents</div>
+              <div className="text-lg font-bold text-green-600">
+                {[...new Set(localDocuments.map(d => d.type))].length}
+              </div>
+              <div className="text-xs text-green-600 mt-1">
+                Catégories actives
+              </div>
+            </div>
+
+            {/* Dernière mise à jour */}
+            <div className="bg-gradient-to-r from-orange-50 to-amber-50 p-3 rounded-lg border border-orange-200">
+              <div className="text-sm font-semibold text-orange-800 mb-2">Dernière activité</div>
+              <div className="text-sm font-bold text-orange-600">
+                {localDocuments.length > 0 ? formatDate(Math.max(...localDocuments.map(d => d.uploadDate.getTime()))) : 'Aucune'}
+              </div>
+              <div className="text-xs text-orange-600 mt-1">
+                Ajout le plus récent
+              </div>
+            </div>
+          </div>
+
+          {/* Barre de progression globale */}
+          <div className="mt-4 pt-4 border-t border-gray-200">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-700">Capacité de stockage utilisée</span>
+              <span className="text-sm text-gray-500">
+                {formatFileSize(totalSize)} / {formatFileSize(50 * 1024 * 1024)} {/* 50MB limite exemple */}
+              </span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-3">
+              <div 
+                className="bg-gradient-to-r from-orange-500 via-purple-500 to-violet-500 h-3 rounded-full transition-all duration-1000 relative overflow-hidden" 
+                style={{ width: `${Math.min(100, (totalSize / (50 * 1024 * 1024)) * 100)}%` }}
+              >
+                <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+              </div>
+            </div>
+            <div className="text-xs text-gray-500 mt-1 flex justify-between">
+              <span>Utilisation: {((totalSize / (50 * 1024 * 1024)) * 100).toFixed(1)}%</span>
+              <span>Espace libre: {formatFileSize((50 * 1024 * 1024) - totalSize)}</span>
+            </div>
           </div>
         </div>
       )}
