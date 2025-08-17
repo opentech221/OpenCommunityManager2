@@ -1,8 +1,14 @@
 # Open Community Manager
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/opentech221/OpenCommunityManager2?quickstart=1)
+[![CI/CD Pipeline](https://github.com/opentech221/OpenCommunityManager2/workflows/CI-CD%20Pipeline/badge.svg)](https://github.com/opentech221/OpenCommunityManager2/actions)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Node.js Version](https://img.shields.io/badge/node-20.x-green.svg)](package.json)
+[![Python Version](https://img.shields.io/badge/python-3.11-blue.svg)](backend/requirements.txt)
+
 **🧭 Le Guide Intuitif des Organisations Communautaires**
 
-Open Community Manager est bien plus qu'une simple plateforme de gestion : c'est un **guide intuitif et intelligent** conçu pour accompagner les organisations dans leur structuration, leur développement et leur gouvernance. 
+Open Community Manager est bien plus qu'une simple plateforme de gestion : c'est un **guide intuitif et intelligent** conçu pour accompagner les organisations dans leur structuration, leur développement et leur gouvernance.
 
 ## 🎯 Vision : Un Guide Complet pour l'Excellence Organisationnelle
 
@@ -21,7 +27,7 @@ L'application intègre un **système expert** qui guide les organisations sur :
 
 #### **Documents obligatoires et recommandés :**
 - ✅ **Statuts** : Templates adaptés selon le type d'organisation
-- ✅ **Règlement intérieur** : Modèles personnalisables 
+- ✅ **Règlement intérieur** : Modèles personnalisables
 - ✅ **Procès-verbaux** : Formats standardisés (AG, CA, Bureau)
 - ✅ **Rapports d'activité** : Structures automatisées
 - ✅ **Bilans financiers** : Génération automatique conforme
@@ -376,7 +382,7 @@ Cette architecture favorise la mutualisation des ressources, la rapidité de dé
 ```
 src/
 ├── components/     ✅ 20 composants (dont guidance)
-├── pages/         ✅ 26+ pages implémentées  
+├── pages/         ✅ 26+ pages implémentées
 ├── hooks/         ✅ 9 hooks (dont useOrganizationalGuidance)
 ├── types/         ✅ 25+ types TypeScript
 ├── constants/     ✅ Configuration guidance complète
