@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # 🗄️ Base de données PostgreSQL
   database:
@@ -67,7 +65,7 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./ssl:/etc/nginx/ssl:ro  # Pour les certificats SSL
+      - ./ssl:/etc/nginx/ssl:ro # Pour les certificats SSL
     networks:
       - ocm-network
 
@@ -93,12 +91,12 @@ services:
     image: prom/prometheus:latest
     container_name: ocm-prometheus
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
-      - '--web.console.templates=/etc/prometheus/consoles'
-      - '--storage.tsdb.retention.time=200h'
-      - '--web.enable-lifecycle'
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
+      - "--web.console.templates=/etc/prometheus/consoles"
+      - "--storage.tsdb.retention.time=200h"
+      - "--web.enable-lifecycle"
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus

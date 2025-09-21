@@ -8,8 +8,8 @@ export const getApiBaseUrl = () => {
   if (import.meta.env.PROD) {
     return import.meta.env.VITE_BACKEND_URL || 'https://opencommunitymanager2.up.railway.app/api';
   }
-  // En développement, utiliser le proxy local
-  return import.meta.env.VITE_BACKEND_URL || '/api';
+  // En développement, utiliser l'URL locale avec proxy Vite
+  return import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000/api';
 };
 
 export const API_BASE_URL = getApiBaseUrl();
@@ -39,7 +39,7 @@ console.log('🔧 [Config] API_BASE_URL:', API_BASE_URL);
 // Test des URLs générées
 console.log('🧪 [Config] Test URL /auth/login:', buildApiUrl('/auth/login'));
 console.log('🧪 [Config] Test URL /finances:', buildApiUrl('/finances'));
-console.log('🧪 [Config] Test URL /api/auth/login with apiUrl:', 
+console.log('🧪 [Config] Test URL /api/auth/login with apiUrl:',
   (() => {
     // Simulation de la fonction apiUrl
     const path = '/api/auth/login';

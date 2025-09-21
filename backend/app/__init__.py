@@ -1,11 +1,12 @@
+import os
 from datetime import datetime
-from flask import Flask, jsonify, Blueprint, request, redirect
-from flask_sqlalchemy import SQLAlchemy
-from flask_jwt_extended import JWTManager
+
+from flask import Blueprint, Flask, jsonify, redirect, request
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
-import os
+from flask_sqlalchemy import SQLAlchemy
 
 # Initialisation des extensions
 db = SQLAlchemy()
@@ -16,8 +17,15 @@ migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
-    # Force HTTPS en production
-    if not app.debug and not app.testing:
+
+    # Configuration
+    app.config.from_object('config.Config')
+
+    # Force HTTPS seulement en production ET si pas en développement local
+    if (not app.debug and
+        not app.testing and
+        app.config.get('ENV') != 'development' and
+        not app.config.get('SQLALCHEMY_DATABASE_URI', '').startswith('postgresql://ocm_user:secure_password@localhost')):
         from flask_talisman import Talisman
         Talisman(app, content_security_policy=None)
 
@@ -28,9 +36,6 @@ def create_app():
         if request.method == 'OPTIONS':
             return None  # Laisse Flask-CORS répondre
         # Railway gère déjà HTTPS au niveau du proxy, pas besoin de rediriger ici
-
-    # Configuration
-    app.config.from_object('config.Config')
     # Vérification explicite de la présence de DATABASE_URL
     if not app.config.get('SQLALCHEMY_DATABASE_URI'):
         raise RuntimeError("DATABASE_URL manquant : vérifie ta configuration ou tes variables d’environnement.")
@@ -52,22 +57,22 @@ def create_app():
         max_age=86400  # Cache préflight 24h
     )
     migrate.init_app(app, db)
-    
+
     # Création du dossier uploads
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    
+
     # Importation des modèles
-    from app.models import association, member, event, cotisation, transaction, guidance
-    
+    from app.models import (association, cotisation, event, guidance, member,
+                            transaction)
     # Enregistrement des blueprints
     from app.routes.auth import auth_bp
-    from app.routes.members import members_bp
-    from app.routes.events import events_bp
     from app.routes.cotisations import cotisations_bp
+    from app.routes.events import events_bp
     from app.routes.finances import finances_bp
-    from app.routes.main import main_bp
     from app.routes.guidance import guidance_bp
-    
+    from app.routes.main import main_bp
+    from app.routes.members import members_bp
+
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(members_bp, url_prefix='/api/members')
     app.register_blueprint(events_bp, url_prefix='/api/events')
@@ -75,7 +80,7 @@ def create_app():
     app.register_blueprint(finances_bp, url_prefix='/api/finances')
     app.register_blueprint(main_bp, url_prefix='/api')
     app.register_blueprint(guidance_bp, url_prefix='/api/guidance')
-    
+
     # Route de santé pour vérifier l'API et CORS
     @app.route('/health', methods=['GET', 'OPTIONS'])
     def health_check():
@@ -115,7 +120,7 @@ def create_app():
     @app.route('/api/ping')
     def ping():
         return jsonify({'ping': 'pong', 'status': 'ok', 'timestamp': datetime.now().isoformat()})
-    
+
 
     # Importation et enregistrement du blueprint health
     from .routes.health import health_bp
@@ -164,12 +169,12 @@ def create_app():
     @app.route('/api/author')
     def author():
         return jsonify({'author': 'OpenTech221', 'contact': 'https://github.com/opentech221'})
-    
+
     # Gestion des erreurs
     @app.errorhandler(404)
     def not_found(error):
         return {'error': 'Endpoint non trouvé'}, 404
-    
+
     @app.errorhandler(500)
     def internal_error(error):
         return {'error': 'Erreur interne du serveur'}, 500
@@ -246,6 +251,6 @@ def create_app():
             'github': 'https://github.com/opentech221/OpenCommunityManager2',
             'docs': 'https://github.com/opentech221/OpenCommunityManager2/blob/master/docs/USER_GUIDE.md'
         })
-    
-    
+
+
     return app
